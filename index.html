@@ -878,32 +878,6 @@ button {
 
 <!-- HIDDEN POST FORM -->
 
-<iframe
-  name="barcoPostFrame"
-  id="barcoPostFrame"
-  style="display:none;"
-></iframe>
-
-
-<form
-  id="barcoPostForm"
-  method="POST"
-  target="barcoPostFrame"
-  style="display:none;"
->
-
-  <input
-    type="hidden"
-    name="action"
-    value="saveDraft"
-  >
-
-  <textarea
-    name="payload"
-    id="postPayload"
-  ></textarea>
-
-</form>
 
 
 
@@ -922,11 +896,13 @@ const API_URL =
    JSONP GET
 ========================================================= */
 
-function apiGet(action) {
+function apiGet(
+  action,
+  params = {}
+) {
 
   return new Promise(
     function(resolve, reject) {
-
 
       const callbackName =
         'barcoCallback_' +
@@ -937,12 +913,10 @@ function apiGet(action) {
           100000
         );
 
-
       const script =
         document.createElement(
           'script'
         );
-
 
       window[callbackName] =
         function(data) {
@@ -955,8 +929,7 @@ function apiGet(action) {
 
           script.remove();
 
-        };
-
+      };
 
       script.onerror =
         function() {
@@ -973,136 +946,57 @@ function apiGet(action) {
 
           script.remove();
 
-        };
+      };
+
+
+      const query =
+        new URLSearchParams();
+
+      query.set(
+        'action',
+        action
+      );
+
+      query.set(
+        'callback',
+        callbackName
+      );
+
+      query.set(
+        '_',
+        Date.now()
+      );
+
+
+      Object.keys(params)
+        .forEach(
+          function(key) {
+
+            query.set(
+              key,
+              params[key]
+            );
+
+          }
+        );
 
 
       script.src =
         API_URL +
-        '?action=' +
-        encodeURIComponent(
-          action
-        ) +
-        '&callback=' +
-        encodeURIComponent(
-          callbackName
-        ) +
-        '&_=' +
-        Date.now();
+        '?' +
+        query.toString();
 
 
-      document.body.appendChild(
-        script
-      );
+      document.body
+        .appendChild(
+          script
+        );
 
     }
   );
 
 }
 
-
-
-/* =========================================================
-   INITIALIZE
-========================================================= */
-
-window.addEventListener(
-  'load',
-  async function() {
-
-
-    try {
-
-
-      const ping =
-        await apiGet(
-          'ping'
-        );
-
-
-      if (
-        !ping ||
-        !ping.success
-      ) {
-
-        throw new Error(
-          'Backend offline.'
-        );
-
-      }
-
-
-      const data =
-        await apiGet(
-          'init'
-        );
-
-
-      if (
-        !data ||
-        !data.success
-      ) {
-
-        throw new Error(
-          data.error ||
-          'Unable to load data.'
-        );
-
-      }
-
-
-      renderForm(data);
-
-
-      addRoadRow();
-
-
-      const status =
-        document.getElementById(
-          'statusBox'
-        );
-
-
-      status.className =
-        'status success';
-
-
-      status.textContent =
-        'BaRCO backend connected successfully.';
-
-
-      document
-        .getElementById(
-          'app'
-        )
-        .style.display =
-        'block';
-
-
-      setTimeout(
-        function() {
-
-          status.style.display =
-            'none';
-
-        },
-        2000
-      );
-
-
-    } catch(error) {
-
-
-      showStatus(
-        'error',
-        'Connection error: ' +
-        error.message
-      );
-
-
-    }
-
-  }
-);
 
 
 
@@ -1509,22 +1403,17 @@ function collectRoads() {
    SAVE DRAFT
 ========================================================= */
 
-function saveDraft() {
-
+async function saveDraft() {
 
   const button =
     document.getElementById(
       'saveButton'
     );
 
-
   const roads =
     collectRoads();
 
 
-  /*
-   * Basic validation.
-   */
   if (
     !document
       .getElementById(
@@ -1633,9 +1522,7 @@ function saveDraft() {
   };
 
 
-  button.disabled =
-    true;
-
+  button.disabled = true;
 
   button.textContent =
     'Saving...';
@@ -1647,31 +1534,82 @@ function saveDraft() {
   );
 
 
-  document
-    .getElementById(
-      'postPayload'
-    )
-    .value =
-    JSON.stringify(
-      payload
+  try {
+
+    const result =
+      await apiGet(
+        'saveDraft',
+        {
+          payload:
+            JSON.stringify(
+              payload
+            )
+        }
+      );
+
+
+    button.disabled =
+      false;
+
+    button.textContent =
+      'Save Draft';
+
+
+    if (
+      result &&
+      result.success
+    ) {
+
+      document
+        .getElementById(
+          'reportId'
+        )
+        .textContent =
+        result.reportId;
+
+
+      showStatus(
+        'success',
+        'Draft saved successfully. ' +
+        result.roadsSaved +
+        ' road entry/entries saved. ' +
+        'Total road length: ' +
+        Number(
+          result.totalRoadLength
+        ).toFixed(2) +
+        ' km.'
+      );
+
+    } else {
+
+      throw new Error(
+        result &&
+        result.error
+          ? result.error
+          : 'Unable to save draft.'
+      );
+
+    }
+
+
+  } catch(error) {
+
+    button.disabled =
+      false;
+
+    button.textContent =
+      'Save Draft';
+
+
+    showStatus(
+      'error',
+      'Save error: ' +
+      error.message
     );
 
-
-  const form =
-    document.getElementById(
-      'barcoPostForm'
-    );
-
-
-  form.action =
-    API_URL;
-
-
-  form.submit();
+  }
 
 }
-
-
 
 /* =========================================================
    RECEIVE RESPONSE FROM APPS SCRIPT IFRAME
