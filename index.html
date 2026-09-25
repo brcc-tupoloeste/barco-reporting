@@ -2731,25 +2731,17 @@ function renderPhotoGroup(
           </div>
 
 
-          <div
-            class="uploaded-photo-meta"
-          >
-            ${escapeHtml(
-              photo.fileName || ''
-            )}
+          <div class="photo-actions">
+
+            <button
+              type="button"
+              class="btn-blue"
+              onclick="replaceUploadedPhoto('${'${escapeJsString(photo.photoId)}'}')"
+            >
+              Replace Photo
+            </button>
+
           </div>
-
-
-          <a
-            href="${escapeHtml(
-              photo.fileUrl || '#'
-            )}"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="drive-link"
-          >
-            Open in Google Drive
-          </a>
 
         </div>
 
@@ -2770,6 +2762,159 @@ function renderPhotoGroup(
   );
 
 }
+
+/* =========================================================
+   REPLACE UPLOADED PHOTO
+========================================================= */
+
+function replaceUploadedPhoto(
+  photoId
+) {
+
+  if (!photoId) {
+    return;
+  }
+
+
+  const input =
+    document.createElement(
+      'input'
+    );
+
+
+  input.type =
+    'file';
+
+
+  input.accept =
+    'image/jpeg,image/png,image/webp';
+
+
+  input.style.display =
+    'none';
+
+
+  input.addEventListener(
+    'change',
+    async function() {
+
+      const file =
+        input.files &&
+        input.files[0];
+
+
+      if (!file) {
+
+        input.remove();
+        return;
+
+      }
+
+
+      try {
+
+        showStatus(
+          'loading',
+          'Replacing photo...'
+        );
+
+
+        const prepared =
+          await prepareImageForUpload(
+            file
+          );
+
+
+        const result =
+          await barcoApi(
+            'replacePhoto',
+            {
+
+              photoId:
+                photoId,
+
+              fileName:
+                prepared.fileName,
+
+              mimeType:
+                prepared.mimeType,
+
+              base64:
+                prepared.base64
+
+            }
+          );
+
+
+        if (
+          !result ||
+          !result.success
+        ) {
+
+          throw new Error(
+            result &&
+            result.error
+              ? result.error
+              : 'Unable to replace photo.'
+          );
+
+        }
+
+
+        await loadUploadedPhotos();
+
+
+        showStatus(
+          'success',
+          'Photo ' +
+          result.photoOrder +
+          ' replaced successfully.'
+        );
+
+
+      } catch(error) {
+
+        showStatus(
+          'error',
+          'Replace photo error: ' +
+          error.message
+        );
+
+
+      } finally {
+
+        input.remove();
+
+      }
+
+    }
+  );
+
+
+  document.body.appendChild(
+    input
+  );
+
+
+  input.click();
+
+}
+
+
+function escapeJsString(
+  value
+) {
+
+  return String(
+    value || ''
+  )
+  .replace(/\\/g, '\\\\')
+  .replace(/'/g, "\\'")
+  .replace(/\r/g, '\\r')
+  .replace(/\n/g, '\\n');
+
+}
+
 
   async function loadUploadedPhotoPreview(
   fileId,
