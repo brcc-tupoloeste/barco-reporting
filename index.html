@@ -449,6 +449,91 @@ button:disabled {
 }
 
 
+
+/* =========================================================
+   REPORT PERIOD / PARTICIPATION / LOCAL PHOTO STATUS
+========================================================= */
+
+.report-period {
+  margin-top: 12px;
+  color: #1f4e78;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.participation-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.participation-table th,
+.participation-table td {
+  padding: 8px 10px;
+  border: 1px solid #9ca3af;
+  font-size: 12px;
+}
+
+.participation-table th {
+  background: #eef2f7;
+  text-align: center;
+}
+
+.participation-table input {
+  width: 100%;
+  padding: 7px;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.participation-total,
+.participation-score {
+  font-weight: bold;
+  text-align: center;
+}
+
+.photo-local-status {
+  min-height: 18px;
+  margin-top: 8px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.photo-local-status.loading-text {
+  color: #1e40af;
+}
+
+.photo-local-status.success-text {
+  color: #166534;
+}
+
+.photo-local-status.error-text {
+  color: #991b1b;
+}
+
+.btn-spinner {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  margin-right: 7px;
+  border: 2px solid rgba(255,255,255,.45);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  vertical-align: -2px;
+  animation: barcoSpin .75s linear infinite;
+}
+
+@keyframes barcoSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@page {
+  size: 8.5in 13in;
+  margin: 0.35in;
+}
+
 @media(max-width:800px) {
 
   .photo-summary,
@@ -536,12 +621,17 @@ button:disabled {
       ></div>
 
 
-      <div class="report-id">
-
-        Report ID:
-        <span id="reportId">-</span>
-
+      <div class="report-period">
+        Month:
+        <span id="headerMonth">-</span>
+        &nbsp;&nbsp; CY
+        <span id="headerYear">-</span>
       </div>
+
+      <span
+        id="reportId"
+        style="display:none;"
+      >-</span>
 
     </div>
 
@@ -563,7 +653,7 @@ button:disabled {
 
             <label>Month</label>
 
-            <select id="month">
+            <select id="month" onchange="updateReportPeriod()">
 
               <option>January</option>
               <option>February</option>
@@ -590,6 +680,7 @@ button:disabled {
             <input
               id="year"
               type="number"
+              readonly
             >
 
           </div>
@@ -747,6 +838,139 @@ button:disabled {
       >
         Save Draft
       </button>
+
+    </div>
+
+
+
+    <!-- PARTICIPATION / ATTENDANCE -->
+
+    <div class="section">
+
+      <div class="section-title">
+        BaRCO Participation / Attendance
+      </div>
+
+      <div class="section-body">
+
+        <div class="road-wrapper">
+
+          <table class="participation-table">
+
+            <thead>
+              <tr>
+                <th>Group</th>
+                <th style="width:150px;">Expected</th>
+                <th style="width:150px;">Participated</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>Elected Barangay Officials</td>
+                <td>
+                  <input
+                    id="expectedBarangayOfficials"
+                    type="number"
+                    value="8"
+                    readonly
+                  >
+                </td>
+                <td>
+                  <input
+                    id="participatedBarangayOfficials"
+                    type="number"
+                    min="0"
+                    max="8"
+                    value="0"
+                    oninput="computeParticipation()"
+                  >
+                </td>
+              </tr>
+
+              <tr>
+                <td>Elected SK Officials</td>
+                <td>
+                  <input
+                    id="expectedSkOfficials"
+                    type="number"
+                    value="7"
+                    readonly
+                  >
+                </td>
+                <td>
+                  <input
+                    id="participatedSkOfficials"
+                    type="number"
+                    min="0"
+                    max="7"
+                    value="0"
+                    oninput="computeParticipation()"
+                  >
+                </td>
+              </tr>
+
+              <tr>
+                <td>Barangay Tanods</td>
+                <td>
+                  <input
+                    id="expectedBarangayTanods"
+                    type="number"
+                    value="8"
+                    readonly
+                  >
+                </td>
+                <td>
+                  <input
+                    id="participatedBarangayTanods"
+                    type="number"
+                    min="0"
+                    max="8"
+                    value="0"
+                    oninput="computeParticipation()"
+                  >
+                </td>
+              </tr>
+
+              <tr>
+                <td><strong>Total</strong></td>
+                <td
+                  id="expectedTotal"
+                  class="participation-total"
+                >
+                  23
+                </td>
+                <td
+                  id="participatedTotal"
+                  class="participation-total"
+                >
+                  0
+                </td>
+              </tr>
+
+              <tr>
+                <td colspan="2">
+                  <strong>Score</strong>
+                  <span style="font-size:10px;color:#64748b;">
+                    (Participated Total ÷ Expected Total) × 20
+                  </span>
+                </td>
+                <td
+                  id="participationScore"
+                  class="participation-score"
+                >
+                  0.00
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
 
     </div>
 
@@ -1533,6 +1757,282 @@ function renderForm(
       now
     );
 
+
+  updateReportPeriod();
+  computeParticipation();
+
+}
+
+
+
+/* =========================================================
+   REPORT PERIOD / FILE NAME
+========================================================= */
+
+function updateReportPeriod() {
+
+  const month =
+    document.getElementById(
+      'month'
+    ).value;
+
+  const year =
+    document.getElementById(
+      'year'
+    ).value;
+
+
+  document.getElementById(
+    'headerMonth'
+  ).textContent =
+    month || '-';
+
+
+  document.getElementById(
+    'headerYear'
+  ).textContent =
+    year || '-';
+
+}
+
+
+function getBarcoFileName() {
+
+  const month =
+    document.getElementById(
+      'month'
+    ).value;
+
+  const year =
+    document.getElementById(
+      'year'
+    ).value;
+
+
+  return (
+    'BaRCO-' +
+    month +
+    '-' +
+    year +
+    '.pdf'
+  );
+
+}
+
+
+/* =========================================================
+   PARTICIPATION
+========================================================= */
+
+function clampParticipationInput(
+  elementId,
+  maximum
+) {
+
+  const input =
+    document.getElementById(
+      elementId
+    );
+
+
+  let value =
+    Number(
+      input.value || 0
+    );
+
+
+  if (value < 0) {
+    value = 0;
+  }
+
+
+  if (value > maximum) {
+    value = maximum;
+  }
+
+
+  input.value =
+    value;
+
+
+  return value;
+
+}
+
+
+function computeParticipation() {
+
+  const expectedBarangay =
+    Number(
+      document.getElementById(
+        'expectedBarangayOfficials'
+      ).value || 0
+    );
+
+
+  const expectedSk =
+    Number(
+      document.getElementById(
+        'expectedSkOfficials'
+      ).value || 0
+    );
+
+
+  const expectedTanods =
+    Number(
+      document.getElementById(
+        'expectedBarangayTanods'
+      ).value || 0
+    );
+
+
+  const barangay =
+    clampParticipationInput(
+      'participatedBarangayOfficials',
+      expectedBarangay
+    );
+
+
+  const sk =
+    clampParticipationInput(
+      'participatedSkOfficials',
+      expectedSk
+    );
+
+
+  const tanods =
+    clampParticipationInput(
+      'participatedBarangayTanods',
+      expectedTanods
+    );
+
+
+  const expectedTotal =
+    expectedBarangay +
+    expectedSk +
+    expectedTanods;
+
+
+  const participatedTotal =
+    barangay +
+    sk +
+    tanods;
+
+
+  const score =
+    expectedTotal > 0
+      ? (
+          participatedTotal /
+          expectedTotal
+        ) * 20
+      : 0;
+
+
+  document.getElementById(
+    'expectedTotal'
+  ).textContent =
+    expectedTotal;
+
+
+  document.getElementById(
+    'participatedTotal'
+  ).textContent =
+    participatedTotal;
+
+
+  document.getElementById(
+    'participationScore'
+  ).textContent =
+    score.toFixed(2);
+
+
+  return {
+    expectedBarangayOfficials:
+      expectedBarangay,
+
+    expectedSkOfficials:
+      expectedSk,
+
+    expectedBarangayTanods:
+      expectedTanods,
+
+    expectedTotal:
+      expectedTotal,
+
+    participatedBarangayOfficials:
+      barangay,
+
+    participatedSkOfficials:
+      sk,
+
+    participatedBarangayTanods:
+      tanods,
+
+    participatedTotal:
+      participatedTotal,
+
+    score:
+      Number(
+        score.toFixed(2)
+      )
+  };
+
+}
+
+
+async function saveParticipationForReport(
+  reportId
+) {
+
+  const participation =
+    computeParticipation();
+
+
+  const result =
+    await barcoApi(
+      'saveParticipation',
+      {
+        reportId:
+          reportId,
+
+        expectedBarangayOfficials:
+          participation.expectedBarangayOfficials,
+
+        expectedSkOfficials:
+          participation.expectedSkOfficials,
+
+        expectedBarangayTanods:
+          participation.expectedBarangayTanods,
+
+        participatedBarangayOfficials:
+          participation.participatedBarangayOfficials,
+
+        participatedSkOfficials:
+          participation.participatedSkOfficials,
+
+        participatedBarangayTanods:
+          participation.participatedBarangayTanods
+      }
+    );
+
+
+  if (
+    !result ||
+    !result.success
+  ) {
+
+    throw new Error(
+      result &&
+      result.error
+        ? result.error
+        : 'Unable to save participation.'
+    );
+
+  }
+
+
+  return result;
+
 }
 
 
@@ -1790,8 +2290,8 @@ async function saveDraft() {
 
   button.disabled = true;
 
-  button.textContent =
-    'Saving...';
+  button.innerHTML =
+    '<span class="btn-spinner"></span>Saving...';
 
 
   try {
@@ -1860,9 +2360,14 @@ async function saveDraft() {
     reportSaved = true;
 
 
+    await saveParticipationForReport(
+      result.reportId
+    );
+
+
     showStatus(
       'success',
-      'Draft saved successfully.'
+      'Draft and participation saved successfully.'
     );
 
 
@@ -2454,6 +2959,9 @@ async function uploadSelectedPhotos() {
   button.disabled =
     true;
 
+  button.innerHTML =
+    '<span class="btn-spinner"></span>Uploading...';
+
 
   progress.style.display =
     'block';
@@ -2532,7 +3040,8 @@ async function uploadSelectedPhotos() {
 
     showStatus(
       'success',
-      'Photos uploaded successfully.'
+      'Photos uploaded successfully.',
+      false
     );
 
 
@@ -2546,7 +3055,8 @@ async function uploadSelectedPhotos() {
     showStatus(
       'error',
       'Photo upload error: ' +
-      error.message
+      error.message,
+      false
     );
 
 
@@ -2554,6 +3064,9 @@ async function uploadSelectedPhotos() {
 
     button.disabled =
       false;
+
+    button.textContent =
+      'Upload Selected Photos';
 
   }
 
@@ -2726,22 +3239,29 @@ function renderPhotoGroup(
           <div class="photo-actions">
 
             <button
+              id="${imageId}_save_caption"
               type="button"
               class="btn-green"
-              onclick="saveUploadedPhotoCaption('${escapeJsString(photo.photoId)}', '${imageId}_caption')"
+              onclick="saveUploadedPhotoCaption('${escapeJsString(photo.photoId)}', '${imageId}_caption', '${imageId}_save_caption', '${imageId}_status')"
             >
               Save Caption
             </button>
 
             <button
+              id="${imageId}_replace"
               type="button"
               class="btn-blue"
-              onclick="replaceUploadedPhoto('${escapeJsString(photo.photoId)}', '${imageId}_caption')"
+              onclick="replaceUploadedPhoto('${escapeJsString(photo.photoId)}', '${imageId}_caption', '${imageId}_replace', '${imageId}_status')"
             >
               Replace Photo
             </button>
 
           </div>
+
+          <div
+            id="${imageId}_status"
+            class="photo-local-status"
+          ></div>
 
         </div>
 
@@ -2769,12 +3289,26 @@ function renderPhotoGroup(
 
 function replaceUploadedPhoto(
   photoId,
-  captionInputId
+  captionInputId,
+  buttonId,
+  statusId
 ) {
 
   if (!photoId) {
     return;
   }
+
+
+  const button =
+    document.getElementById(
+      buttonId
+    );
+
+
+  const status =
+    document.getElementById(
+      statusId
+    );
 
 
   const captionInput =
@@ -2826,8 +3360,10 @@ function replaceUploadedPhoto(
 
       try {
 
-        showStatus(
-          'loading',
+        setPhotoActionLoading(
+          button,
+          status,
+          'Replacing...',
           'Replacing photo...'
         );
 
@@ -2880,7 +3416,8 @@ function replaceUploadedPhoto(
         await loadUploadedPhotos();
 
 
-        showStatus(
+        setPhotoLocalStatus(
+          status,
           'success',
           'Photo ' +
           result.photoOrder +
@@ -2890,7 +3427,8 @@ function replaceUploadedPhoto(
 
       } catch(error) {
 
-        showStatus(
+        setPhotoLocalStatus(
+          status,
           'error',
           'Replace photo error: ' +
           error.message
@@ -2898,6 +3436,11 @@ function replaceUploadedPhoto(
 
 
       } finally {
+
+        setPhotoActionIdle(
+          button,
+          'Replace Photo'
+        );
 
         input.remove();
 
@@ -2919,12 +3462,26 @@ function replaceUploadedPhoto(
 
 async function saveUploadedPhotoCaption(
   photoId,
-  captionInputId
+  captionInputId,
+  buttonId,
+  statusId
 ) {
 
   if (!photoId) {
     return;
   }
+
+
+  const button =
+    document.getElementById(
+      buttonId
+    );
+
+
+  const status =
+    document.getElementById(
+      statusId
+    );
 
 
   const input =
@@ -2941,9 +3498,11 @@ async function saveUploadedPhotoCaption(
 
   try {
 
-    showStatus(
-      'loading',
-      'Saving photo caption...'
+    setPhotoActionLoading(
+      button,
+      status,
+      'Saving...',
+      'Saving caption...'
     );
 
 
@@ -2971,21 +3530,109 @@ async function saveUploadedPhotoCaption(
     }
 
 
-    showStatus(
+    setPhotoLocalStatus(
+      status,
       'success',
-      'Photo caption saved successfully.'
+      'Caption saved.'
     );
 
 
   } catch(error) {
 
-    showStatus(
+    setPhotoLocalStatus(
+      status,
       'error',
       'Caption save error: ' +
       error.message
     );
 
+
+  } finally {
+
+    setPhotoActionIdle(
+      button,
+      'Save Caption'
+    );
+
   }
+
+}
+
+
+
+function setPhotoActionLoading(
+  button,
+  status,
+  buttonText,
+  statusText
+) {
+
+  if (button) {
+
+    button.disabled =
+      true;
+
+    button.innerHTML =
+      '<span class="btn-spinner"></span>' +
+      escapeHtml(
+        buttonText
+      );
+
+  }
+
+
+  setPhotoLocalStatus(
+    status,
+    'loading',
+    statusText
+  );
+
+}
+
+
+function setPhotoActionIdle(
+  button,
+  label
+) {
+
+  if (!button) {
+    return;
+  }
+
+
+  button.disabled =
+    false;
+
+  button.textContent =
+    label;
+
+}
+
+
+function setPhotoLocalStatus(
+  status,
+  type,
+  message
+) {
+
+  if (!status) {
+    return;
+  }
+
+
+  status.className =
+    'photo-local-status ' +
+    (
+      type === 'success'
+        ? 'success-text'
+        : type === 'error'
+          ? 'error-text'
+          : 'loading-text'
+    );
+
+
+  status.textContent =
+    message || '';
 
 }
 
@@ -3099,7 +3746,8 @@ function escapeJsString(
 
 function showStatus(
   type,
-  message
+  message,
+  shouldScroll = true
 ) {
 
   const box =
@@ -3121,10 +3769,14 @@ function showStatus(
     message;
 
 
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
+  if (shouldScroll) {
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+
+  }
 
 }
 
