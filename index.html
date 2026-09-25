@@ -1,314 +1,925 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>BaRCO Report Generator</title>
+<meta charset="UTF-8">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-    body {
-      margin: 0;
-      padding: 20px;
-      font-family: Arial, sans-serif;
-      background: #e5e7eb;
-      color: #111827;
-    }
+<title>
+  BaRCO Report Generator
+</title>
 
-    .page {
-      max-width: 1200px;
-      margin: 0 auto;
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0,0,0,.08);
-      padding: 24px;
-    }
 
-    .status {
-      padding: 14px;
-      border-radius: 8px;
-      margin-bottom: 18px;
-      font-weight: bold;
-    }
+<style>
 
-    .loading {
-      background: #dbeafe;
-      color: #1e40af;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    .success {
-      background: #dcfce7;
-      color: #166534;
-    }
+body {
 
-    .error {
-      background: #fee2e2;
-      color: #991b1b;
-    }
+  margin: 0;
 
-    .annex {
-      text-align: right;
-      font-weight: bold;
-      font-style: italic;
-    }
+  padding: 20px;
 
-    .header {
-      text-align: center;
-      margin-bottom: 22px;
-    }
+  font-family:
+    Arial,
+    sans-serif;
 
-    .barangay {
-      font-weight: bold;
-      font-size: 16px;
-    }
+  background:
+    #e5e7eb;
 
-    .title {
-      font-weight: bold;
-      font-size: 20px;
-      margin-top: 4px;
-    }
+  color:
+    #111827;
+}
 
-    .subtitle {
-      font-weight: bold;
-      margin-top: 3px;
-    }
 
-    .reference {
-      margin-top: 4px;
-      font-size: 11px;
-      font-style: italic;
-      line-height: 1.4;
-    }
+.page {
 
-    .report-id {
-      margin-top: 12px;
-      color: #1f4e78;
-      font-weight: bold;
-    }
+  max-width:
+    1200px;
 
-    .section {
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-top: 20px;
-    }
+  margin:
+    0 auto;
 
-    .section-title {
-      background: #1f4e78;
-      color: white;
-      font-weight: bold;
-      padding: 10px 14px;
-    }
+  background:
+    #ffffff;
 
-    .section-body {
-      padding: 16px;
-    }
+  border-radius:
+    12px;
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap: 14px;
-    }
+  box-shadow:
+    0 4px 16px
+    rgba(0,0,0,.08);
 
-    .field label {
-      display: block;
-      font-size: 12px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
+  padding:
+    24px;
 
-    .field input,
-    .field select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #cbd5e1;
-      border-radius: 7px;
-      font: inherit;
-    }
+}
 
-    @media(max-width:700px) {
-      body {
-        padding: 8px;
-      }
 
-      .page {
-        padding: 14px;
-      }
+.status {
 
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+  padding:
+    14px;
+
+  border-radius:
+    8px;
+
+  margin-bottom:
+    18px;
+
+  font-weight:
+    bold;
+
+}
+
+
+.loading {
+
+  background:
+    #dbeafe;
+
+  color:
+    #1e40af;
+
+}
+
+
+.success {
+
+  background:
+    #dcfce7;
+
+  color:
+    #166534;
+
+}
+
+
+.error {
+
+  background:
+    #fee2e2;
+
+  color:
+    #991b1b;
+
+}
+
+
+.annex {
+
+  text-align:
+    right;
+
+  font-weight:
+    bold;
+
+  font-style:
+    italic;
+
+}
+
+
+.header {
+
+  text-align:
+    center;
+
+  margin-bottom:
+    22px;
+
+}
+
+
+.barangay {
+
+  font-weight:
+    bold;
+
+  font-size:
+    16px;
+
+}
+
+
+.title {
+
+  font-weight:
+    bold;
+
+  font-size:
+    20px;
+
+  margin-top:
+    4px;
+
+}
+
+
+.subtitle {
+
+  font-weight:
+    bold;
+
+  margin-top:
+    3px;
+
+}
+
+
+.reference {
+
+  margin-top:
+    4px;
+
+  font-size:
+    11px;
+
+  font-style:
+    italic;
+
+  line-height:
+    1.4;
+
+}
+
+
+.report-id {
+
+  margin-top:
+    12px;
+
+  color:
+    #1f4e78;
+
+  font-weight:
+    bold;
+
+}
+
+
+.section {
+
+  border:
+    1px solid
+    #d1d5db;
+
+  border-radius:
+    10px;
+
+  overflow:
+    hidden;
+
+  margin-top:
+    20px;
+
+}
+
+
+.section-title {
+
+  background:
+    #1f4e78;
+
+  color:
+    white;
+
+  font-weight:
+    bold;
+
+  padding:
+    10px 14px;
+
+}
+
+
+.section-body {
+
+  padding:
+    16px;
+
+}
+
+
+.grid {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0,1fr)
+    );
+
+  gap:
+    14px;
+
+}
+
+
+.field label {
+
+  display:
+    block;
+
+  font-size:
+    12px;
+
+  font-weight:
+    bold;
+
+  margin-bottom:
+    5px;
+
+}
+
+
+.field input,
+.field select {
+
+  width:
+    100%;
+
+  padding:
+    10px;
+
+  border:
+    1px solid
+    #cbd5e1;
+
+  border-radius:
+    7px;
+
+  font:
+    inherit;
+
+}
+
+
+/* ROAD TABLE */
+
+.road-wrapper {
+
+  overflow-x:
+    auto;
+
+}
+
+
+.road-table {
+
+  width:
+    100%;
+
+  min-width:
+    1050px;
+
+  border-collapse:
+    collapse;
+
+  table-layout:
+    fixed;
+
+}
+
+
+.road-table th,
+.road-table td {
+
+  border:
+    1px solid
+    #9ca3af;
+
+  padding:
+    6px;
+
+  vertical-align:
+    top;
+
+}
+
+
+.road-table th {
+
+  background:
+    #eef2f7;
+
+  font-size:
+    11px;
+
+  text-align:
+    center;
+
+}
+
+
+.road-table input,
+.road-table select,
+.road-table textarea {
+
+  width:
+    100%;
+
+  padding:
+    7px;
+
+  border:
+    1px solid
+    #d1d5db;
+
+  border-radius:
+    5px;
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  font-size:
+    12px;
+
+}
+
+
+.road-table textarea {
+
+  min-height:
+    55px;
+
+  resize:
+    vertical;
+
+}
+
+
+.actions {
+
+  display:
+    flex;
+
+  gap:
+    10px;
+
+  flex-wrap:
+    wrap;
+
+  margin-top:
+    15px;
+
+}
+
+
+button {
+
+  border:
+    0;
+
+  border-radius:
+    7px;
+
+  padding:
+    10px 16px;
+
+  cursor:
+    pointer;
+
+  font-weight:
+    bold;
+
+}
+
+
+.btn-green {
+
+  background:
+    #198754;
+
+  color:
+    white;
+
+}
+
+
+.btn-blue {
+
+  background:
+    #1f4e78;
+
+  color:
+    white;
+
+}
+
+
+.btn-red {
+
+  background:
+    #dc3545;
+
+  color:
+    white;
+
+}
+
+
+.total {
+
+  margin-top:
+    15px;
+
+  text-align:
+    right;
+
+  font-weight:
+    bold;
+
+  font-size:
+    15px;
+
+}
+
+
+.save-area {
+
+  margin-top:
+    25px;
+
+  display:
+    flex;
+
+  justify-content:
+    flex-end;
+
+}
+
+
+.save-button {
+
+  background:
+    #198754;
+
+  color:
+    white;
+
+  padding:
+    13px 28px;
+
+  font-size:
+    15px;
+
+}
+
+
+.save-button:disabled {
+
+  opacity:
+    .6;
+
+  cursor:
+    not-allowed;
+
+}
+
+
+@media(max-width:700px) {
+
+  body {
+
+    padding:
+      8px;
+
+  }
+
+
+  .page {
+
+    padding:
+      14px;
+
+  }
+
+
+  .grid {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-  <div class="page">
 
-    <div id="statusBox" class="status loading">
-      Connecting to BaRCO backend...
-    </div>
+<div class="page">
 
-    <div id="app" style="display:none;">
 
-      <div class="annex" id="annex"></div>
+  <div
+    id="statusBox"
+    class="status loading"
+  >
+    Connecting to BaRCO backend...
+  </div>
 
-      <div class="header">
 
-        <div
-          class="barangay"
-          id="barangay"
-        ></div>
+  <div
+    id="app"
+    style="display:none;"
+  >
 
-        <div
-          class="title"
-          id="reportTitle"
-        ></div>
 
-        <div
-          class="subtitle"
-          id="reportSubtitle"
-        ></div>
+    <div
+      class="annex"
+      id="annex"
+    ></div>
 
-        <div
-          class="reference"
-          id="dilgReference"
-        ></div>
 
-        <div class="report-id">
-          Report ID:
-          <span id="reportId"></span>
-        </div>
+    <div class="header">
+
+
+      <div
+        class="barangay"
+        id="barangay"
+      ></div>
+
+
+      <div
+        class="title"
+        id="reportTitle"
+      ></div>
+
+
+      <div
+        class="subtitle"
+        id="reportSubtitle"
+      ></div>
+
+
+      <div
+        class="reference"
+        id="dilgReference"
+      ></div>
+
+
+      <div class="report-id">
+
+        Report ID:
+
+        <span id="reportId">
+        </span>
 
       </div>
 
 
-      <div class="section">
-
-        <div class="section-title">
-          Report Information
-        </div>
-
-        <div class="section-body">
-
-          <div class="grid">
-
-            <div class="field">
-
-              <label>Month</label>
-
-              <select id="month">
-                <option>January</option>
-                <option>February</option>
-                <option>March</option>
-                <option>April</option>
-                <option>May</option>
-                <option>June</option>
-                <option>July</option>
-                <option>August</option>
-                <option>September</option>
-                <option>October</option>
-                <option>November</option>
-                <option>December</option>
-              </select>
-
-            </div>
+    </div>
 
 
-            <div class="field">
+    <!-- REPORT INFORMATION -->
 
-              <label>Year</label>
-
-              <input
-                type="number"
-                id="year"
-                value="2026"
-              >
-
-            </div>
+    <div class="section">
 
 
-            <div class="field">
+      <div class="section-title">
 
-              <label>Date of BaRCO</label>
+        Report Information
 
-              <input
-                type="date"
-                id="dateOfBarco"
-              >
-
-            </div>
+      </div>
 
 
-            <div class="field">
-
-              <label>Report Status</label>
-
-              <select id="reportStatus">
-                <option value="DRAFT">
-                  DRAFT
-                </option>
-
-                <option value="FINAL">
-                  FINAL
-                </option>
-              </select>
-
-            </div>
+      <div class="section-body">
 
 
-            <div class="field">
-
-              <label>Prepared By</label>
-
-              <input
-                type="text"
-                id="preparedBy"
-              >
-
-            </div>
+        <div class="grid">
 
 
-            <div class="field">
+          <div class="field">
 
-              <label>Punong Barangay</label>
+            <label>
+              Month
+            </label>
 
-              <input
-                type="text"
-                id="punongBarangay"
-              >
+            <select id="month">
 
-            </div>
+              <option>January</option>
+              <option>February</option>
+              <option>March</option>
+              <option>April</option>
+              <option>May</option>
+              <option>June</option>
+              <option>July</option>
+              <option>August</option>
+              <option>September</option>
+              <option>October</option>
+              <option>November</option>
+              <option>December</option>
+
+            </select>
 
           </div>
 
+
+          <div class="field">
+
+            <label>
+              Year
+            </label>
+
+            <input
+              id="year"
+              type="number"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              Date of BaRCO
+            </label>
+
+            <input
+              id="dateOfBarco"
+              type="date"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              Report Status
+            </label>
+
+            <input
+              id="reportStatus"
+              value="DRAFT"
+              readonly
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              Prepared By
+            </label>
+
+            <input
+              id="preparedBy"
+              type="text"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              Punong Barangay
+            </label>
+
+            <input
+              id="punongBarangay"
+              type="text"
+            >
+
+          </div>
+
+
         </div>
+
 
       </div>
 
     </div>
+
+
+
+    <!-- ROAD ENTRIES -->
+
+    <div class="section">
+
+
+      <div class="section-title">
+
+        Barangay Road Clearing Entries
+
+      </div>
+
+
+      <div class="section-body">
+
+
+        <div class="road-wrapper">
+
+
+          <table class="road-table">
+
+
+            <thead>
+
+              <tr>
+
+                <th style="width:80px;">
+                  YES / NO
+                </th>
+
+                <th style="width:240px;">
+                  Road / Street / Alley /
+                  Turned Over Road
+                </th>
+
+                <th style="width:100px;">
+                  Length (km)
+                </th>
+
+                <th style="width:140px;">
+                  Date of Clearing
+                </th>
+
+                <th style="width:260px;">
+                  Action Taken
+                </th>
+
+                <th style="width:210px;">
+                  Remarks / MOV
+                </th>
+
+                <th style="width:70px;">
+                  Remove
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody id="roadRows">
+            </tbody>
+
+
+          </table>
+
+
+        </div>
+
+
+        <div class="actions">
+
+
+          <button
+            type="button"
+            class="btn-green"
+            onclick="addRoadRow()"
+          >
+            + Add Road
+          </button>
+
+
+        </div>
+
+
+        <div class="total">
+
+          Total Road Length:
+
+          <span id="totalRoadLength">
+            0.00
+          </span>
+
+          km
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+
+
+    <div class="save-area">
+
+
+      <button
+        id="saveButton"
+        class="save-button"
+        type="button"
+        onclick="saveDraft()"
+      >
+        Save Draft
+      </button>
+
+
+    </div>
+
 
   </div>
 
 
+</div>
+
+
+
+<!-- HIDDEN POST FORM -->
+
+<iframe
+  name="barcoPostFrame"
+  id="barcoPostFrame"
+  style="display:none;"
+></iframe>
+
+
+<form
+  id="barcoPostForm"
+  method="POST"
+  target="barcoPostFrame"
+  style="display:none;"
+>
+
+  <input
+    type="hidden"
+    name="action"
+    value="saveDraft"
+  >
+
+  <textarea
+    name="payload"
+    id="postPayload"
+  ></textarea>
+
+</form>
+
+
+
 <script>
 
+
 /*
- * IMPORTANT:
- * Replace this with your current
- * Apps Script /exec deployment URL.
+ * Keep your WORKING /exec URL here.
  */
 const API_URL =
   'https://script.google.com/macros/s/AKfycbw4DOyLUBLe_RLsx6e-dK_52FLUMNhhWHmq4R9C2ViHpWwclJnMiQgPkA5h1lmaCKpe/exec';
 
 
+
 /* =========================================================
-   JSONP API CALL
+   JSONP GET
 ========================================================= */
 
 function apiGet(action) {
@@ -316,12 +927,20 @@ function apiGet(action) {
   return new Promise(
     function(resolve, reject) {
 
+
       const callbackName =
         'barcoCallback_' +
         Date.now() +
         '_' +
         Math.floor(
-          Math.random() * 100000
+          Math.random() *
+          100000
+        );
+
+
+      const script =
+        document.createElement(
+          'script'
         );
 
 
@@ -337,12 +956,6 @@ function apiGet(action) {
           script.remove();
 
         };
-
-
-      const script =
-        document.createElement(
-          'script'
-        );
 
 
       script.onerror =
@@ -366,7 +979,9 @@ function apiGet(action) {
       script.src =
         API_URL +
         '?action=' +
-        encodeURIComponent(action) +
+        encodeURIComponent(
+          action
+        ) +
         '&callback=' +
         encodeURIComponent(
           callbackName
@@ -385,6 +1000,7 @@ function apiGet(action) {
 }
 
 
+
 /* =========================================================
    INITIALIZE
 ========================================================= */
@@ -393,18 +1009,14 @@ window.addEventListener(
   'load',
   async function() {
 
-    const statusBox =
-      document.getElementById(
-        'statusBox'
-      );
 
     try {
 
-      /*
-       * First test backend.
-       */
+
       const ping =
-        await apiGet('ping');
+        await apiGet(
+          'ping'
+        );
 
 
       if (
@@ -413,17 +1025,16 @@ window.addEventListener(
       ) {
 
         throw new Error(
-          'Backend ping failed.'
+          'Backend offline.'
         );
 
       }
 
 
-      /*
-       * Load form data.
-       */
       const data =
-        await apiGet('init');
+        await apiGet(
+          'init'
+        );
 
 
       if (
@@ -432,10 +1043,8 @@ window.addEventListener(
       ) {
 
         throw new Error(
-          data &&
-          data.error
-            ? data.error
-            : 'Unable to load init data.'
+          data.error ||
+          'Unable to load data.'
         );
 
       }
@@ -444,44 +1053,51 @@ window.addEventListener(
       renderForm(data);
 
 
-      statusBox.className =
+      addRoadRow();
+
+
+      const status =
+        document.getElementById(
+          'statusBox'
+        );
+
+
+      status.className =
         'status success';
 
-      statusBox.textContent =
+
+      status.textContent =
         'BaRCO backend connected successfully.';
 
 
       document
-        .getElementById('app')
+        .getElementById(
+          'app'
+        )
         .style.display =
         'block';
 
 
-      /*
-       * Hide green message after
-       * a short time.
-       */
       setTimeout(
         function() {
 
-          statusBox.style.display =
+          status.style.display =
             'none';
 
         },
-        2500
+        2000
       );
 
 
-    } catch (error) {
+    } catch(error) {
 
-      console.error(error);
 
-      statusBox.className =
-        'status error';
-
-      statusBox.textContent =
+      showStatus(
+        'error',
         'Connection error: ' +
-        error.message;
+        error.message
+      );
+
 
     }
 
@@ -489,20 +1105,26 @@ window.addEventListener(
 );
 
 
+
 /* =========================================================
-   RENDER FORM
+   RENDER HEADER
 ========================================================= */
 
 function renderForm(data) {
 
+
   document
-    .getElementById('annex')
+    .getElementById(
+      'annex'
+    )
     .textContent =
     data.header.annexLabel;
 
 
   document
-    .getElementById('barangay')
+    .getElementById(
+      'barangay'
+    )
     .textContent =
     data.header.barangayName +
     ', ' +
@@ -512,44 +1134,52 @@ function renderForm(data) {
 
 
   document
-    .getElementById('reportTitle')
+    .getElementById(
+      'reportTitle'
+    )
     .textContent =
     data.header.reportTitle;
 
 
   document
-    .getElementById('reportSubtitle')
+    .getElementById(
+      'reportSubtitle'
+    )
     .textContent =
     data.header.reportSubtitle;
 
 
   document
-    .getElementById('dilgReference')
+    .getElementById(
+      'dilgReference'
+    )
     .textContent =
     data.header.dilgReference;
 
 
   document
-    .getElementById('reportId')
+    .getElementById(
+      'reportId'
+    )
     .textContent =
     data.reportId;
 
 
   document
-    .getElementById('preparedBy')
+    .getElementById(
+      'preparedBy'
+    )
     .value =
     data.report.preparedBy;
 
 
   document
-    .getElementById('punongBarangay')
+    .getElementById(
+      'punongBarangay'
+    )
     .value =
     data.report.punongBarangay;
 
-
-  /*
-   * Set current local month/year.
-   */
 
   const now =
     new Date();
@@ -559,49 +1189,646 @@ function renderForm(data) {
     now.toLocaleString(
       'en-US',
       {
-        month: 'long'
+        month:
+          'long'
       }
     );
 
 
   document
-    .getElementById('month')
+    .getElementById(
+      'month'
+    )
     .value =
     monthName;
 
 
   document
-    .getElementById('year')
+    .getElementById(
+      'year'
+    )
     .value =
     now.getFullYear();
 
 
   document
-    .getElementById('dateOfBarco')
+    .getElementById(
+      'dateOfBarco'
+    )
     .value =
-    formatDateForInput(now);
+    formatDateForInput(
+      now
+    );
 
 }
 
 
+
 /* =========================================================
-   DATE FORMAT
+   ADD ROAD
 ========================================================= */
 
-function formatDateForInput(date) {
+function addRoadRow() {
+
+
+  const tbody =
+    document.getElementById(
+      'roadRows'
+    );
+
+
+  const tr =
+    document.createElement(
+      'tr'
+    );
+
+
+  tr.innerHTML = `
+
+    <td>
+
+      <select class="conducted">
+
+        <option value="YES">
+          YES
+        </option>
+
+        <option value="NO">
+          NO
+        </option>
+
+      </select>
+
+    </td>
+
+
+    <td>
+
+      <input
+        class="roadName"
+        type="text"
+        placeholder="Example: Puro – Burak Barangay Road"
+      >
+
+    </td>
+
+
+    <td>
+
+      <input
+        class="roadLength"
+        type="number"
+        min="0"
+        step="0.01"
+        value="0"
+        oninput="computeRoadTotal()"
+      >
+
+    </td>
+
+
+    <td>
+
+      <input
+        class="clearingDate"
+        type="date"
+        value="${
+          document.getElementById(
+            'dateOfBarco'
+          ).value
+        }"
+      >
+
+    </td>
+
+
+    <td>
+
+      <textarea
+        class="actionTaken"
+        placeholder="Action taken"
+      ></textarea>
+
+    </td>
+
+
+    <td>
+
+      <textarea
+        class="remarks"
+      >Photo Documentation</textarea>
+
+    </td>
+
+
+    <td
+      style="text-align:center;"
+    >
+
+      <button
+        type="button"
+        class="btn-red"
+        onclick="removeRoadRow(this)"
+      >
+        ×
+      </button>
+
+    </td>
+
+  `;
+
+
+  tbody.appendChild(
+    tr
+  );
+
+
+  computeRoadTotal();
+
+}
+
+
+
+/* =========================================================
+   REMOVE ROAD
+========================================================= */
+
+function removeRoadRow(button) {
+
+
+  const rows =
+    document.querySelectorAll(
+      '#roadRows tr'
+    );
+
+
+  if (
+    rows.length <= 1
+  ) {
+
+    alert(
+      'At least one road entry is required.'
+    );
+
+    return;
+
+  }
+
+
+  button
+    .closest('tr')
+    .remove();
+
+
+  computeRoadTotal();
+
+}
+
+
+
+/* =========================================================
+   TOTAL
+========================================================= */
+
+function computeRoadTotal() {
+
+
+  let total = 0;
+
+
+  document
+    .querySelectorAll(
+      '.roadLength'
+    )
+    .forEach(
+      function(input) {
+
+        total +=
+          Number(
+            input.value ||
+            0
+          );
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      'totalRoadLength'
+    )
+    .textContent =
+    total.toFixed(2);
+
+}
+
+
+
+/* =========================================================
+   COLLECT ROADS
+========================================================= */
+
+function collectRoads() {
+
+
+  const roads = [];
+
+
+  document
+    .querySelectorAll(
+      '#roadRows tr'
+    )
+    .forEach(
+      function(row) {
+
+
+        roads.push({
+
+          conducted:
+            row
+              .querySelector(
+                '.conducted'
+              )
+              .value,
+
+          roadName:
+            row
+              .querySelector(
+                '.roadName'
+              )
+              .value
+              .trim(),
+
+          roadLength:
+            Number(
+              row
+                .querySelector(
+                  '.roadLength'
+                )
+                .value ||
+              0
+            ),
+
+          clearingDate:
+            row
+              .querySelector(
+                '.clearingDate'
+              )
+              .value,
+
+          actionTaken:
+            row
+              .querySelector(
+                '.actionTaken'
+              )
+              .value
+              .trim(),
+
+          remarks:
+            row
+              .querySelector(
+                '.remarks'
+              )
+              .value
+              .trim()
+
+        });
+
+
+      }
+    );
+
+
+  return roads;
+
+}
+
+
+
+/* =========================================================
+   SAVE DRAFT
+========================================================= */
+
+function saveDraft() {
+
+
+  const button =
+    document.getElementById(
+      'saveButton'
+    );
+
+
+  const roads =
+    collectRoads();
+
+
+  /*
+   * Basic validation.
+   */
+  if (
+    !document
+      .getElementById(
+        'dateOfBarco'
+      )
+      .value
+  ) {
+
+    alert(
+      'Please select Date of BaRCO.'
+    );
+
+    return;
+
+  }
+
+
+  for (
+    let i = 0;
+    i < roads.length;
+    i++
+  ) {
+
+    if (
+      !roads[i].roadName
+    ) {
+
+      alert(
+        'Please enter the road name for Road #' +
+        (i + 1) +
+        '.'
+      );
+
+      return;
+
+    }
+
+    if (
+      !roads[i].clearingDate
+    ) {
+
+      alert(
+        'Please select the clearing date for Road #' +
+        (i + 1) +
+        '.'
+      );
+
+      return;
+
+    }
+
+  }
+
+
+  const payload = {
+
+    reportId:
+      document
+        .getElementById(
+          'reportId'
+        )
+        .textContent,
+
+    month:
+      document
+        .getElementById(
+          'month'
+        )
+        .value,
+
+    year:
+      Number(
+        document
+          .getElementById(
+            'year'
+          )
+          .value
+      ),
+
+    dateOfBarco:
+      document
+        .getElementById(
+          'dateOfBarco'
+        )
+        .value,
+
+    preparedBy:
+      document
+        .getElementById(
+          'preparedBy'
+        )
+        .value
+        .trim(),
+
+    punongBarangay:
+      document
+        .getElementById(
+          'punongBarangay'
+        )
+        .value
+        .trim(),
+
+    roads:
+      roads
+
+  };
+
+
+  button.disabled =
+    true;
+
+
+  button.textContent =
+    'Saving...';
+
+
+  showStatus(
+    'loading',
+    'Saving draft...'
+  );
+
+
+  document
+    .getElementById(
+      'postPayload'
+    )
+    .value =
+    JSON.stringify(
+      payload
+    );
+
+
+  const form =
+    document.getElementById(
+      'barcoPostForm'
+    );
+
+
+  form.action =
+    API_URL;
+
+
+  form.submit();
+
+}
+
+
+
+/* =========================================================
+   RECEIVE RESPONSE FROM APPS SCRIPT IFRAME
+========================================================= */
+
+window.addEventListener(
+  'message',
+  function(event) {
+
+
+    const data =
+      event.data;
+
+
+    if (
+      !data ||
+      data.source !==
+      'BARCO_API'
+    ) {
+
+      return;
+
+    }
+
+
+    const result =
+      data.result;
+
+
+    const button =
+      document.getElementById(
+        'saveButton'
+      );
+
+
+    button.disabled =
+      false;
+
+
+    button.textContent =
+      'Save Draft';
+
+
+    if (
+      result &&
+      result.success
+    ) {
+
+
+      document
+        .getElementById(
+          'reportId'
+        )
+        .textContent =
+        result.reportId;
+
+
+      showStatus(
+        'success',
+        'Draft saved successfully. ' +
+        result.roadsSaved +
+        ' road entry/entries saved. ' +
+        'Total road length: ' +
+        Number(
+          result.totalRoadLength
+        ).toFixed(2) +
+        ' km.'
+      );
+
+
+    } else {
+
+
+      showStatus(
+        'error',
+        result &&
+        result.error
+          ? result.error
+          : 'Unable to save draft.'
+      );
+
+
+    }
+
+
+  }
+);
+
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function showStatus(
+  type,
+  message
+) {
+
+
+  const box =
+    document.getElementById(
+      'statusBox'
+    );
+
+
+  box.style.display =
+    'block';
+
+
+  box.className =
+    'status ' +
+    type;
+
+
+  box.textContent =
+    message;
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+
+}
+
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+function formatDateForInput(
+  date
+) {
+
 
   const year =
     date.getFullYear();
 
+
   const month =
     String(
       date.getMonth() + 1
-    ).padStart(2, '0');
+    ).padStart(
+      2,
+      '0'
+    );
+
 
   const day =
     String(
       date.getDate()
-    ).padStart(2, '0');
+    ).padStart(
+      2,
+      '0'
+    );
 
 
   return (
@@ -614,7 +1841,10 @@ function formatDateForInput(date) {
 
 }
 
+
 </script>
 
+
 </body>
+
 </html>
