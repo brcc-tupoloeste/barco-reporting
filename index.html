@@ -1388,7 +1388,82 @@ async function saveDraft() {
 
 }
 
+function sleep(ms) {
 
+  return new Promise(
+    function(resolve) {
+
+      setTimeout(
+        resolve,
+        ms
+      );
+
+    }
+  );
+
+}
+
+
+/*
+ * Check repeatedly until the saved
+ * report and expected road count appear.
+ */
+async function waitForSavedReport(
+  reportId,
+  expectedRoadCount
+) {
+
+  const maxAttempts =
+    8;
+
+
+  for (
+    let attempt = 1;
+    attempt <= maxAttempts;
+    attempt++
+  ) {
+
+    const result =
+      await apiGet(
+        'getReport',
+        {
+          reportId:
+            reportId
+        }
+      );
+
+
+    if (
+      result &&
+      result.success &&
+      result.found &&
+      Number(
+        result.roadsSaved
+      ) ===
+      Number(
+        expectedRoadCount
+      )
+    ) {
+
+      return result;
+
+    }
+
+
+    await sleep(
+      1000
+    );
+
+  }
+
+
+  throw new Error(
+    'Save confirmation timed out.'
+  );
+
+}
+
+  
 /* =========================================================
    STATUS
 ========================================================= */
