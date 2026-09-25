@@ -18,8 +18,13 @@
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
+  padding: 0;
+}
+
+body {
   padding: 20px;
   font-family: Arial, sans-serif;
   background: #e5e7eb;
@@ -27,6 +32,7 @@ body {
 }
 
 .page {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   background: #ffffff;
@@ -36,9 +42,11 @@ body {
 }
 
 .status {
+  display: block;
   padding: 14px;
-  border-radius: 8px;
   margin-bottom: 18px;
+  border-radius: 8px;
+  font-size: 14px;
   font-weight: bold;
 }
 
@@ -59,8 +67,10 @@ body {
 
 .annex {
   text-align: right;
-  font-weight: bold;
+  font-size: 14px;
   font-style: italic;
+  font-weight: bold;
+  margin-bottom: 4px;
 }
 
 .header {
@@ -69,75 +79,93 @@ body {
 }
 
 .barangay {
-  font-weight: bold;
   font-size: 16px;
+  font-weight: bold;
 }
 
 .title {
-  font-weight: bold;
+  margin-top: 3px;
   font-size: 20px;
-  margin-top: 4px;
+  font-weight: bold;
 }
 
 .subtitle {
-  font-weight: bold;
   margin-top: 3px;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .reference {
-  margin-top: 4px;
+  margin-top: 7px;
+  font-size: 10px;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.slogan {
+  margin-top: 6px;
   font-size: 11px;
   font-style: italic;
-  line-height: 1.4;
 }
 
 .report-id {
   margin-top: 12px;
   color: #1f4e78;
+  font-size: 14px;
   font-weight: bold;
 }
 
 .section {
+  margin-top: 18px;
   border: 1px solid #d1d5db;
   border-radius: 10px;
   overflow: hidden;
-  margin-top: 20px;
 }
 
 .section-title {
-  background: #1f4e78;
-  color: white;
-  font-weight: bold;
   padding: 10px 14px;
+  background: #1f4e78;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .section-body {
-  padding: 16px;
+  padding: 14px;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
 .field label {
   display: block;
-  font-size: 12px;
-  font-weight: bold;
   margin-bottom: 5px;
+  font-size: 11px;
+  font-weight: bold;
 }
 
 .field input,
-.field select {
+.field select,
+.field textarea {
   width: 100%;
-  padding: 10px;
+  padding: 9px 10px;
   border: 1px solid #cbd5e1;
-  border-radius: 7px;
-  font: inherit;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111827;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+}
+
+.field input[readonly] {
+  background: #f8fafc;
 }
 
 .road-wrapper {
+  width: 100%;
   overflow-x: auto;
 }
 
@@ -150,15 +178,15 @@ body {
 
 .road-table th,
 .road-table td {
-  border: 1px solid #9ca3af;
   padding: 6px;
+  border: 1px solid #9ca3af;
   vertical-align: top;
 }
 
 .road-table th {
   background: #eef2f7;
-  font-size: 11px;
   text-align: center;
+  font-size: 10px;
 }
 
 .road-table input,
@@ -173,14 +201,14 @@ body {
 }
 
 .road-table textarea {
-  min-height: 55px;
+  min-height: 52px;
   resize: vertical;
 }
 
 .actions {
   display: flex;
-  gap: 10px;
   flex-wrap: wrap;
+  gap: 10px;
   margin-top: 15px;
 }
 
@@ -188,52 +216,46 @@ button {
   border: 0;
   border-radius: 7px;
   padding: 10px 16px;
-  cursor: pointer;
+  font-family: Arial, sans-serif;
   font-weight: bold;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
 }
 
 .btn-green {
   background: #198754;
-  color: white;
+  color: #ffffff;
 }
 
 .btn-red {
+  padding: 7px 10px;
   background: #dc3545;
-  color: white;
+  color: #ffffff;
 }
 
 .total {
   margin-top: 15px;
   text-align: right;
+  font-size: 14px;
   font-weight: bold;
-  font-size: 15px;
 }
 
 .save-area {
-  margin-top: 25px;
   display: flex;
   justify-content: flex-end;
+  margin-top: 22px;
 }
 
 .save-button {
+  min-width: 150px;
+  padding: 13px 24px;
   background: #198754;
-  color: white;
-  padding: 13px 28px;
-  font-size: 15px;
-}
-
-.save-button:disabled {
-  opacity: .6;
-  cursor: not-allowed;
-}
-
-#barcoBridge {
-  position: fixed;
-  width: 1px;
-  height: 1px;
-  border: 0;
-  opacity: 0;
-  pointer-events: none;
+  color: #ffffff;
+  font-size: 14px;
 }
 
 @media(max-width:700px) {
@@ -244,10 +266,15 @@ button {
 
   .page {
     padding: 14px;
+    border-radius: 8px;
   }
 
   .grid {
     grid-template-columns: 1fr;
+  }
+
+  .title {
+    font-size: 18px;
   }
 
 }
@@ -258,18 +285,6 @@ button {
 
 
 <body>
-
-
-<!--
-  IMPORTANT:
-  Replace src with your CURRENT Apps Script /exec URL.
--->
-
-<iframe
-  id="barcoBridge"
-  src="https://script.google.com/macros/s/AKfycbw4DOyLUBLe_RLsx6e-dK_52FLUMNhhWHmq4R9C2ViHpWwclJnMiQgPkA5h1lmaCKpe/exec"
-></iframe>
-
 
 <div class="page">
 
@@ -287,40 +302,55 @@ button {
   >
 
     <div
-      class="annex"
       id="annex"
+      class="annex"
     ></div>
 
 
     <div class="header">
 
       <div
-        class="barangay"
         id="barangay"
+        class="barangay"
       ></div>
 
       <div
-        class="title"
         id="reportTitle"
+        class="title"
       ></div>
 
       <div
-        class="subtitle"
         id="reportSubtitle"
+        class="subtitle"
       ></div>
 
       <div
-        class="reference"
         id="dilgReference"
+        class="reference"
       ></div>
+
+      <div
+        id="slogan"
+        class="slogan"
+      ></div>
+
 
       <div class="report-id">
+
         Report ID:
-        <span id="reportId"></span>
+
+        <span id="reportId">
+          -
+        </span>
+
       </div>
 
     </div>
 
+
+    <!-- ===================================================
+         REPORT INFORMATION
+    ==================================================== -->
 
     <div class="section">
 
@@ -328,79 +358,147 @@ button {
         Report Information
       </div>
 
+
       <div class="section-body">
 
         <div class="grid">
 
+
           <div class="field">
-            <label>Month</label>
+
+            <label>
+              Month
+            </label>
 
             <select id="month">
-              <option>January</option>
-              <option>February</option>
-              <option>March</option>
-              <option>April</option>
-              <option>May</option>
-              <option>June</option>
-              <option>July</option>
-              <option>August</option>
-              <option>September</option>
-              <option>October</option>
-              <option>November</option>
-              <option>December</option>
+
+              <option value="January">
+                January
+              </option>
+
+              <option value="February">
+                February
+              </option>
+
+              <option value="March">
+                March
+              </option>
+
+              <option value="April">
+                April
+              </option>
+
+              <option value="May">
+                May
+              </option>
+
+              <option value="June">
+                June
+              </option>
+
+              <option value="July">
+                July
+              </option>
+
+              <option value="August">
+                August
+              </option>
+
+              <option value="September">
+                September
+              </option>
+
+              <option value="October">
+                October
+              </option>
+
+              <option value="November">
+                November
+              </option>
+
+              <option value="December">
+                December
+              </option>
+
             </select>
+
           </div>
 
 
           <div class="field">
-            <label>Year</label>
+
+            <label>
+              Year
+            </label>
 
             <input
               id="year"
               type="number"
+              min="2000"
+              max="2100"
             >
+
           </div>
 
 
           <div class="field">
-            <label>Date of BaRCO</label>
+
+            <label>
+              Date of BaRCO
+            </label>
 
             <input
               id="dateOfBarco"
               type="date"
+              onchange="syncRoadDates()"
             >
+
           </div>
 
 
           <div class="field">
-            <label>Report Status</label>
+
+            <label>
+              Report Status
+            </label>
 
             <input
               id="reportStatus"
+              type="text"
               value="DRAFT"
               readonly
             >
+
           </div>
 
 
           <div class="field">
-            <label>Prepared By</label>
+
+            <label>
+              Prepared By
+            </label>
 
             <input
               id="preparedBy"
               type="text"
             >
+
           </div>
 
 
           <div class="field">
-            <label>Punong Barangay</label>
+
+            <label>
+              Punong Barangay
+            </label>
 
             <input
               id="punongBarangay"
               type="text"
             >
+
           </div>
+
 
         </div>
 
@@ -409,13 +507,19 @@ button {
     </div>
 
 
+    <!-- ===================================================
+         ROAD ENTRIES
+    ==================================================== -->
+
     <div class="section">
 
       <div class="section-title">
         Barangay Road Clearing Entries
       </div>
 
+
       <div class="section-body">
+
 
         <div class="road-wrapper">
 
@@ -458,7 +562,9 @@ button {
 
             </thead>
 
-            <tbody id="roadRows"></tbody>
+
+            <tbody id="roadRows">
+            </tbody>
 
           </table>
 
@@ -479,11 +585,15 @@ button {
 
 
         <div class="total">
+
           Total Road Length:
+
           <span id="totalRoadLength">
             0.00
           </span>
+
           km
+
         </div>
 
       </div>
@@ -495,8 +605,8 @@ button {
 
       <button
         id="saveButton"
-        class="save-button"
         type="button"
+        class="save-button"
         onclick="saveDraft()"
       >
         Save Draft
@@ -511,276 +621,43 @@ button {
 
 <script>
 
+/************************************************************
+ * BaRCO REPORT GENERATOR
+ * GitHub Pages Frontend
+ * Apps Script iframe bridge version
+ ************************************************************/
+
+
 /* =========================================================
-   BRIDGE CONFIG
+   APPS SCRIPT DEPLOYMENT URL
 ========================================================= */
 
-const BARCO_BRIDGE_ORIGIN =
-  'https://script.google.com';
+const API_URL =
+  'https://script.google.com/macros/s/AKfycbw4DOyLUBLe_RLsx6e-dK_52FLUMNhhWHmq4R9C2ViHpWwclJnMiQgPkA5h1lmaCKpe/exec';
 
-let bridgeReady =
+
+/* =========================================================
+   BRIDGE STATE
+========================================================= */
+
+let barcoBridgeFrame =
+  null;
+
+let barcoBridgeWindow =
+  null;
+
+let barcoBridgeReady =
   false;
 
-let requestCounter =
-  0;
+let barcoBridgeReadyPromise =
+  null;
 
-const pendingRequests =
-  new Map();
-
-
-/* =========================================================
-   RECEIVE BRIDGE RESPONSES
-========================================================= */
-
-window.addEventListener(
-  'message',
-  function(event) {
-
-    const data =
-      event.data || {};
-
-
-    if (
-      data.__barcoBridgeReady === true
-    ) {
-
-      bridgeReady =
-        true;
-
-      console.log(
-        '[BaRCO CLIENT] Bridge ready'
-      );
-
-      return;
-    }
-
-
-    if (
-      data.__barcoApi !== true ||
-      !data.id
-    ) {
-
-      return;
-    }
-
-
-    const pending =
-      pendingRequests.get(
-        data.id
-      );
-
-
-    if (!pending) {
-      return;
-    }
-
-
-    pendingRequests.delete(
-      data.id
-    );
-
-
-    clearTimeout(
-      pending.timeout
-    );
-
-
-    if (data.ok) {
-
-      pending.resolve(
-        data.data
-      );
-
-    } else {
-
-      pending.reject(
-        new Error(
-          data.error ||
-          'BaRCO request failed.'
-        )
-      );
-
-    }
-
-  }
-);
+const barcoBridgeWaiters =
+  {};
 
 
 /* =========================================================
-   CALL APPS SCRIPT THROUGH BRIDGE
-========================================================= */
-
-function barcoApi(
-  action,
-  payload
-) {
-
-  payload =
-    payload || {};
-
-
-  return new Promise(
-    function(resolve, reject) {
-
-      const id =
-        'BARCO_REQ_' +
-        Date.now() +
-        '_' +
-        (++requestCounter);
-
-
-      const timeout =
-        setTimeout(
-          function() {
-
-            pendingRequests.delete(
-              id
-            );
-
-            reject(
-              new Error(
-                'BaRCO backend request timed out.'
-              )
-            );
-
-          },
-          30000
-        );
-
-
-      pendingRequests.set(
-        id,
-        {
-          resolve:
-            resolve,
-
-          reject:
-            reject,
-
-          timeout:
-            timeout
-        }
-      );
-
-
-      const iframe =
-        document.getElementById(
-          'barcoBridge'
-        );
-
-
-      if (
-        !iframe ||
-        !iframe.contentWindow
-      ) {
-
-        clearTimeout(
-          timeout
-        );
-
-        pendingRequests.delete(
-          id
-        );
-
-        reject(
-          new Error(
-            'BaRCO bridge is not available.'
-          )
-        );
-
-        return;
-      }
-
-
-      iframe.contentWindow
-        .postMessage(
-          {
-            __barcoApiRequest:
-              true,
-
-            id:
-              id,
-
-            action:
-              action,
-
-            payload:
-              payload
-          },
-          '*'
-        );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   WAIT FOR BRIDGE
-========================================================= */
-
-async function waitForBridge() {
-
-  const iframe =
-    document.getElementById(
-      'barcoBridge'
-    );
-
-
-  for (
-    let i = 0;
-    i < 40;
-    i++
-  ) {
-
-    if (bridgeReady) {
-      return true;
-    }
-
-
-    if (
-      iframe &&
-      iframe.contentWindow
-    ) {
-
-      iframe.contentWindow
-        .postMessage(
-          {
-            __barcoBridgeProbe:
-              true
-          },
-          '*'
-        );
-
-    }
-
-
-    await sleep(250);
-
-  }
-
-
-  throw new Error(
-    'BaRCO bridge did not become ready.'
-  );
-
-}
-
-
-/* =========================================================
-   BRIDGE CONFIG
-========================================================= */
-
-let barcoBridgeFrame = null;
-let barcoBridgeWindow = null;
-let barcoBridgeReady = false;
-let barcoBridgeWaiters = {};
-let barcoBridgeReadyPromise = null;
-
-
-/* =========================================================
-   RECEIVE MESSAGES FROM APPS SCRIPT BRIDGE
+   RECEIVE MESSAGES FROM APPS SCRIPT
 ========================================================= */
 
 window.addEventListener(
@@ -791,29 +668,31 @@ window.addEventListener(
       ev.data || {};
 
 
-    /* -------------------------------------------------------
+    /* -----------------------------------------------------
        BRIDGE READY
-    ------------------------------------------------------- */
+    ----------------------------------------------------- */
 
     if (
       m.__barcoBridgeReady === true
     ) {
 
       console.log(
-        '[BaRCO CLIENT] Bridge ready',
+        '[BaRCO CLIENT] READY FROM:',
         ev.origin
       );
 
 
       /*
        * IMPORTANT:
-       * Apps Script may run inside a nested
-       * googleusercontent frame.
        *
-       * Save the EXACT window that sent READY.
+       * Apps Script HtmlService may be inside a
+       * nested googleusercontent frame.
+       *
+       * Save the exact window that sent READY.
        */
       barcoBridgeWindow =
         ev.source;
+
 
       barcoBridgeReady =
         true;
@@ -821,7 +700,7 @@ window.addEventListener(
 
       window.dispatchEvent(
         new Event(
-          'barco-bridge-ready-internal'
+          'barco-bridge-ready'
         )
       );
 
@@ -831,9 +710,9 @@ window.addEventListener(
     }
 
 
-    /* -------------------------------------------------------
+    /* -----------------------------------------------------
        API RESPONSE
-    ------------------------------------------------------- */
+    ----------------------------------------------------- */
 
     if (
       m.__barcoApi !== true ||
@@ -845,14 +724,25 @@ window.addEventListener(
     }
 
 
+    console.log(
+      '[BaRCO CLIENT] RESPONSE:',
+      m.id,
+      m.ok
+    );
+
+
     const pending =
       barcoBridgeWaiters[
         m.id
       ];
 
 
-    if (!pending) {
+    if (
+      !pending
+    ) {
+
       return;
+
     }
 
 
@@ -866,7 +756,9 @@ window.addEventListener(
     );
 
 
-    if (m.ok) {
+    if (
+      m.ok
+    ) {
 
       pending.resolve(
         m.data === undefined ||
@@ -891,7 +783,52 @@ window.addEventListener(
 
 
 /* =========================================================
-   ENSURE BRIDGE
+   PROBE BRIDGE
+========================================================= */
+
+function probeBarcoBridge() {
+
+  if (
+    !barcoBridgeFrame ||
+    !barcoBridgeFrame.contentWindow
+  ) {
+
+    return;
+
+  }
+
+
+  try {
+
+    barcoBridgeFrame
+      .contentWindow
+      .postMessage(
+        {
+          __barcoBridgeProbe:
+            true
+        },
+        '*'
+      );
+
+
+    console.log(
+      '[BaRCO CLIENT] PROBE SENT'
+    );
+
+  } catch(error) {
+
+    console.warn(
+      '[BaRCO CLIENT] PROBE ERROR',
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   CREATE / ENSURE BRIDGE
 ========================================================= */
 
 function ensureBarcoBridge() {
@@ -917,16 +854,49 @@ function ensureBarcoBridge() {
 
   barcoBridgeReadyPromise =
     new Promise(
-      function(resolve, reject) {
+      function(
+        resolve,
+        reject
+      ) {
 
         let settled =
           false;
 
+        let probeTimer =
+          null;
+
+        let timeoutTimer =
+          null;
+
+
+        function cleanupReadyListener() {
+
+          window.removeEventListener(
+            'barco-bridge-ready',
+            finishReady
+          );
+
+        }
+
 
         function finishReady() {
 
-          if (settled) {
+          if (
+            settled
+          ) {
+
             return;
+
+          }
+
+
+          if (
+            !barcoBridgeReady ||
+            !barcoBridgeWindow
+          ) {
+
+            return;
+
           }
 
 
@@ -934,13 +904,34 @@ function ensureBarcoBridge() {
             true;
 
 
-          clearTimeout(
-            timer
+          if (
+            probeTimer
+          ) {
+
+            clearInterval(
+              probeTimer
+            );
+
+          }
+
+
+          if (
+            timeoutTimer
+          ) {
+
+            clearTimeout(
+              timeoutTimer
+            );
+
+          }
+
+
+          cleanupReadyListener();
+
+
+          console.log(
+            '[BaRCO CLIENT] BRIDGE CONNECTED'
           );
-
-
-          barcoBridgeReady =
-            true;
 
 
           resolve();
@@ -948,130 +939,216 @@ function ensureBarcoBridge() {
         }
 
 
-        const timer =
-          setTimeout(
-            function() {
-
-              if (settled) {
-                return;
-              }
-
-
-              settled =
-                true;
-
-
-              barcoBridgeReadyPromise =
-                null;
-
-
-              reject(
-                new Error(
-                  'BaRCO bridge did not become ready.'
-                )
-              );
-
-            },
-            25000
-          );
-
-
-        if (
-          !barcoBridgeFrame
-        ) {
-
-          barcoBridgeFrame =
-            document.getElementById(
-              'barcoBridge'
-            );
-
+        function failReady() {
 
           if (
-            !barcoBridgeFrame
+            settled
           ) {
-
-            reject(
-              new Error(
-                'BaRCO bridge iframe not found.'
-              )
-            );
 
             return;
 
           }
 
 
-          /*
-           * Probe after iframe load.
-           */
-          barcoBridgeFrame
-            .addEventListener(
-              'load',
-              function() {
-
-                [
-                  0,
-                  300,
-                  1000,
-                  2500
-                ].forEach(
-                  function(delay) {
-
-                    setTimeout(
-                      function() {
-
-                        if (
-                          barcoBridgeReady
-                        ) {
-                          return;
-                        }
+          settled =
+            true;
 
 
-                        try {
+          if (
+            probeTimer
+          ) {
 
-                          barcoBridgeFrame
-                            .contentWindow
-                            .postMessage(
-                              {
-                                __barcoBridgeProbe:
-                                  true
-                              },
-                              '*'
-                            );
-
-                        } catch (err) {}
-
-                      },
-                      delay
-                    );
-
-                  }
-                );
-
-              }
+            clearInterval(
+              probeTimer
             );
 
-        }
+          }
 
 
-        if (
-          barcoBridgeReady &&
-          barcoBridgeWindow
-        ) {
+          cleanupReadyListener();
 
-          finishReady();
+
+          barcoBridgeReadyPromise =
+            null;
+
+
+          reject(
+            new Error(
+              'BaRCO bridge did not become ready.'
+            )
+          );
 
         }
 
 
         window.addEventListener(
-          'barco-bridge-ready-internal',
-          finishReady,
-          {
-            once:
-              true
-          }
+          'barco-bridge-ready',
+          finishReady
         );
+
+
+        /* -------------------------------------------------
+           CREATE HIDDEN APPS SCRIPT IFRAME
+        ------------------------------------------------- */
+
+        if (
+          !barcoBridgeFrame
+        ) {
+
+          barcoBridgeFrame =
+            document.createElement(
+              'iframe'
+            );
+
+
+          barcoBridgeFrame.id =
+            'barcoApiBridge';
+
+
+          barcoBridgeFrame
+            .setAttribute(
+              'aria-hidden',
+              'true'
+            );
+
+
+          barcoBridgeFrame.style.position =
+            'fixed';
+
+          barcoBridgeFrame.style.width =
+            '1px';
+
+          barcoBridgeFrame.style.height =
+            '1px';
+
+          barcoBridgeFrame.style.opacity =
+            '0';
+
+          barcoBridgeFrame.style.pointerEvents =
+            'none';
+
+          barcoBridgeFrame.style.border =
+            '0';
+
+          barcoBridgeFrame.style.left =
+            '-9999px';
+
+          barcoBridgeFrame.style.top =
+            '-9999px';
+
+
+          /*
+           * Cache-buster.
+           *
+           * Ensures latest deployed Apps Script bridge
+           * is loaded instead of a previously cached page.
+           */
+          const separator =
+            API_URL.indexOf('?') >= 0
+              ? '&'
+              : '?';
+
+
+          barcoBridgeFrame.src =
+            API_URL +
+            separator +
+            'barco_bridge=1&v=' +
+            encodeURIComponent(
+              String(
+                Date.now()
+              )
+            );
+
+
+          barcoBridgeFrame
+            .addEventListener(
+              'load',
+              function() {
+
+                console.log(
+                  '[BaRCO CLIENT] IFRAME LOADED'
+                );
+
+
+                probeBarcoBridge();
+
+
+                setTimeout(
+                  probeBarcoBridge,
+                  300
+                );
+
+
+                setTimeout(
+                  probeBarcoBridge,
+                  1000
+                );
+
+
+                setTimeout(
+                  probeBarcoBridge,
+                  2500
+                );
+
+              }
+            );
+
+
+          document.body
+            .appendChild(
+              barcoBridgeFrame
+            );
+
+        }
+
+
+        /*
+         * Probe immediately.
+         */
+        probeBarcoBridge();
+
+
+        /*
+         * Continue probing until READY arrives.
+         */
+        probeTimer =
+          setInterval(
+            function() {
+
+              if (
+                barcoBridgeReady &&
+                barcoBridgeWindow
+              ) {
+
+                finishReady();
+
+                return;
+
+              }
+
+
+              probeBarcoBridge();
+
+            },
+            1000
+          );
+
+
+        /*
+         * Maximum bridge startup wait.
+         */
+        timeoutTimer =
+          setTimeout(
+            failReady,
+            30000
+          );
+
+
+        /*
+         * READY may already have arrived
+         * before timers were installed.
+         */
+        finishReady();
 
       }
     );
@@ -1083,7 +1160,7 @@ function ensureBarcoBridge() {
 
 
 /* =========================================================
-   CALL APPS SCRIPT THROUGH EXACT BRIDGE WINDOW
+   SEND API REQUEST THROUGH EXACT BRIDGE WINDOW
 ========================================================= */
 
 function barcoApi(
@@ -1106,7 +1183,7 @@ function barcoApi(
           ) {
 
             const id =
-              'BARCO-' +
+              'BARCO-BRIDGE-' +
               Date.now() +
               '-' +
               Math.random()
@@ -1129,7 +1206,7 @@ function barcoApi(
 
                   reject(
                     new Error(
-                      'BaRCO server request timed out.'
+                      'BaRCO backend request timed out.'
                     )
                   );
 
@@ -1156,18 +1233,8 @@ function barcoApi(
 
             try {
 
-              /*
-               * CRITICAL FIX:
-               * Send request back to the exact
-               * googleusercontent window that
-               * sent the READY message.
-               */
-              const bridgeTarget =
-                barcoBridgeWindow;
-
-
               if (
-                !bridgeTarget
+                !barcoBridgeWindow
               ) {
 
                 throw new Error(
@@ -1177,7 +1244,20 @@ function barcoApi(
               }
 
 
-              bridgeTarget
+              console.log(
+                '[BaRCO CLIENT] REQUEST SENT:',
+                action,
+                id
+              );
+
+
+              /*
+               * CRITICAL:
+               *
+               * Send the request to the exact nested
+               * Apps Script window that sent READY.
+               */
+              barcoBridgeWindow
                 .postMessage(
                   {
 
@@ -1196,12 +1276,6 @@ function barcoApi(
                   },
                   '*'
                 );
-
-
-              console.log(
-                '[BaRCO CLIENT] Request sent:',
-                action
-              );
 
 
             } catch(error) {
@@ -1230,8 +1304,281 @@ function barcoApi(
 
 }
 
+
 /* =========================================================
-   ADD ROAD
+   INITIALIZE BaRCO
+========================================================= */
+
+window.addEventListener(
+  'load',
+  async function() {
+
+    const statusBox =
+      document.getElementById(
+        'statusBox'
+      );
+
+
+    try {
+
+      console.log(
+        '[BaRCO CLIENT] STARTING'
+      );
+
+
+      await ensureBarcoBridge();
+
+
+      console.log(
+        '[BaRCO CLIENT] CALLING INIT'
+      );
+
+
+      const data =
+        await barcoApi(
+          'init',
+          {}
+        );
+
+
+      console.log(
+        '[BaRCO CLIENT] INIT RESULT:',
+        data
+      );
+
+
+      if (
+        !data ||
+        !data.success
+      ) {
+
+        throw new Error(
+          data &&
+          data.error
+            ? data.error
+            : 'Unable to load BaRCO data.'
+        );
+
+      }
+
+
+      renderForm(
+        data
+      );
+
+
+      if (
+        document.querySelectorAll(
+          '#roadRows tr'
+        ).length === 0
+      ) {
+
+        addRoadRow();
+
+      }
+
+
+      document
+        .getElementById(
+          'app'
+        )
+        .style.display =
+        'block';
+
+
+      statusBox.className =
+        'status success';
+
+
+      statusBox.textContent =
+        'BaRCO system ready.';
+
+
+      setTimeout(
+        function() {
+
+          statusBox.style.display =
+            'none';
+
+        },
+        1200
+      );
+
+
+    } catch(error) {
+
+      console.error(
+        '[BaRCO CLIENT] INIT ERROR:',
+        error
+      );
+
+
+      statusBox.style.display =
+        'block';
+
+
+      statusBox.className =
+        'status error';
+
+
+      statusBox.textContent =
+        'Connection error: ' +
+        error.message;
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   RENDER FORM
+========================================================= */
+
+function renderForm(
+  data
+) {
+
+  document
+    .getElementById(
+      'annex'
+    )
+    .textContent =
+    data.header &&
+    data.header.annexLabel
+      ? data.header.annexLabel
+      : '';
+
+
+  document
+    .getElementById(
+      'barangay'
+    )
+    .textContent =
+    [
+      data.header.barangayName,
+      data.header.municipality,
+      data.header.province
+    ]
+      .filter(Boolean)
+      .join(', ');
+
+
+  document
+    .getElementById(
+      'reportTitle'
+    )
+    .textContent =
+    data.header.reportTitle ||
+    '';
+
+
+  document
+    .getElementById(
+      'reportSubtitle'
+    )
+    .textContent =
+    data.header.reportSubtitle ||
+    '';
+
+
+  document
+    .getElementById(
+      'dilgReference'
+    )
+    .textContent =
+    data.header.dilgReference ||
+    '';
+
+
+  document
+    .getElementById(
+      'slogan'
+    )
+    .textContent =
+    data.header.slogan ||
+    '';
+
+
+  document
+    .getElementById(
+      'reportId'
+    )
+    .textContent =
+    data.reportId ||
+    '';
+
+
+  document
+    .getElementById(
+      'preparedBy'
+    )
+    .value =
+    data.report &&
+    data.report.preparedBy
+      ? data.report.preparedBy
+      : '';
+
+
+  document
+    .getElementById(
+      'punongBarangay'
+    )
+    .value =
+    data.report &&
+    data.report.punongBarangay
+      ? data.report.punongBarangay
+      : '';
+
+
+  const now =
+    new Date();
+
+
+  document
+    .getElementById(
+      'month'
+    )
+    .value =
+    now.toLocaleString(
+      'en-US',
+      {
+        month:
+          'long'
+      }
+    );
+
+
+  document
+    .getElementById(
+      'year'
+    )
+    .value =
+    now.getFullYear();
+
+
+  document
+    .getElementById(
+      'dateOfBarco'
+    )
+    .value =
+    formatDateForInput(
+      now
+    );
+
+
+  document
+    .getElementById(
+      'reportStatus'
+    )
+    .value =
+    'DRAFT';
+
+}
+
+
+/* =========================================================
+   ADD ROAD ROW
 ========================================================= */
 
 function addRoadRow() {
@@ -1253,7 +1600,7 @@ function addRoadRow() {
       .getElementById(
         'dateOfBarco'
       )
-      .value;
+      .value || '';
 
 
   tr.innerHTML = `
@@ -1278,8 +1625,8 @@ function addRoadRow() {
     <td>
 
       <input
-        class="roadName"
         type="text"
+        class="roadName"
         placeholder="Example: Puro – Burak Barangay Road"
       >
 
@@ -1289,8 +1636,8 @@ function addRoadRow() {
     <td>
 
       <input
-        class="roadLength"
         type="number"
+        class="roadLength"
         min="0"
         step="0.01"
         value="0"
@@ -1303,8 +1650,8 @@ function addRoadRow() {
     <td>
 
       <input
-        class="clearingDate"
         type="date"
+        class="clearingDate"
         value="${defaultDate}"
       >
 
@@ -1336,6 +1683,7 @@ function addRoadRow() {
         type="button"
         class="btn-red"
         onclick="removeRoadRow(this)"
+        title="Remove road"
       >
         ×
       </button>
@@ -1356,7 +1704,7 @@ function addRoadRow() {
 
 
 /* =========================================================
-   REMOVE ROAD
+   REMOVE ROAD ROW
 ========================================================= */
 
 function removeRoadRow(
@@ -1382,9 +1730,19 @@ function removeRoadRow(
   }
 
 
-  button
-    .closest('tr')
-    .remove();
+  const row =
+    button.closest(
+      'tr'
+    );
+
+
+  if (
+    row
+  ) {
+
+    row.remove();
+
+  }
 
 
   computeRoadTotal();
@@ -1393,12 +1751,43 @@ function removeRoadRow(
 
 
 /* =========================================================
-   TOTAL
+   SYNC ROAD DATES
+========================================================= */
+
+function syncRoadDates() {
+
+  const date =
+    document
+      .getElementById(
+        'dateOfBarco'
+      )
+      .value;
+
+
+  document
+    .querySelectorAll(
+      '.clearingDate'
+    )
+    .forEach(
+      function(input) {
+
+        input.value =
+          date;
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   COMPUTE ROAD TOTAL
 ========================================================= */
 
 function computeRoadTotal() {
 
-  let total = 0;
+  let total =
+    0;
 
 
   document
@@ -1408,10 +1797,22 @@ function computeRoadTotal() {
     .forEach(
       function(input) {
 
-        total +=
+        const value =
           Number(
             input.value || 0
           );
+
+
+        if (
+          Number.isFinite(
+            value
+          )
+        ) {
+
+          total +=
+            value;
+
+        }
 
       }
     );
@@ -1422,18 +1823,21 @@ function computeRoadTotal() {
       'totalRoadLength'
     )
     .textContent =
-    total.toFixed(2);
+    total.toFixed(
+      2
+    );
 
 }
 
 
 /* =========================================================
-   COLLECT ROADS
+   COLLECT ROAD DATA
 ========================================================= */
 
 function collectRoads() {
 
-  const roads = [];
+  const roads =
+    [];
 
 
   document
@@ -1441,7 +1845,9 @@ function collectRoads() {
       '#roadRows tr'
     )
     .forEach(
-      function(row) {
+      function(
+        row
+      ) {
 
         roads.push({
 
@@ -1509,7 +1915,7 @@ function collectRoads() {
 
 async function saveDraft() {
 
-  const button =
+  const saveButton =
     document.getElementById(
       'saveButton'
     );
@@ -1517,6 +1923,24 @@ async function saveDraft() {
 
   const roads =
     collectRoads();
+
+
+  const month =
+    document
+      .getElementById(
+        'month'
+      )
+      .value;
+
+
+  const year =
+    Number(
+      document
+        .getElementById(
+          'year'
+        )
+        .value
+    );
 
 
   const dateOfBarco =
@@ -1527,10 +1951,51 @@ async function saveDraft() {
       .value;
 
 
-  if (!dateOfBarco) {
+  if (
+    !month
+  ) {
+
+    alert(
+      'Please select the report month.'
+    );
+
+    return;
+
+  }
+
+
+  if (
+    !year
+  ) {
+
+    alert(
+      'Please enter the report year.'
+    );
+
+    return;
+
+  }
+
+
+  if (
+    !dateOfBarco
+  ) {
 
     alert(
       'Please select Date of BaRCO.'
+    );
+
+    return;
+
+  }
+
+
+  if (
+    roads.length === 0
+  ) {
+
+    alert(
+      'Please add at least one road.'
     );
 
     return;
@@ -1587,20 +2052,10 @@ async function saveDraft() {
         .trim(),
 
     month:
-      document
-        .getElementById(
-          'month'
-        )
-        .value,
+      month,
 
     year:
-      Number(
-        document
-          .getElementById(
-            'year'
-          )
-          .value
-      ),
+      year,
 
     dateOfBarco:
       dateOfBarco,
@@ -1627,11 +2082,11 @@ async function saveDraft() {
   };
 
 
-  button.disabled =
+  saveButton.disabled =
     true;
 
 
-  button.textContent =
+  saveButton.textContent =
     'Saving...';
 
 
@@ -1643,6 +2098,12 @@ async function saveDraft() {
 
   try {
 
+    console.log(
+      '[BaRCO CLIENT] SAVING:',
+      payload
+    );
+
+
     const result =
       await barcoApi(
         'saveDraft',
@@ -1650,12 +2111,10 @@ async function saveDraft() {
       );
 
 
-    button.disabled =
-      false;
-
-
-    button.textContent =
-      'Save Draft';
+    console.log(
+      '[BaRCO CLIENT] SAVE RESULT:',
+      result
+    );
 
 
     if (
@@ -1673,22 +2132,39 @@ async function saveDraft() {
     }
 
 
+    if (
+      result.reportId
+    ) {
+
+      document
+        .getElementById(
+          'reportId'
+        )
+        .textContent =
+        result.reportId;
+
+    }
+
+
     document
       .getElementById(
-        'reportId'
+        'reportStatus'
       )
-      .textContent =
-      result.reportId;
+      .value =
+      result.status ||
+      'DRAFT';
 
 
     showStatus(
       'success',
       'Draft saved successfully. ' +
-      result.roadsSaved +
+      Number(
+        result.roadsSaved || 0
+      ) +
       ' road entry/entries saved. ' +
       'Total road length: ' +
       Number(
-        result.totalRoadLength
+        result.totalRoadLength || 0
       ).toFixed(2) +
       ' km.'
     );
@@ -1696,12 +2172,10 @@ async function saveDraft() {
 
   } catch(error) {
 
-    button.disabled =
-      false;
-
-
-    button.textContent =
-      'Save Draft';
+    console.error(
+      '[BaRCO CLIENT] SAVE ERROR:',
+      error
+    );
 
 
     showStatus(
@@ -1710,13 +2184,23 @@ async function saveDraft() {
       error.message
     );
 
+
+  } finally {
+
+    saveButton.disabled =
+      false;
+
+
+    saveButton.textContent =
+      'Save Draft';
+
   }
 
 }
 
 
 /* =========================================================
-   STATUS
+   STATUS MESSAGE
 ========================================================= */
 
 function showStatus(
@@ -1752,24 +2236,8 @@ function showStatus(
 
 
 /* =========================================================
-   HELPERS
+   FORMAT DATE FOR HTML INPUT
 ========================================================= */
-
-function sleep(ms) {
-
-  return new Promise(
-    function(resolve) {
-
-      setTimeout(
-        resolve,
-        ms
-      );
-
-    }
-  );
-
-}
-
 
 function formatDateForInput(
   date
@@ -1782,19 +2250,21 @@ function formatDateForInput(
   const month =
     String(
       date.getMonth() + 1
-    ).padStart(
-      2,
-      '0'
-    );
+    )
+      .padStart(
+        2,
+        '0'
+      );
 
 
   const day =
     String(
       date.getDate()
-    ).padStart(
-      2,
-      '0'
-    );
+    )
+      .padStart(
+        2,
+        '0'
+      );
 
 
   return (
@@ -1808,7 +2278,6 @@ function formatDateForInput(
 }
 
 </script>
-
 
 </body>
 
