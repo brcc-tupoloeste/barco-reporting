@@ -2628,40 +2628,110 @@ function renderPhotoGroup(
 
 
       card.className =
-        'uploaded-photo-card';
+        'photo-card';
+
+
+      const imageId =
+        'uploaded_img_' +
+        String(
+          photo.photoId || ''
+        )
+        .replace(
+          /[^a-zA-Z0-9_-]/g,
+          '_'
+        );
 
 
       card.innerHTML = `
 
-        <div class="uploaded-photo-number">
-          Photo ${photo.photoOrder}
-        </div>
-
-        <div class="uploaded-photo-caption">
-          ${
-            photo.caption
-              ? escapeHtml(
-                  photo.caption
-                )
-              : '<em>No caption</em>'
-          }
-        </div>
-
-        <div class="uploaded-photo-meta">
-          ${escapeHtml(
-            photo.fileName || ''
-          )}
-        </div>
-
-        <a
-          href="${escapeHtml(
-            photo.fileUrl || '#'
-          )}"
-          target="_blank"
-          class="drive-link"
+        <div
+          style="
+            position:relative;
+            width:100%;
+            aspect-ratio:4/3;
+            background:#e5e7eb;
+          "
         >
-          Open in Google Drive
-        </a>
+
+          <img
+            id="${imageId}"
+            class="photo-image"
+            alt="Photo ${escapeHtml(
+              photo.photoOrder
+            )}"
+            style="display:none;"
+          >
+
+          <div
+            id="${imageId}_loading"
+            style="
+              position:absolute;
+              inset:0;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              text-align:center;
+              padding:10px;
+              color:#64748b;
+              font-size:11px;
+            "
+          >
+            Loading photo...
+          </div>
+
+        </div>
+
+
+        <div class="photo-body">
+
+          <div
+            class="uploaded-photo-number"
+          >
+            Photo ${escapeHtml(
+              photo.photoOrder
+            )}
+            • Page ${escapeHtml(
+              photo.pageNo
+            )}
+          </div>
+
+
+          <div
+            class="uploaded-photo-caption"
+          >
+
+            ${
+              photo.caption
+                ? escapeHtml(
+                    photo.caption
+                  )
+                : '<em>No caption</em>'
+            }
+
+          </div>
+
+
+          <div
+            class="uploaded-photo-meta"
+          >
+            ${escapeHtml(
+              photo.fileName || ''
+            )}
+          </div>
+
+
+          <a
+            href="${escapeHtml(
+              photo.fileUrl || '#'
+            )}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="drive-link"
+          >
+            Open in Google Drive
+          </a>
+
+        </div>
 
       `;
 
@@ -2670,11 +2740,104 @@ function renderPhotoGroup(
         card
       );
 
+
+      loadUploadedPhotoPreview(
+        photo.fileId,
+        imageId
+      );
+
     }
   );
 
 }
 
+  async function loadUploadedPhotoPreview(
+  fileId,
+  imageId
+) {
+
+  const image =
+    document.getElementById(
+      imageId
+    );
+
+
+  const loading =
+    document.getElementById(
+      imageId +
+      '_loading'
+    );
+
+
+  if (
+    !image ||
+    !fileId
+  ) {
+
+    return;
+
+  }
+
+
+  try {
+
+    const result =
+      await barcoApi(
+        'getPhotoPreview',
+        {
+          fileId:
+            fileId
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success ||
+      !result.dataUrl
+    ) {
+
+      throw new Error(
+        'Unable to load photo.'
+      );
+
+    }
+
+
+    image.src =
+      result.dataUrl;
+
+
+    image.style.display =
+      'block';
+
+
+    if (loading) {
+
+      loading.style.display =
+        'none';
+
+    }
+
+
+  } catch(error) {
+
+    console.error(
+      'Photo preview error:',
+      error
+    );
+
+
+    if (loading) {
+
+      loading.textContent =
+        'Unable to load preview';
+
+    }
+
+  }
+
+}
 
 /* =========================================================
    STATUS
