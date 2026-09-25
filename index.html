@@ -2716,27 +2716,27 @@ function renderPhotoGroup(
           </div>
 
 
-          <div
-            class="uploaded-photo-caption"
-          >
-
-            ${
-              photo.caption
-                ? escapeHtml(
-                    photo.caption
-                  )
-                : '<em>No caption</em>'
-            }
-
-          </div>
+          <textarea
+            id="${imageId}_caption"
+            class="photo-caption"
+            placeholder="Photo caption..."
+          >${escapeHtml(photo.caption || '')}</textarea>
 
 
           <div class="photo-actions">
 
             <button
               type="button"
+              class="btn-green"
+              onclick="saveUploadedPhotoCaption('${escapeJsString(photo.photoId)}', '${imageId}_caption')"
+            >
+              Save Caption
+            </button>
+
+            <button
+              type="button"
               class="btn-blue"
-              onclick="replaceUploadedPhoto('${'${escapeJsString(photo.photoId)}'}')"
+              onclick="replaceUploadedPhoto('${escapeJsString(photo.photoId)}', '${imageId}_caption')"
             >
               Replace Photo
             </button>
@@ -2768,12 +2768,25 @@ function renderPhotoGroup(
 ========================================================= */
 
 function replaceUploadedPhoto(
-  photoId
+  photoId,
+  captionInputId
 ) {
 
   if (!photoId) {
     return;
   }
+
+
+  const captionInput =
+    document.getElementById(
+      captionInputId
+    );
+
+
+  const currentCaption =
+    captionInput
+      ? captionInput.value.trim()
+      : '';
 
 
   const input =
@@ -2832,6 +2845,9 @@ function replaceUploadedPhoto(
 
               photoId:
                 photoId,
+
+              caption:
+                currentCaption,
 
               fileName:
                 prepared.fileName,
@@ -2897,6 +2913,79 @@ function replaceUploadedPhoto(
 
 
   input.click();
+
+}
+
+
+async function saveUploadedPhotoCaption(
+  photoId,
+  captionInputId
+) {
+
+  if (!photoId) {
+    return;
+  }
+
+
+  const input =
+    document.getElementById(
+      captionInputId
+    );
+
+
+  const caption =
+    input
+      ? input.value.trim()
+      : '';
+
+
+  try {
+
+    showStatus(
+      'loading',
+      'Saving photo caption...'
+    );
+
+
+    const result =
+      await barcoApi(
+        'updatePhotoCaption',
+        {
+          photoId: photoId,
+          caption: caption
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+
+      throw new Error(
+        result && result.error
+          ? result.error
+          : 'Unable to save caption.'
+      );
+
+    }
+
+
+    showStatus(
+      'success',
+      'Photo caption saved successfully.'
+    );
+
+
+  } catch(error) {
+
+    showStatus(
+      'error',
+      'Caption save error: ' +
+      error.message
+    );
+
+  }
 
 }
 
