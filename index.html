@@ -979,6 +979,7 @@ const barcoBridgeWaiters = {};
 let selectedPhotos = [];
 
 let uploadedPhotoCount = 0;
+  let reportSaved = false;
 
 
 /* =========================================================
@@ -1855,6 +1856,8 @@ async function saveDraft() {
       'reportId'
     ).textContent =
       result.reportId;
+    
+    reportSaved = true;
 
 
     showStatus(
@@ -2385,10 +2388,27 @@ function clearSelectedPhotos() {
 
 async function uploadSelectedPhotos() {
 
+  if (!reportSaved) {
+
+    alert(
+      'Please save the report first before uploading photos.'
+    );
+
+    return;
+
+  }
+
+
   if (
     selectedPhotos.length === 0
   ) {
+
+    alert(
+      'Please select at least one photo.'
+    );
+
     return;
+
   }
 
 
