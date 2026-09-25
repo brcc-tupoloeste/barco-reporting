@@ -873,8 +873,9 @@ button:disabled {
                   <input
                     id="expectedBarangayOfficials"
                     type="number"
+                    min="0"
                     value="8"
-                    readonly
+                    oninput="computeParticipation()"
                   >
                 </td>
                 <td>
@@ -895,8 +896,9 @@ button:disabled {
                   <input
                     id="expectedSkOfficials"
                     type="number"
+                    min="0"
                     value="7"
-                    readonly
+                    oninput="computeParticipation()"
                   >
                 </td>
                 <td>
@@ -917,8 +919,9 @@ button:disabled {
                   <input
                     id="expectedBarangayTanods"
                     type="number"
+                    min="0"
                     value="8"
-                    readonly
+                    oninput="computeParticipation()"
                   >
                 </td>
                 <td>
@@ -1884,6 +1887,32 @@ function computeParticipation() {
         'expectedBarangayTanods'
       ).value || 0
     );
+
+
+  const barangayInput =
+    document.getElementById(
+      'participatedBarangayOfficials'
+    );
+
+  const skInput =
+    document.getElementById(
+      'participatedSkOfficials'
+    );
+
+  const tanodsInput =
+    document.getElementById(
+      'participatedBarangayTanods'
+    );
+
+
+  barangayInput.max =
+    expectedBarangay;
+
+  skInput.max =
+    expectedSk;
+
+  tanodsInput.max =
+    expectedTanods;
 
 
   const barangay =
