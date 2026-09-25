@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BaRCO Report Generator</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,.08);
+      padding: 24px;
+    }
+
+    .status {
+      padding: 14px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      font-weight: bold;
+    }
+
+    .loading {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .annex {
+      text-align: right;
+      font-weight: bold;
+      font-style: italic;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .barangay {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .title {
+      font-weight: bold;
+      font-size: 20px;
+      margin-top: 4px;
+    }
+
+    .subtitle {
+      font-weight: bold;
+      margin-top: 3px;
+    }
+
+    .reference {
+      margin-top: 4px;
+      font-size: 11px;
+      font-style: italic;
+      line-height: 1.4;
+    }
+
+    .report-id {
+      margin-top: 12px;
+      color: #1f4e78;
+      font-weight: bold;
+    }
+
+    .section {
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+
+    .section-title {
+      background: #1f4e78;
+      color: white;
+      font-weight: bold;
+      padding: 10px 14px;
+    }
+
+    .section-body {
+      padding: 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 14px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      font: inherit;
+    }
+
+    @media(max-width:700px) {
+      body {
+        padding: 8px;
+      }
+
+      .page {
+        padding: 14px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <div id="statusBox" class="status loading">
+      Connecting to BaRCO backend...
+    </div>
+
+    <div id="app" style="display:none;">
+
+      <div class="annex" id="annex"></div>
+
+      <div class="header">
+
+        <div
+          class="barangay"
+          id="barangay"
+        ></div>
+
+        <div
+          class="title"
+          id="reportTitle"
+        ></div>
+
+        <div
+          class="subtitle"
+          id="reportSubtitle"
+        ></div>
+
+        <div
+          class="reference"
+          id="dilgReference"
+        ></div>
+
+        <div class="report-id">
+          Report ID:
+          <span id="reportId"></span>
+        </div>
+
+      </div>
+
+
+      <div class="section">
+
+        <div class="section-title">
+          Report Information
+        </div>
+
+        <div class="section-body">
+
+          <div class="grid">
+
+            <div class="field">
+
+              <label>Month</label>
+
+              <select id="month">
+                <option>January</option>
+                <option>February</option>
+                <option>March</option>
+                <option>April</option>
+                <option>May</option>
+                <option>June</option>
+                <option>July</option>
+                <option>August</option>
+                <option>September</option>
+                <option>October</option>
+                <option>November</option>
+                <option>December</option>
+              </select>
+
+            </div>
+
+
+            <div class="field">
+
+              <label>Year</label>
+
+              <input
+                type="number"
+                id="year"
+                value="2026"
+              >
+
+            </div>
+
+
+            <div class="field">
+
+              <label>Date of BaRCO</label>
+
+              <input
+                type="date"
+                id="dateOfBarco"
+              >
+
+            </div>
+
+
+            <div class="field">
+
+              <label>Report Status</label>
+
+              <select id="reportStatus">
+                <option value="DRAFT">
+                  DRAFT
+                </option>
+
+                <option value="FINAL">
+                  FINAL
+                </option>
+              </select>
+
+            </div>
+
+
+            <div class="field">
+
+              <label>Prepared By</label>
+
+              <input
+                type="text"
+                id="preparedBy"
+              >
+
+            </div>
+
+
+            <div class="field">
+
+              <label>Punong Barangay</label>
+
+              <input
+                type="text"
+                id="punongBarangay"
+              >
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+<script>
+
+/*
+ * IMPORTANT:
+ * Replace this with your current
+ * Apps Script /exec deployment URL.
+ */
+const API_URL =
+  '[https://script.google.com/macros/s/AKfycbw4DOyLUBLe_RLsx6e-dK_52FLUMNhhWHmq4R9C2ViHpWwclJnMiQgPkA5h1lmaCKpe/exec](https://script.google.com/macros/s/AKfycbw4DOyLUBLe_RLsx6e-dK_52FLUMNhhWHmq4R9C2ViHpWwclJnMiQgPkA5h1lmaCKpe/exec)';
+
+
+/* =========================================================
+   JSONP API CALL
+========================================================= */
+
+function apiGet(action) {
+
+  return new Promise(
+    function(resolve, reject) {
+
+      const callbackName =
+        'barcoCallback_' +
+        Date.now() +
+        '_' +
+        Math.floor(
+          Math.random() * 100000
+        );
+
+
+      window[callbackName] =
+        function(data) {
+
+          resolve(data);
+
+          delete window[
+            callbackName
+          ];
+
+          script.remove();
+
+        };
+
+
+      const script =
+        document.createElement(
+          'script'
+        );
+
+
+      script.onerror =
+        function() {
+
+          reject(
+            new Error(
+              'Unable to connect to BaRCO backend.'
+            )
+          );
+
+          delete window[
+            callbackName
+          ];
+
+          script.remove();
+
+        };
+
+
+      script.src =
+        API_URL +
+        '?action=' +
+        encodeURIComponent(action) +
+        '&callback=' +
+        encodeURIComponent(
+          callbackName
+        ) +
+        '&_=' +
+        Date.now();
+
+
+      document.body.appendChild(
+        script
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+window.addEventListener(
+  'load',
+  async function() {
+
+    const statusBox =
+      document.getElementById(
+        'statusBox'
+      );
+
+    try {
+
+      /*
+       * First test backend.
+       */
+      const ping =
+        await apiGet('ping');
+
+
+      if (
+        !ping ||
+        !ping.success
+      ) {
+
+        throw new Error(
+          'Backend ping failed.'
+        );
+
+      }
+
+
+      /*
+       * Load form data.
+       */
+      const data =
+        await apiGet('init');
+
+
+      if (
+        !data ||
+        !data.success
+      ) {
+
+        throw new Error(
+          data &&
+          data.error
+            ? data.error
+            : 'Unable to load init data.'
+        );
+
+      }
+
+
+      renderForm(data);
+
+
+      statusBox.className =
+        'status success';
+
+      statusBox.textContent =
+        'BaRCO backend connected successfully.';
+
+
+      document
+        .getElementById('app')
+        .style.display =
+        'block';
+
+
+      /*
+       * Hide green message after
+       * a short time.
+       */
+      setTimeout(
+        function() {
+
+          statusBox.style.display =
+            'none';
+
+        },
+        2500
+      );
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      statusBox.className =
+        'status error';
+
+      statusBox.textContent =
+        'Connection error: ' +
+        error.message;
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   RENDER FORM
+========================================================= */
+
+function renderForm(data) {
+
+  document
+    .getElementById('annex')
+    .textContent =
+    data.header.annexLabel;
+
+
+  document
+    .getElementById('barangay')
+    .textContent =
+    data.header.barangayName +
+    ', ' +
+    data.header.municipality +
+    ', ' +
+    data.header.province;
+
+
+  document
+    .getElementById('reportTitle')
+    .textContent =
+    data.header.reportTitle;
+
+
+  document
+    .getElementById('reportSubtitle')
+    .textContent =
+    data.header.reportSubtitle;
+
+
+  document
+    .getElementById('dilgReference')
+    .textContent =
+    data.header.dilgReference;
+
+
+  document
+    .getElementById('reportId')
+    .textContent =
+    data.reportId;
+
+
+  document
+    .getElementById('preparedBy')
+    .value =
+    data.report.preparedBy;
+
+
+  document
+    .getElementById('punongBarangay')
+    .value =
+    data.report.punongBarangay;
+
+
+  /*
+   * Set current local month/year.
+   */
+
+  const now =
+    new Date();
+
+
+  const monthName =
+    now.toLocaleString(
+      'en-US',
+      {
+        month: 'long'
+      }
+    );
+
+
+  document
+    .getElementById('month')
+    .value =
+    monthName;
+
+
+  document
+    .getElementById('year')
+    .value =
+    now.getFullYear();
+
+
+  document
+    .getElementById('dateOfBarco')
+    .value =
+    formatDateForInput(now);
+
+}
+
+
+/* =========================================================
+   DATE FORMAT
+========================================================= */
+
+function formatDateForInput(date) {
+
+  const year =
+    date.getFullYear();
+
+  const month =
+    String(
+      date.getMonth() + 1
+    ).padStart(2, '0');
+
+  const day =
+    String(
+      date.getDate()
+    ).padStart(2, '0');
+
+
+  return (
+    year +
+    '-' +
+    month +
+    '-' +
+    day
+  );
+
+}
+
+</script>
+
+</body>
+</html>
