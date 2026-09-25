@@ -724,6 +724,90 @@ button:disabled {
   font-weight: bold;
 }
 
+
+/* =========================================================
+   PAGE 4 SIGNATORIES
+========================================================= */
+
+.signatory-top-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.signatory-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 14px;
+}
+
+.signatory-panel {
+  border: 1px solid #dbe1e8;
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 14px;
+}
+
+.signatory-panel.full {
+  grid-column: 1 / -1;
+}
+
+.signatory-panel-title {
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #1f4e78;
+}
+
+.signatory-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.signatory-row {
+  display: grid;
+  grid-template-columns: 32px minmax(0,1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+.signatory-row-number {
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  color: #64748b;
+}
+
+.signatory-input {
+  width: 100%;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #1f2937;
+  font-size: 13px;
+}
+
+.signatory-note {
+  margin-top: 10px;
+  padding: 9px 11px;
+  border-radius: 6px;
+  background: #eff6ff;
+  color: #334155;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+@media(max-width:700px) {
+  .signatory-top-grid,
+  .signatory-groups {
+    grid-template-columns: 1fr;
+  }
+}
+
 @page {
   size: 8.5in 13in;
   margin: 0.35in;
@@ -1275,6 +1359,96 @@ button:disabled {
             </tbody>
 
           </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- PAGE 4 SIGNATORIES -->
+
+    <div class="section">
+
+      <div class="section-title">
+        Page 4 — Certification / Signatories
+      </div>
+
+      <div class="section-body">
+
+        <div class="signatory-top-grid">
+
+          <div class="field">
+            <label>Punong Barangay</label>
+            <input
+              id="signatoryPunongBarangay"
+              class="signatory-input"
+              type="text"
+            >
+          </div>
+
+          <div class="field">
+            <label>SK Chairperson</label>
+            <input
+              id="signatorySkChairperson"
+              class="signatory-input"
+              type="text"
+            >
+          </div>
+
+        </div>
+
+
+        <div class="signatory-groups">
+
+          <div class="signatory-panel">
+
+            <div class="signatory-panel-title">
+              Sangguniang Barangay Members
+            </div>
+
+            <div
+              id="sbMemberInputs"
+              class="signatory-list"
+            ></div>
+
+          </div>
+
+
+          <div class="signatory-panel">
+
+            <div class="signatory-panel-title">
+              Sangguniang Kabataan Members
+            </div>
+
+            <div
+              id="skMemberInputs"
+              class="signatory-list"
+            ></div>
+
+          </div>
+
+
+          <div class="signatory-panel full">
+
+            <div class="signatory-panel-title">
+              Barangay Tanods — Maximum 10
+            </div>
+
+            <div
+              id="tanodInputs"
+              class="signatory-list"
+            ></div>
+
+            <div class="signatory-note">
+              Vacant/blank Tanod fields are automatically ignored in the PDF.
+              The remaining names are compacted, centered, and evenly aligned
+              on Page 4.
+            </div>
+
+          </div>
 
         </div>
 
@@ -1931,6 +2105,9 @@ window.addEventListener(
         );
 
 
+      setupSignatoryInputs();
+
+
       renderForm(
         data
       );
@@ -1951,6 +2128,10 @@ window.addEventListener(
       if (!restored) {
 
         addRoadRow();
+
+
+        await loadDefaultSignatories();
+
 
         showStatus(
           'success',
@@ -1986,6 +2167,349 @@ window.addEventListener(
 
   }
 );
+
+
+
+/* =========================================================
+   REPORT SIGNATORIES — PAGE 4
+========================================================= */
+
+function setupSignatoryInputs() {
+
+  BARCO_buildSignatoryList_(
+    'sbMemberInputs',
+    'sbMember',
+    7
+  );
+
+  BARCO_buildSignatoryList_(
+    'skMemberInputs',
+    'skMember',
+    7
+  );
+
+  BARCO_buildSignatoryList_(
+    'tanodInputs',
+    'tanodMember',
+    10
+  );
+
+}
+
+
+function BARCO_buildSignatoryList_(
+  containerId,
+  prefix,
+  count
+) {
+
+  const container =
+    document.getElementById(
+      containerId
+    );
+
+  if (!container) {
+    return;
+  }
+
+  if (
+    container.children.length
+  ) {
+    return;
+  }
+
+  for (
+    let i = 1;
+    i <= count;
+    i++
+  ) {
+
+    const row =
+      document.createElement(
+        'div'
+      );
+
+    row.className =
+      'signatory-row';
+
+    row.innerHTML = `
+      <div class="signatory-row-number">
+        ${i}.
+      </div>
+
+      <input
+        id="${prefix}${i}"
+        class="signatory-input"
+        type="text"
+        autocomplete="off"
+        placeholder="${
+          prefix === 'tanodMember'
+            ? 'Name or leave blank if vacant'
+            : 'Name'
+        }"
+      >
+    `;
+
+    container.appendChild(
+      row
+    );
+
+  }
+
+}
+
+
+function collectReportSignatories() {
+
+  const collect =
+    function(prefix, count) {
+
+      const values = [];
+
+      for (
+        let i = 1;
+        i <= count;
+        i++
+      ) {
+
+        const input =
+          document.getElementById(
+            prefix + i
+          );
+
+        values.push(
+          input
+            ? input.value.trim()
+            : ''
+        );
+
+      }
+
+      return values;
+
+    };
+
+  return {
+    punongBarangay:
+      document.getElementById(
+        'signatoryPunongBarangay'
+      ).value.trim(),
+
+    skChairperson:
+      document.getElementById(
+        'signatorySkChairperson'
+      ).value.trim(),
+
+    sbMembers:
+      collect(
+        'sbMember',
+        7
+      ),
+
+    skMembers:
+      collect(
+        'skMember',
+        7
+      ),
+
+    tanods:
+      collect(
+        'tanodMember',
+        10
+      )
+  };
+
+}
+
+
+function renderReportSignatories(
+  data
+) {
+
+  data =
+    data || {};
+
+  document.getElementById(
+    'signatoryPunongBarangay'
+  ).value =
+    data.punongBarangay ||
+    document.getElementById(
+      'punongBarangay'
+    ).value ||
+    '';
+
+  document.getElementById(
+    'signatorySkChairperson'
+  ).value =
+    data.skChairperson || '';
+
+  BARCO_fillSignatoryList_(
+    'sbMember',
+    7,
+    data.sbMembers
+  );
+
+  BARCO_fillSignatoryList_(
+    'skMember',
+    7,
+    data.skMembers
+  );
+
+  BARCO_fillSignatoryList_(
+    'tanodMember',
+    10,
+    data.tanods
+  );
+
+}
+
+
+function BARCO_fillSignatoryList_(
+  prefix,
+  count,
+  values
+) {
+
+  values =
+    Array.isArray(values)
+      ? values
+      : [];
+
+  for (
+    let i = 1;
+    i <= count;
+    i++
+  ) {
+
+    const input =
+      document.getElementById(
+        prefix + i
+      );
+
+    if (input) {
+
+      input.value =
+        values[i - 1] || '';
+
+    }
+
+  }
+
+}
+
+
+async function loadDefaultSignatories() {
+
+  const result =
+    await barcoApi(
+      'getDefaultSignatories',
+      {}
+    );
+
+  if (
+    result &&
+    result.success
+  ) {
+
+    renderReportSignatories(
+      result
+    );
+
+  }
+
+}
+
+
+async function loadReportSignatories(
+  reportId
+) {
+
+  reportId =
+    String(
+      reportId || ''
+    ).trim();
+
+  if (!reportId) {
+
+    await loadDefaultSignatories();
+
+    return;
+
+  }
+
+  const result =
+    await barcoApi(
+      'getReportSignatories',
+      {
+        reportId:
+          reportId
+      }
+    );
+
+  if (
+    result &&
+    result.success
+  ) {
+
+    renderReportSignatories(
+      result
+    );
+
+  }
+
+}
+
+
+async function saveReportSignatoriesForReport(
+  reportId
+) {
+
+  const values =
+    collectReportSignatories();
+
+  const result =
+    await barcoApi(
+      'saveReportSignatories',
+      {
+        reportId:
+          reportId,
+
+        punongBarangay:
+          values.punongBarangay,
+
+        skChairperson:
+          values.skChairperson,
+
+        sbMembers:
+          values.sbMembers,
+
+        skMembers:
+          values.skMembers,
+
+        tanods:
+          values.tanods
+      }
+    );
+
+  if (
+    !result ||
+    !result.success
+  ) {
+
+    throw new Error(
+      (
+        result &&
+        result.error
+      ) ||
+      'Unable to save report signatories.'
+    );
+
+  }
+
+  return result;
+
+}
+
 
 
 /* =========================================================
@@ -2316,6 +2840,11 @@ async function openDraftById(
     );
 
 
+    await loadReportSignatories(
+      reportId
+    );
+
+
     reportSaved =
       true;
 
@@ -2432,6 +2961,11 @@ async function restoreLastSavedDraft() {
 
     renderSavedDraft(
       result
+    );
+
+
+    await loadReportSignatories(
+      savedReportId
     );
 
 
@@ -3335,9 +3869,14 @@ async function saveDraft() {
     );
 
 
+    await saveReportSignatoriesForReport(
+      result.reportId
+    );
+
+
     showStatus(
       'success',
-      'Draft and participation saved successfully.',
+      'Draft, participation and signatories saved successfully.',
       false
     );
 
@@ -3559,6 +4098,11 @@ async function generateFinalPdf() {
       );
 
     }
+
+
+    await saveReportSignatoriesForReport(
+      reportId
+    );
 
 
     showActionOverlay(
