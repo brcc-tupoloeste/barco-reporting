@@ -1159,13 +1159,15 @@ async function saveDraft() {
     collectRoads();
 
 
-  if (
-    !document
+  const dateOfBarco =
+    document
       .getElementById(
         'dateOfBarco'
       )
-      .value
-  ) {
+      .value;
+
+
+  if (!dateOfBarco) {
 
     alert(
       'Please select Date of BaRCO.'
@@ -1182,9 +1184,7 @@ async function saveDraft() {
     i++
   ) {
 
-    if (
-      !roads[i].roadName
-    ) {
+    if (!roads[i].roadName) {
 
       alert(
         'Please enter the road name for Road #' +
@@ -1197,9 +1197,7 @@ async function saveDraft() {
     }
 
 
-    if (
-      !roads[i].clearingDate
-    ) {
+    if (!roads[i].clearingDate) {
 
       alert(
         'Please select the clearing date for Road #' +
@@ -1214,14 +1212,19 @@ async function saveDraft() {
   }
 
 
+  const reportId =
+    document
+      .getElementById(
+        'reportId'
+      )
+      .textContent
+      .trim();
+
+
   const payload = {
 
     reportId:
-      document
-        .getElementById(
-          'reportId'
-        )
-        .textContent,
+      reportId,
 
     month:
       document
@@ -1240,11 +1243,7 @@ async function saveDraft() {
       ),
 
     dateOfBarco:
-      document
-        .getElementById(
-          'dateOfBarco'
-        )
-        .value,
+      dateOfBarco,
 
     preparedBy:
       document
@@ -1271,7 +1270,6 @@ async function saveDraft() {
   button.disabled =
     true;
 
-
   button.textContent =
     'Saving...';
 
@@ -1284,16 +1282,65 @@ async function saveDraft() {
 
   try {
 
-    const result =
-      await apiGet(
-        'saveDraft',
-        {
-          payload:
-            JSON.stringify(
+    /*
+     * POST the save request.
+     *
+     * no-cors means browser doesn't need
+     * permission to read the POST response.
+     */
+    await fetch(
+      API_URL,
+      {
+        method:
+          'POST',
+
+        mode:
+          'no-cors',
+
+        headers: {
+          'Content-Type':
+            'text/plain;charset=utf-8'
+        },
+
+        body:
+          JSON.stringify({
+            action:
+              'saveDraft',
+
+            data:
               payload
-            )
-        }
+          })
+      }
+    );
+
+
+    /*
+     * Wait briefly so Apps Script has
+     * time to write to Sheets.
+     */
+    await sleep(1000);
+
+
+    /*
+     * Verify via working JSONP GET.
+     */
+    const result =
+      await waitForSavedReport(
+        reportId,
+        roads.length
       );
+
+
+    if (
+      !result ||
+      !result.found
+    ) {
+
+      throw new Error(
+        'The report could not be confirmed after saving.'
+      );
+
+    }
 
 
     button.disabled =
@@ -1303,43 +1350,26 @@ async function saveDraft() {
       'Save Draft';
 
 
-    if (
-      result &&
-      result.success
-    ) {
+    showStatus(
+      'success',
+      'Draft saved successfully. ' +
+      result.roadsSaved +
+      ' road entry/entries saved. ' +
+      'Total road length: ' +
+      Number(
+        result.totalRoadLength
+      ).toFixed(2) +
+      ' km.'
+    );
 
-      document
-        .getElementById(
-          'reportId'
-        )
-        .textContent =
-        result.reportId;
-
-
-      showStatus(
-        'success',
-        'Draft saved successfully. ' +
-        result.roadsSaved +
-        ' road entry/entries saved. ' +
-        'Total road length: ' +
-        Number(
-          result.totalRoadLength
-        ).toFixed(2) +
-        ' km.'
-      );
-
-    } else {
-
-      throw new Error(
-        result &&
-        result.error
-          ? result.error
-          : 'Unable to save draft.'
-      );
-
-    }
 
   } catch(error) {
+
+    console.error(
+      'Save draft error:',
+      error
+    );
+
 
     button.disabled =
       false;
