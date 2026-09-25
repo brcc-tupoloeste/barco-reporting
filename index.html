@@ -137,8 +137,6 @@ body {
   font: inherit;
 }
 
-/* ROAD TABLE */
-
 .road-wrapper {
   overflow-x: auto;
 }
@@ -229,6 +227,15 @@ button {
   cursor: not-allowed;
 }
 
+#barcoBridge {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
 @media(max-width:700px) {
 
   body {
@@ -249,7 +256,20 @@ button {
 
 </head>
 
+
 <body>
+
+
+<!--
+  IMPORTANT:
+  Replace src with your CURRENT Apps Script /exec URL.
+-->
+
+<iframe
+  id="barcoBridge"
+  src="https://script.google.com/macros/s/AKfycbw4DOyLUBLe_RLsx6e-dK_52FLUMNhhWHmq4R9C2ViHpWwclJnMiQgPkA5h1lmaCKpe/exec"
+></iframe>
+
 
 <div class="page">
 
@@ -260,6 +280,7 @@ button {
     Connecting to BaRCO backend...
   </div>
 
+
   <div
     id="app"
     style="display:none;"
@@ -269,6 +290,7 @@ button {
       class="annex"
       id="annex"
     ></div>
+
 
     <div class="header">
 
@@ -299,8 +321,6 @@ button {
 
     </div>
 
-
-    <!-- REPORT INFORMATION -->
 
     <div class="section">
 
@@ -348,7 +368,6 @@ button {
             <input
               id="dateOfBarco"
               type="date"
-              onchange="syncRoadDates()"
             >
           </div>
 
@@ -389,8 +408,6 @@ button {
 
     </div>
 
-
-    <!-- ROAD ENTRIES -->
 
     <div class="section">
 
@@ -495,180 +512,264 @@ button {
 <script>
 
 /* =========================================================
-   API URL
+   BRIDGE CONFIG
 ========================================================= */
 
-const API_URL =
-  'https://script.google.com/macros/s/AKfycbw4DOyLUBLe_RLsx6e-dK_52FLUMNhhWHmq4R9C2ViHpWwclJnMiQgPkA5h1lmaCKpe/exec';
+const BARCO_BRIDGE_ORIGIN =
+  'https://script.google.com';
+
+let bridgeReady =
+  false;
+
+let requestCounter =
+  0;
+
+const pendingRequests =
+  new Map();
 
 
 /* =========================================================
-   JSONP GET
+   RECEIVE BRIDGE RESPONSES
 ========================================================= */
 
-function apiGet(action, params) {
+window.addEventListener(
+  'message',
+  function(event) {
 
-  params = params || {};
-
-  return new Promise(function(resolve, reject) {
-
-    const callbackName =
-      'barcoCallback_' +
-      Date.now() +
-      '_' +
-      Math.floor(Math.random() * 1000000);
-
-    const script =
-      document.createElement('script');
-
-    let settled = false;
+    const data =
+      event.data || {};
 
 
-    /*
-     * Register callback FIRST.
-     */
-    window[callbackName] = function(data) {
+    if (
+      data.__barcoBridgeReady === true
+    ) {
 
-      if (settled) {
-        return;
-      }
+      bridgeReady =
+        true;
 
-      settled = true;
+      console.log(
+        '[BaRCO CLIENT] Bridge ready'
+      );
 
-      clearTimeout(timeoutId);
-
-      resolve(data);
-
-      /*
-       * Do not immediately delete the callback.
-       * Keep a harmless no-op briefly in case
-       * the browser/script redirect fires late.
-       */
-      window[callbackName] = function() {};
-
-      setTimeout(function() {
-
-        try {
-          delete window[callbackName];
-        } catch (e) {
-          window[callbackName] = undefined;
-        }
-
-      }, 30000);
+      return;
+    }
 
 
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
+    if (
+      data.__barcoApi !== true ||
+      !data.id
+    ) {
 
-    };
+      return;
+    }
 
 
-    script.onerror = function() {
+    const pending =
+      pendingRequests.get(
+        data.id
+      );
 
-      if (settled) {
-        return;
-      }
 
-      settled = true;
+    if (!pending) {
+      return;
+    }
 
-      clearTimeout(timeoutId);
 
-      /*
-       * Keep callback defined so a late
-       * Apps Script redirect cannot throw
-       * "callback is not defined".
-       */
-      window[callbackName] = function() {};
+    pendingRequests.delete(
+      data.id
+    );
 
-      reject(
+
+    clearTimeout(
+      pending.timeout
+    );
+
+
+    if (data.ok) {
+
+      pending.resolve(
+        data.data
+      );
+
+    } else {
+
+      pending.reject(
         new Error(
-          'Unable to connect to BaRCO backend.'
+          data.error ||
+          'BaRCO request failed.'
         )
       );
 
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
+    }
 
-    };
-
-
-    let url =
-      API_URL +
-      '?action=' +
-      encodeURIComponent(action) +
-      '&callback=' +
-      encodeURIComponent(callbackName) +
-      '&_=' +
-      Date.now();
+  }
+);
 
 
-    Object.keys(params).forEach(function(key) {
+/* =========================================================
+   CALL APPS SCRIPT THROUGH BRIDGE
+========================================================= */
 
-      url +=
-        '&' +
-        encodeURIComponent(key) +
-        '=' +
-        encodeURIComponent(
-          String(params[key])
+function barcoApi(
+  action,
+  payload
+) {
+
+  payload =
+    payload || {};
+
+
+  return new Promise(
+    function(resolve, reject) {
+
+      const id =
+        'BARCO_REQ_' +
+        Date.now() +
+        '_' +
+        (++requestCounter);
+
+
+      const timeout =
+        setTimeout(
+          function() {
+
+            pendingRequests.delete(
+              id
+            );
+
+            reject(
+              new Error(
+                'BaRCO backend request timed out.'
+              )
+            );
+
+          },
+          30000
         );
 
-    });
 
+      pendingRequests.set(
+        id,
+        {
+          resolve:
+            resolve,
 
-    script.src = url;
+          reject:
+            reject,
 
-    script.async = true;
-
-
-    /*
-     * Apps Script sometimes redirects through
-     * googleusercontent.com and private browsing
-     * can delay that redirect substantially.
-     *
-     * 60 seconds is safer than the old 15 seconds.
-     */
-    const timeoutId =
-      setTimeout(function() {
-
-        if (settled) {
-          return;
+          timeout:
+            timeout
         }
+      );
 
-        settled = true;
 
-        /*
-         * IMPORTANT:
-         * Do NOT delete callback here.
-         * Convert it to no-op so a late response
-         * does not cause ReferenceError.
-         */
-        window[callbackName] =
-          function() {};
+      const iframe =
+        document.getElementById(
+          'barcoBridge'
+        );
 
-        if (script.parentNode) {
-          script.parentNode.removeChild(script);
-        }
+
+      if (
+        !iframe ||
+        !iframe.contentWindow
+      ) {
+
+        clearTimeout(
+          timeout
+        );
+
+        pendingRequests.delete(
+          id
+        );
 
         reject(
           new Error(
-            'BaRCO backend request timed out.'
+            'BaRCO bridge is not available.'
           )
         );
 
-      }, 60000);
+        return;
+      }
 
 
-    document.head.appendChild(script);
+      iframe.contentWindow
+        .postMessage(
+          {
+            __barcoApiRequest:
+              true,
 
-  });
+            id:
+              id,
+
+            action:
+              action,
+
+            payload:
+              payload
+          },
+          '*'
+        );
+
+    }
+  );
 
 }
 
 
 /* =========================================================
-   INITIALIZE APP
+   WAIT FOR BRIDGE
+========================================================= */
+
+async function waitForBridge() {
+
+  const iframe =
+    document.getElementById(
+      'barcoBridge'
+    );
+
+
+  for (
+    let i = 0;
+    i < 40;
+    i++
+  ) {
+
+    if (bridgeReady) {
+      return true;
+    }
+
+
+    if (
+      iframe &&
+      iframe.contentWindow
+    ) {
+
+      iframe.contentWindow
+        .postMessage(
+          {
+            __barcoBridgeProbe:
+              true
+          },
+          '*'
+        );
+
+    }
+
+
+    await sleep(250);
+
+  }
+
+
+  throw new Error(
+    'BaRCO bridge did not become ready.'
+  );
+
+}
+
+
+/* =========================================================
+   INITIALIZE
 ========================================================= */
 
 window.addEventListener(
@@ -680,26 +781,21 @@ window.addEventListener(
         'statusBox'
       );
 
+
     try {
 
-      const ping =
-        await apiGet('ping');
+      await waitForBridge();
 
 
-      if (
-        !ping ||
-        !ping.success
-      ) {
-
-        throw new Error(
-          'Backend ping failed.'
-        );
-
-      }
-
-
+      /*
+       * One INIT request only.
+       * No separate ping needed.
+       */
       const data =
-        await apiGet('init');
+        await barcoApi(
+          'init',
+          {}
+        );
 
 
       if (
@@ -708,22 +804,24 @@ window.addEventListener(
       ) {
 
         throw new Error(
-          data &&
-          data.error
-            ? data.error
-            : 'Unable to load BaRCO data.'
+          'Unable to load BaRCO data.'
         );
 
       }
 
 
-      renderForm(data);
+      renderForm(
+        data
+      );
+
 
       addRoadRow();
 
 
       document
-        .getElementById('app')
+        .getElementById(
+          'app'
+        )
         .style.display =
         'block';
 
@@ -731,8 +829,9 @@ window.addEventListener(
       statusBox.className =
         'status success';
 
+
       statusBox.textContent =
-        'BaRCO backend connected successfully.';
+        'BaRCO system ready.';
 
 
       setTimeout(
@@ -742,22 +841,21 @@ window.addEventListener(
             'none';
 
         },
-        2000
+        1200
       );
 
 
     } catch(error) {
 
       console.error(
-        'BaRCO initialization error:',
+        '[BaRCO CLIENT]',
         error
       );
 
-      statusBox.style.display =
-        'block';
 
       statusBox.className =
         'status error';
+
 
       statusBox.textContent =
         'Connection error: ' +
@@ -773,16 +871,22 @@ window.addEventListener(
    RENDER FORM
 ========================================================= */
 
-function renderForm(data) {
+function renderForm(
+  data
+) {
 
   document
-    .getElementById('annex')
+    .getElementById(
+      'annex'
+    )
     .textContent =
     data.header.annexLabel;
 
 
   document
-    .getElementById('barangay')
+    .getElementById(
+      'barangay'
+    )
     .textContent =
     data.header.barangayName +
     ', ' +
@@ -792,37 +896,49 @@ function renderForm(data) {
 
 
   document
-    .getElementById('reportTitle')
+    .getElementById(
+      'reportTitle'
+    )
     .textContent =
     data.header.reportTitle;
 
 
   document
-    .getElementById('reportSubtitle')
+    .getElementById(
+      'reportSubtitle'
+    )
     .textContent =
     data.header.reportSubtitle;
 
 
   document
-    .getElementById('dilgReference')
+    .getElementById(
+      'dilgReference'
+    )
     .textContent =
     data.header.dilgReference;
 
 
   document
-    .getElementById('reportId')
+    .getElementById(
+      'reportId'
+    )
     .textContent =
     data.reportId;
 
 
   document
-    .getElementById('preparedBy')
+    .getElementById(
+      'preparedBy'
+    )
     .value =
     data.report.preparedBy;
 
 
   document
-    .getElementById('punongBarangay')
+    .getElementById(
+      'punongBarangay'
+    )
     .value =
     data.report.punongBarangay;
 
@@ -831,31 +947,36 @@ function renderForm(data) {
     new Date();
 
 
-  const monthName =
+  document
+    .getElementById(
+      'month'
+    )
+    .value =
     now.toLocaleString(
       'en-US',
       {
-        month: 'long'
+        month:
+          'long'
       }
     );
 
 
   document
-    .getElementById('month')
-    .value =
-    monthName;
-
-
-  document
-    .getElementById('year')
+    .getElementById(
+      'year'
+    )
     .value =
     now.getFullYear();
 
 
   document
-    .getElementById('dateOfBarco')
+    .getElementById(
+      'dateOfBarco'
+    )
     .value =
-    formatDateForInput(now);
+    formatDateForInput(
+      now
+    );
 
 }
 
@@ -989,7 +1110,9 @@ function addRoadRow() {
    REMOVE ROAD
 ========================================================= */
 
-function removeRoadRow(button) {
+function removeRoadRow(
+  button
+) {
 
   const rows =
     document.querySelectorAll(
@@ -1021,40 +1144,7 @@ function removeRoadRow(button) {
 
 
 /* =========================================================
-   SYNC ROAD DATES
-========================================================= */
-
-function syncRoadDates() {
-
-  const date =
-    document
-      .getElementById(
-        'dateOfBarco'
-      )
-      .value;
-
-
-  document
-    .querySelectorAll(
-      '.clearingDate'
-    )
-    .forEach(
-      function(input) {
-
-        if (
-          !input.dataset.manuallyChanged
-        ) {
-          input.value = date;
-        }
-
-      }
-    );
-
-}
-
-
-/* =========================================================
-   TOTAL ROAD LENGTH
+   TOTAL
 ========================================================= */
 
 function computeRoadTotal() {
@@ -1205,7 +1295,9 @@ async function saveDraft() {
     i++
   ) {
 
-    if (!roads[i].roadName) {
+    if (
+      !roads[i].roadName
+    ) {
 
       alert(
         'Please enter the road name for Road #' +
@@ -1218,7 +1310,9 @@ async function saveDraft() {
     }
 
 
-    if (!roads[i].clearingDate) {
+    if (
+      !roads[i].clearingDate
+    ) {
 
       alert(
         'Please select the clearing date for Road #' +
@@ -1233,19 +1327,15 @@ async function saveDraft() {
   }
 
 
-  const reportId =
-    document
-      .getElementById(
-        'reportId'
-      )
-      .textContent
-      .trim();
-
-
   const payload = {
 
     reportId:
-      reportId,
+      document
+        .getElementById(
+          'reportId'
+        )
+        .textContent
+        .trim(),
 
     month:
       document
@@ -1291,6 +1381,7 @@ async function saveDraft() {
   button.disabled =
     true;
 
+
   button.textContent =
     'Saving...';
 
@@ -1303,72 +1394,42 @@ async function saveDraft() {
 
   try {
 
-    /*
-     * POST the save request.
-     *
-     * no-cors means browser doesn't need
-     * permission to read the POST response.
-     */
-    await fetch(
-      API_URL,
-      {
-        method:
-          'POST',
-
-        mode:
-          'no-cors',
-
-        headers: {
-          'Content-Type':
-            'text/plain;charset=utf-8'
-        },
-
-        body:
-          JSON.stringify({
-            action:
-              'saveDraft',
-
-            data:
-              payload
-          })
-      }
-    );
-
-
-    /*
-     * Wait briefly so Apps Script has
-     * time to write to Sheets.
-     */
-    await sleep(1000);
-
-
-    /*
-     * Verify via working JSONP GET.
-     */
     const result =
-      await waitForSavedReport(
-        reportId,
-        roads.length
+      await barcoApi(
+        'saveDraft',
+        payload
       );
-
-
-    if (
-      !result ||
-      !result.found
-    ) {
-
-      throw new Error(
-        'The report could not be confirmed after saving.'
-      );
-
-    }
 
 
     button.disabled =
       false;
 
+
     button.textContent =
       'Save Draft';
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+
+      throw new Error(
+        result &&
+        result.error
+          ? result.error
+          : 'Unable to save draft.'
+      );
+
+    }
+
+
+    document
+      .getElementById(
+        'reportId'
+      )
+      .textContent =
+      result.reportId;
 
 
     showStatus(
@@ -1386,14 +1447,9 @@ async function saveDraft() {
 
   } catch(error) {
 
-    console.error(
-      'Save draft error:',
-      error
-    );
-
-
     button.disabled =
       false;
+
 
     button.textContent =
       'Save Draft';
@@ -1409,82 +1465,7 @@ async function saveDraft() {
 
 }
 
-function sleep(ms) {
 
-  return new Promise(
-    function(resolve) {
-
-      setTimeout(
-        resolve,
-        ms
-      );
-
-    }
-  );
-
-}
-
-
-/*
- * Check repeatedly until the saved
- * report and expected road count appear.
- */
-async function waitForSavedReport(
-  reportId,
-  expectedRoadCount
-) {
-
-  const maxAttempts =
-    8;
-
-
-  for (
-    let attempt = 1;
-    attempt <= maxAttempts;
-    attempt++
-  ) {
-
-    const result =
-      await apiGet(
-        'getReport',
-        {
-          reportId:
-            reportId
-        }
-      );
-
-
-    if (
-      result &&
-      result.success &&
-      result.found &&
-      Number(
-        result.roadsSaved
-      ) ===
-      Number(
-        expectedRoadCount
-      )
-    ) {
-
-      return result;
-
-    }
-
-
-    await sleep(
-      1000
-    );
-
-  }
-
-
-  throw new Error(
-    'Save confirmation timed out.'
-  );
-
-}
-
-  
 /* =========================================================
    STATUS
 ========================================================= */
@@ -1522,8 +1503,24 @@ function showStatus(
 
 
 /* =========================================================
-   DATE FORMAT
+   HELPERS
 ========================================================= */
+
+function sleep(ms) {
+
+  return new Promise(
+    function(resolve) {
+
+      setTimeout(
+        resolve,
+        ms
+      );
+
+    }
+  );
+
+}
+
 
 function formatDateForInput(
   date
@@ -1562,6 +1559,7 @@ function formatDateForInput(
 }
 
 </script>
+
 
 </body>
 
