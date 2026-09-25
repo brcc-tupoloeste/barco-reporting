@@ -530,6 +530,114 @@ button:disabled {
 }
 
 
+
+/* =========================================================
+   SAVED DRAFTS
+========================================================= */
+
+.draft-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 14px;
+}
+
+.draft-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(15,23,42,.45);
+}
+
+.draft-modal.show {
+  display: flex;
+}
+
+.draft-modal-panel {
+  width: 100%;
+  max-width: 720px;
+  max-height: 82vh;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 18px 45px rgba(0,0,0,.25);
+}
+
+.draft-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #1f4e78;
+  color: #ffffff;
+}
+
+.draft-modal-title {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.draft-modal-close {
+  padding: 6px 10px;
+  background: rgba(255,255,255,.16);
+  color: #ffffff;
+}
+
+.draft-modal-body {
+  max-height: 68vh;
+  overflow-y: auto;
+  padding: 14px;
+}
+
+.draft-list {
+  display: grid;
+  gap: 10px;
+}
+
+.draft-item {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 9px;
+  background: #f8fafc;
+}
+
+.draft-month {
+  color: #1f2937;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.draft-meta {
+  margin-top: 4px;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.draft-open-btn {
+  white-space: nowrap;
+}
+
+@media(max-width:600px) {
+  .draft-item {
+    grid-template-columns: 1fr;
+  }
+
+  .draft-open-btn {
+    width: 100%;
+  }
+}
+
 /* =========================================================
    GLOBAL ACTION OVERLAY
 ========================================================= */
@@ -634,6 +742,44 @@ button:disabled {
 
 
 
+<div
+  id="draftModal"
+  class="draft-modal"
+  onclick="draftModalBackdropClick(event)"
+>
+  <div class="draft-modal-panel">
+
+    <div class="draft-modal-header">
+
+      <div class="draft-modal-title">
+        Saved BaRCO Drafts
+      </div>
+
+      <button
+        type="button"
+        class="draft-modal-close"
+        onclick="closeSavedDrafts()"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <div class="draft-modal-body">
+
+      <div
+        id="draftList"
+        class="draft-list"
+      >
+        Loading drafts...
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
 <div class="page">
 
   <div
@@ -654,6 +800,27 @@ button:disabled {
       id="annex"
       class="annex"
     ></div>
+
+
+    <div class="draft-toolbar">
+
+      <button
+        type="button"
+        class="btn-blue"
+        onclick="openSavedDrafts()"
+      >
+        Saved Drafts
+      </button>
+
+      <button
+        type="button"
+        class="btn-gray"
+        onclick="startNewMonthlyReport()"
+      >
+        New Monthly Report
+      </button>
+
+    </div>
 
 
     <div class="header">
@@ -1838,6 +2005,303 @@ function renderForm(
 }
 
 
+
+
+
+/* =========================================================
+   SAVED DRAFTS LIST / OPEN
+========================================================= */
+
+async function openSavedDrafts() {
+
+  const modal =
+    document.getElementById(
+      'draftModal'
+    );
+
+  const list =
+    document.getElementById(
+      'draftList'
+    );
+
+
+  modal.classList.add(
+    'show'
+  );
+
+
+  list.innerHTML =
+    '<div class="empty-message">Loading saved drafts...</div>';
+
+
+  try {
+
+    const result =
+      await barcoApi(
+        'listDrafts',
+        {}
+      );
+
+
+    const drafts =
+      Array.isArray(
+        result.drafts
+      )
+        ? result.drafts
+        : [];
+
+
+    if (
+      drafts.length === 0
+    ) {
+
+      list.innerHTML =
+        '<div class="empty-message">No saved drafts yet.</div>';
+
+      return;
+
+    }
+
+
+    list.innerHTML =
+      '';
+
+
+    drafts.forEach(
+      function(draft) {
+
+        const item =
+          document.createElement(
+            'div'
+          );
+
+
+        item.className =
+          'draft-item';
+
+
+        const monthYear =
+          escapeHtml(
+            draft.month || ''
+          ) +
+          ' ' +
+          escapeHtml(
+            draft.year || ''
+          );
+
+
+        const dateText =
+          draft.dateOfBarco
+            ? escapeHtml(
+                draft.dateOfBarco
+              )
+            : 'No BaRCO date';
+
+
+        const updatedText =
+          draft.lastUpdated
+            ? escapeHtml(
+                draft.lastUpdated
+              )
+            : '';
+
+
+        const safeId =
+          String(
+            draft.reportId || ''
+          )
+          .replace(
+            /'/g,
+            "\\'"
+          );
+
+
+        item.innerHTML = `
+
+          <div>
+
+            <div class="draft-month">
+              ${monthYear}
+            </div>
+
+            <div class="draft-meta">
+              Date of BaRCO: ${dateText}
+              ${
+                updatedText
+                  ? '<br>Last saved: ' + updatedText
+                  : ''
+              }
+            </div>
+
+          </div>
+
+          <button
+            type="button"
+            class="btn-blue draft-open-btn"
+            onclick="openDraftById('${safeId}')"
+          >
+            Open Draft
+          </button>
+
+        `;
+
+
+        list.appendChild(
+          item
+        );
+
+      }
+    );
+
+
+  } catch(error) {
+
+    list.innerHTML =
+      '<div class="empty-message">' +
+      escapeHtml(
+        'Unable to load drafts: ' +
+        error.message
+      ) +
+      '</div>';
+
+  }
+
+}
+
+
+function closeSavedDrafts() {
+
+  document.getElementById(
+    'draftModal'
+  ).classList.remove(
+    'show'
+  );
+
+}
+
+
+function draftModalBackdropClick(
+  event
+) {
+
+  if (
+    event.target &&
+    event.target.id ===
+      'draftModal'
+  ) {
+
+    closeSavedDrafts();
+
+  }
+
+}
+
+
+async function openDraftById(
+  reportId
+) {
+
+  if (!reportId) {
+    return;
+  }
+
+
+  try {
+
+    showActionOverlay(
+      'Opening saved draft...'
+    );
+
+
+    const result =
+      await barcoApi(
+        'getReportFull',
+        {
+          reportId:
+            reportId
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success ||
+      !result.found
+    ) {
+
+      throw new Error(
+        'Saved draft not found.'
+      );
+
+    }
+
+
+    renderSavedDraft(
+      result
+    );
+
+
+    reportSaved =
+      true;
+
+
+    localStorage.setItem(
+      'barcoLastReportId',
+      reportId
+    );
+
+
+    await loadUploadedPhotos();
+
+
+    closeSavedDrafts();
+
+
+    showStatus(
+      'success',
+      'Saved draft opened.',
+      false
+    );
+
+
+  } catch(error) {
+
+    alert(
+      'Unable to open draft: ' +
+      error.message
+    );
+
+
+  } finally {
+
+    hideActionOverlay();
+
+  }
+
+}
+
+
+function startNewMonthlyReport() {
+
+  const confirmed =
+    confirm(
+      'Start a new monthly BaRCO report? Your saved drafts will remain available.'
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  localStorage.removeItem(
+    'barcoLastReportId'
+  );
+
+
+  window.location.reload();
+
+}
 
 
 /* =========================================================
