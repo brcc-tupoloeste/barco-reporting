@@ -531,6 +531,48 @@ button:disabled {
 
 
 
+
+/* =========================================================
+   FINAL PDF
+========================================================= */
+
+.pdf-result {
+  display: none;
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid #86efac;
+  border-radius: 9px;
+  background: #f0fdf4;
+}
+
+.pdf-result.show {
+  display: block;
+}
+
+.pdf-result-title {
+  color: #166534;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.pdf-result-file {
+  margin-top: 5px;
+  color: #334155;
+  font-size: 12px;
+}
+
+.pdf-result a {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 9px 14px;
+  border-radius: 7px;
+  background: #1f4e78;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
 /* =========================================================
    SAVED DRAFTS
 ========================================================= */
@@ -1058,7 +1100,7 @@ button:disabled {
     </div>
 
 
-    <div class="save-area">
+    <div class="save-area" style="gap:10px; flex-wrap:wrap;">
 
       <button
         id="saveButton"
@@ -1069,6 +1111,39 @@ button:disabled {
         Save Draft
       </button>
 
+      <button
+        id="generatePdfButton"
+        class="btn-blue"
+        type="button"
+        onclick="generateFinalPdf()"
+      >
+        Generate Final PDF
+      </button>
+
+    </div>
+
+
+    <div
+      id="pdfResult"
+      class="pdf-result"
+    >
+      <div class="pdf-result-title">
+        Final PDF generated
+      </div>
+
+      <div
+        id="pdfResultFile"
+        class="pdf-result-file"
+      ></div>
+
+      <a
+        id="pdfResultLink"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Open PDF
+      </a>
     </div>
 
 
@@ -3290,6 +3365,302 @@ async function saveDraft() {
 
     button.textContent =
       'Save Draft';
+
+  }
+
+}
+
+
+
+/* =========================================================
+   GENERATE FINAL PDF
+========================================================= */
+
+async function generateFinalPdf() {
+
+  const button =
+    document.getElementById(
+      'generatePdfButton'
+    );
+
+
+  if (
+    !button
+  ) {
+    return;
+  }
+
+
+  button.disabled =
+    true;
+
+
+  button.innerHTML =
+    '<span class="btn-spinner"></span>Generating...';
+
+
+  showActionOverlay(
+    'Saving data and generating final PDF...'
+  );
+
+
+  try {
+
+    /*
+     * Always save the current form first so the PDF uses
+     * the latest road and participation values.
+     */
+
+    const roads =
+      collectRoads();
+
+
+    for (
+      let i = 0;
+      i < roads.length;
+      i++
+    ) {
+
+      if (
+        !roads[i].roadName
+      ) {
+
+        throw new Error(
+          'Please enter road name for Road #' +
+          (i + 1)
+        );
+
+      }
+
+    }
+
+
+    const saveResult =
+      await barcoApi(
+        'saveDraft',
+        {
+          reportId:
+            document.getElementById(
+              'reportId'
+            ).textContent.trim(),
+
+          month:
+            document.getElementById(
+              'month'
+            ).value,
+
+          year:
+            Number(
+              document.getElementById(
+                'year'
+              ).value
+            ),
+
+          dateOfBarco:
+            document.getElementById(
+              'dateOfBarco'
+            ).value,
+
+          preparedBy:
+            document.getElementById(
+              'preparedBy'
+            ).value.trim(),
+
+          punongBarangay:
+            document.getElementById(
+              'punongBarangay'
+            ).value.trim(),
+
+          roads:
+            roads
+        }
+      );
+
+
+    if (
+      !saveResult ||
+      !saveResult.success
+    ) {
+
+      throw new Error(
+        (
+          saveResult &&
+          saveResult.error
+        ) ||
+        'Unable to save report before PDF generation.'
+      );
+
+    }
+
+
+    const reportId =
+      saveResult.reportId;
+
+
+    document.getElementById(
+      'reportId'
+    ).textContent =
+      reportId;
+
+
+    localStorage.setItem(
+      'barcoLastReportId',
+      reportId
+    );
+
+
+    reportSaved =
+      true;
+
+
+    const participation =
+      collectParticipation();
+
+
+    const participationResult =
+      await barcoApi(
+        'saveParticipation',
+        {
+          reportId:
+            reportId,
+
+          expectedBarangayOfficials:
+            participation.expectedBarangayOfficials,
+
+          expectedSkOfficials:
+            participation.expectedSkOfficials,
+
+          expectedBarangayTanods:
+            participation.expectedBarangayTanods,
+
+          participatedBarangayOfficials:
+            participation.participatedBarangayOfficials,
+
+          participatedSkOfficials:
+            participation.participatedSkOfficials,
+
+          participatedBarangayTanods:
+            participation.participatedBarangayTanods
+        }
+      );
+
+
+    if (
+      !participationResult ||
+      !participationResult.success
+    ) {
+
+      throw new Error(
+        (
+          participationResult &&
+          participationResult.error
+        ) ||
+        'Unable to save participation before PDF generation.'
+      );
+
+    }
+
+
+    showActionOverlay(
+      'Building 4-page BaRCO PDF...'
+    );
+
+
+    const result =
+      await barcoApi(
+        'generatePdf',
+        {
+          reportId:
+            reportId
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'PDF generation failed.'
+      );
+
+    }
+
+
+    const box =
+      document.getElementById(
+        'pdfResult'
+      );
+
+
+    const file =
+      document.getElementById(
+        'pdfResultFile'
+      );
+
+
+    const link =
+      document.getElementById(
+        'pdfResultLink'
+      );
+
+
+    file.textContent =
+      result.fileName ||
+      getBarcoPdfFileName();
+
+
+    link.href =
+      result.fileUrl ||
+      '#';
+
+
+    box.classList.add(
+      'show'
+    );
+
+
+    showStatus(
+      'success',
+      'Final BaRCO PDF generated successfully.',
+      false
+    );
+
+
+    box.scrollIntoView({
+      behavior:
+        'smooth',
+      block:
+        'center'
+    });
+
+
+  } catch(error) {
+
+    showStatus(
+      'error',
+      'PDF generation error: ' +
+      error.message,
+      false
+    );
+
+
+  } finally {
+
+    hideActionOverlay();
+
+
+    button.disabled =
+      false;
+
+
+    button.textContent =
+      'Generate Final PDF';
 
   }
 
