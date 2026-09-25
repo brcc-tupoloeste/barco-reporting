@@ -65,6 +65,11 @@ body {
   color: #991b1b;
 }
 
+.warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+
 .annex {
   text-align: right;
   font-size: 14px;
@@ -136,7 +141,7 @@ body {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0,1fr));
   gap: 14px;
 }
 
@@ -222,7 +227,7 @@ button {
 }
 
 button:disabled {
-  opacity: .6;
+  opacity: .55;
   cursor: not-allowed;
 }
 
@@ -231,9 +236,19 @@ button:disabled {
   color: #ffffff;
 }
 
+.btn-blue {
+  background: #1f4e78;
+  color: #ffffff;
+}
+
 .btn-red {
   padding: 7px 10px;
   background: #dc3545;
+  color: #ffffff;
+}
+
+.btn-gray {
+  background: #64748b;
   color: #ffffff;
 }
 
@@ -250,12 +265,157 @@ button:disabled {
   margin-top: 22px;
 }
 
-.save-button {
-  min-width: 150px;
-  padding: 13px 24px;
-  background: #198754;
-  color: #ffffff;
+
+/* =========================================================
+   PHOTO DOCUMENTATION
+========================================================= */
+
+.photo-note {
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  border-radius: 7px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.photo-upload-box {
+  border: 2px dashed #94a3b8;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.photo-upload-box input[type="file"] {
+  width: 100%;
+  max-width: 400px;
+}
+
+.photo-preview-grid,
+.uploaded-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.photo-card {
+  overflow: hidden;
+  border: 1px solid #d1d5db;
+  border-radius: 9px;
+  background: #ffffff;
+}
+
+.photo-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  display: block;
+  object-fit: cover;
+  background: #e5e7eb;
+}
+
+.photo-body {
+  padding: 10px;
+}
+
+.photo-name {
+  margin-bottom: 8px;
+  color: #475569;
+  font-size: 11px;
+  word-break: break-word;
+}
+
+.photo-caption {
+  width: 100%;
+  min-height: 58px;
+  padding: 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+  resize: vertical;
+}
+
+.photo-card-actions {
+  display: flex;
+  gap: 7px;
+  margin-top: 8px;
+}
+
+.photo-card-actions button {
+  flex: 1;
+  padding: 8px;
+  font-size: 11px;
+}
+
+.upload-progress {
+  display: none;
+  margin-top: 14px;
+  padding: 11px;
+  border-radius: 7px;
+  background: #dbeafe;
+  color: #1e40af;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.uploaded-title {
+  margin-top: 22px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid #d1d5db;
   font-size: 14px;
+  font-weight: bold;
+}
+
+.uploaded-photo-card {
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.uploaded-photo-number {
+  color: #1f4e78;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.uploaded-photo-caption {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.uploaded-photo-meta {
+  margin-top: 6px;
+  color: #64748b;
+  font-size: 10px;
+}
+
+.drive-link {
+  display: inline-block;
+  margin-top: 9px;
+  color: #1d4ed8;
+  font-size: 11px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.empty-message {
+  padding: 18px;
+  text-align: center;
+  color: #64748b;
+  font-size: 12px;
+}
+
+@media(max-width:800px) {
+
+  .photo-preview-grid,
+  .uploaded-photo-grid {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+
 }
 
 @media(max-width:700px) {
@@ -277,6 +437,11 @@ button:disabled {
     font-size: 18px;
   }
 
+  .photo-preview-grid,
+  .uploaded-photo-grid {
+    grid-template-columns: 1fr;
+  }
+
 }
 
 </style>
@@ -285,6 +450,7 @@ button:disabled {
 
 
 <body>
+
 
 <div class="page">
 
@@ -300,6 +466,7 @@ button:disabled {
     id="app"
     style="display:none;"
   >
+
 
     <div
       id="annex"
@@ -334,7 +501,6 @@ button:disabled {
         class="slogan"
       ></div>
 
-
       <div class="report-id">
 
         Report ID:
@@ -348,9 +514,7 @@ button:disabled {
     </div>
 
 
-    <!-- ===================================================
-         REPORT INFORMATION
-    ==================================================== -->
+    <!-- REPORT INFORMATION -->
 
     <div class="section">
 
@@ -366,59 +530,22 @@ button:disabled {
 
           <div class="field">
 
-            <label>
-              Month
-            </label>
+            <label>Month</label>
 
             <select id="month">
 
-              <option value="January">
-                January
-              </option>
-
-              <option value="February">
-                February
-              </option>
-
-              <option value="March">
-                March
-              </option>
-
-              <option value="April">
-                April
-              </option>
-
-              <option value="May">
-                May
-              </option>
-
-              <option value="June">
-                June
-              </option>
-
-              <option value="July">
-                July
-              </option>
-
-              <option value="August">
-                August
-              </option>
-
-              <option value="September">
-                September
-              </option>
-
-              <option value="October">
-                October
-              </option>
-
-              <option value="November">
-                November
-              </option>
-
-              <option value="December">
-                December
-              </option>
+              <option>January</option>
+              <option>February</option>
+              <option>March</option>
+              <option>April</option>
+              <option>May</option>
+              <option>June</option>
+              <option>July</option>
+              <option>August</option>
+              <option>September</option>
+              <option>October</option>
+              <option>November</option>
+              <option>December</option>
 
             </select>
 
@@ -427,9 +554,7 @@ button:disabled {
 
           <div class="field">
 
-            <label>
-              Year
-            </label>
+            <label>Year</label>
 
             <input
               id="year"
@@ -443,9 +568,7 @@ button:disabled {
 
           <div class="field">
 
-            <label>
-              Date of BaRCO
-            </label>
+            <label>Date of BaRCO</label>
 
             <input
               id="dateOfBarco"
@@ -458,13 +581,10 @@ button:disabled {
 
           <div class="field">
 
-            <label>
-              Report Status
-            </label>
+            <label>Report Status</label>
 
             <input
               id="reportStatus"
-              type="text"
               value="DRAFT"
               readonly
             >
@@ -474,9 +594,7 @@ button:disabled {
 
           <div class="field">
 
-            <label>
-              Prepared By
-            </label>
+            <label>Prepared By</label>
 
             <input
               id="preparedBy"
@@ -488,9 +606,7 @@ button:disabled {
 
           <div class="field">
 
-            <label>
-              Punong Barangay
-            </label>
+            <label>Punong Barangay</label>
 
             <input
               id="punongBarangay"
@@ -507,9 +623,7 @@ button:disabled {
     </div>
 
 
-    <!-- ===================================================
-         ROAD ENTRIES
-    ==================================================== -->
+    <!-- ROAD ENTRIES -->
 
     <div class="section">
 
@@ -519,7 +633,6 @@ button:disabled {
 
 
       <div class="section-body">
-
 
         <div class="road-wrapper">
 
@@ -563,8 +676,7 @@ button:disabled {
             </thead>
 
 
-            <tbody id="roadRows">
-            </tbody>
+            <tbody id="roadRows"></tbody>
 
           </table>
 
@@ -606,7 +718,7 @@ button:disabled {
       <button
         id="saveButton"
         type="button"
-        class="save-button"
+        class="btn-green"
         onclick="saveDraft()"
       >
         Save Draft
@@ -614,23 +726,129 @@ button:disabled {
 
     </div>
 
+
+
+    <!-- ===================================================
+         PHOTO DOCUMENTATION
+    ==================================================== -->
+
+    <div
+      id="photoSection"
+      class="section"
+    >
+
+      <div class="section-title">
+        Photo Documentation
+      </div>
+
+
+      <div class="section-body">
+
+        <div class="photo-note">
+
+          Save the report first before uploading photos.
+          You can select multiple photos at once.
+          Images will automatically be resized before upload
+          to reduce file size while keeping good report quality.
+
+        </div>
+
+
+        <div class="photo-upload-box">
+
+          <input
+            id="photoInput"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            multiple
+            onchange="handlePhotoSelection(this.files)"
+          >
+
+          <div
+            style="
+              margin-top:8px;
+              font-size:11px;
+              color:#64748b;
+            "
+          >
+            JPG, PNG or WebP
+          </div>
+
+        </div>
+
+
+        <div
+          id="photoPreviewGrid"
+          class="photo-preview-grid"
+        ></div>
+
+
+        <div
+          id="photoActions"
+          class="actions"
+          style="display:none;"
+        >
+
+          <button
+            id="uploadPhotosButton"
+            type="button"
+            class="btn-blue"
+            onclick="uploadSelectedPhotos()"
+          >
+            Upload Selected Photos
+          </button>
+
+
+          <button
+            type="button"
+            class="btn-gray"
+            onclick="clearSelectedPhotos()"
+          >
+            Clear Selection
+          </button>
+
+        </div>
+
+
+        <div
+          id="uploadProgress"
+          class="upload-progress"
+        ></div>
+
+
+        <div class="uploaded-title">
+          Uploaded Photos
+        </div>
+
+
+        <div
+          id="uploadedPhotoGrid"
+          class="uploaded-photo-grid"
+        >
+
+          <div class="empty-message">
+            No uploaded photos yet.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
   </div>
 
 </div>
+
 
 
 <script>
 
 /************************************************************
  * BaRCO REPORT GENERATOR
- * GitHub Pages Frontend
- * Apps Script iframe bridge version
  ************************************************************/
 
-
-/* =========================================================
-   APPS SCRIPT DEPLOYMENT URL
-========================================================= */
 
 const API_URL =
   'https://script.google.com/macros/s/AKfycbw4DOyLUBLe_RLsx6e-dK_52FLUMNhhWHmq4R9C2ViHpWwclJnMiQgPkA5h1lmaCKpe/exec';
@@ -640,24 +858,20 @@ const API_URL =
    BRIDGE STATE
 ========================================================= */
 
-let barcoBridgeFrame =
-  null;
+let barcoBridgeFrame = null;
+let barcoBridgeWindow = null;
+let barcoBridgeReady = false;
+let barcoBridgeReadyPromise = null;
 
-let barcoBridgeWindow =
-  null;
+const barcoBridgeWaiters = {};
 
-let barcoBridgeReady =
-  false;
+let reportSaved = false;
 
-let barcoBridgeReadyPromise =
-  null;
-
-const barcoBridgeWaiters =
-  {};
+let selectedPhotos = [];
 
 
 /* =========================================================
-   RECEIVE MESSAGES FROM APPS SCRIPT
+   RECEIVE BRIDGE MESSAGES
 ========================================================= */
 
 window.addEventListener(
@@ -667,10 +881,6 @@ window.addEventListener(
     const m =
       ev.data || {};
 
-
-    /* -----------------------------------------------------
-       BRIDGE READY
-    ----------------------------------------------------- */
 
     if (
       m.__barcoBridgeReady === true
@@ -682,14 +892,6 @@ window.addEventListener(
       );
 
 
-      /*
-       * IMPORTANT:
-       *
-       * Apps Script HtmlService may be inside a
-       * nested googleusercontent frame.
-       *
-       * Save the exact window that sent READY.
-       */
       barcoBridgeWindow =
         ev.source;
 
@@ -706,13 +908,8 @@ window.addEventListener(
 
 
       return;
-
     }
 
-
-    /* -----------------------------------------------------
-       API RESPONSE
-    ----------------------------------------------------- */
 
     if (
       m.__barcoApi !== true ||
@@ -720,7 +917,6 @@ window.addEventListener(
     ) {
 
       return;
-
     }
 
 
@@ -737,12 +933,8 @@ window.addEventListener(
       ];
 
 
-    if (
-      !pending
-    ) {
-
+    if (!pending) {
       return;
-
     }
 
 
@@ -756,9 +948,7 @@ window.addEventListener(
     );
 
 
-    if (
-      m.ok
-    ) {
+    if (m.ok) {
 
       pending.resolve(
         m.data === undefined ||
@@ -783,7 +973,7 @@ window.addEventListener(
 
 
 /* =========================================================
-   PROBE BRIDGE
+   PROBE
 ========================================================= */
 
 function probeBarcoBridge() {
@@ -792,9 +982,7 @@ function probeBarcoBridge() {
     !barcoBridgeFrame ||
     !barcoBridgeFrame.contentWindow
   ) {
-
     return;
-
   }
 
 
@@ -810,25 +998,13 @@ function probeBarcoBridge() {
         '*'
       );
 
-
-    console.log(
-      '[BaRCO CLIENT] PROBE SENT'
-    );
-
-  } catch(error) {
-
-    console.warn(
-      '[BaRCO CLIENT] PROBE ERROR',
-      error
-    );
-
-  }
+  } catch(error) {}
 
 }
 
 
 /* =========================================================
-   CREATE / ENSURE BRIDGE
+   ENSURE BRIDGE
 ========================================================= */
 
 function ensureBarcoBridge() {
@@ -854,39 +1030,19 @@ function ensureBarcoBridge() {
 
   barcoBridgeReadyPromise =
     new Promise(
-      function(
-        resolve,
-        reject
-      ) {
+      function(resolve, reject) {
 
-        let settled =
-          false;
+        let settled = false;
 
-        let probeTimer =
-          null;
+        let probeTimer = null;
 
-        let timeoutTimer =
-          null;
-
-
-        function cleanupReadyListener() {
-
-          window.removeEventListener(
-            'barco-bridge-ready',
-            finishReady
-          );
-
-        }
+        let timeoutTimer = null;
 
 
         function finishReady() {
 
-          if (
-            settled
-          ) {
-
+          if (settled) {
             return;
-
           }
 
 
@@ -894,39 +1050,27 @@ function ensureBarcoBridge() {
             !barcoBridgeReady ||
             !barcoBridgeWindow
           ) {
-
             return;
-
           }
 
 
-          settled =
-            true;
+          settled = true;
 
 
-          if (
+          clearInterval(
             probeTimer
-          ) {
-
-            clearInterval(
-              probeTimer
-            );
-
-          }
+          );
 
 
-          if (
+          clearTimeout(
             timeoutTimer
-          ) {
-
-            clearTimeout(
-              timeoutTimer
-            );
-
-          }
+          );
 
 
-          cleanupReadyListener();
+          window.removeEventListener(
+            'barco-bridge-ready',
+            finishReady
+          );
 
 
           console.log(
@@ -941,31 +1085,23 @@ function ensureBarcoBridge() {
 
         function failReady() {
 
-          if (
-            settled
-          ) {
-
+          if (settled) {
             return;
-
           }
 
 
-          settled =
-            true;
+          settled = true;
 
 
-          if (
+          clearInterval(
             probeTimer
-          ) {
-
-            clearInterval(
-              probeTimer
-            );
-
-          }
+          );
 
 
-          cleanupReadyListener();
+          window.removeEventListener(
+            'barco-bridge-ready',
+            finishReady
+          );
 
 
           barcoBridgeReadyPromise =
@@ -987,10 +1123,6 @@ function ensureBarcoBridge() {
         );
 
 
-        /* -------------------------------------------------
-           CREATE HIDDEN APPS SCRIPT IFRAME
-        ------------------------------------------------- */
-
         if (
           !barcoBridgeFrame
         ) {
@@ -1003,13 +1135,6 @@ function ensureBarcoBridge() {
 
           barcoBridgeFrame.id =
             'barcoApiBridge';
-
-
-          barcoBridgeFrame
-            .setAttribute(
-              'aria-hidden',
-              'true'
-            );
 
 
           barcoBridgeFrame.style.position =
@@ -1037,12 +1162,6 @@ function ensureBarcoBridge() {
             '-9999px';
 
 
-          /*
-           * Cache-buster.
-           *
-           * Ensures latest deployed Apps Script bridge
-           * is loaded instead of a previously cached page.
-           */
           const separator =
             API_URL.indexOf('?') >= 0
               ? '&'
@@ -1053,11 +1172,7 @@ function ensureBarcoBridge() {
             API_URL +
             separator +
             'barco_bridge=1&v=' +
-            encodeURIComponent(
-              String(
-                Date.now()
-              )
-            );
+            Date.now();
 
 
           barcoBridgeFrame
@@ -1065,25 +1180,17 @@ function ensureBarcoBridge() {
               'load',
               function() {
 
-                console.log(
-                  '[BaRCO CLIENT] IFRAME LOADED'
-                );
-
-
                 probeBarcoBridge();
-
 
                 setTimeout(
                   probeBarcoBridge,
                   300
                 );
 
-
                 setTimeout(
                   probeBarcoBridge,
                   1000
                 );
-
 
                 setTimeout(
                   probeBarcoBridge,
@@ -1102,15 +1209,9 @@ function ensureBarcoBridge() {
         }
 
 
-        /*
-         * Probe immediately.
-         */
         probeBarcoBridge();
 
 
-        /*
-         * Continue probing until READY arrives.
-         */
         probeTimer =
           setInterval(
             function() {
@@ -1134,9 +1235,6 @@ function ensureBarcoBridge() {
           );
 
 
-        /*
-         * Maximum bridge startup wait.
-         */
         timeoutTimer =
           setTimeout(
             failReady,
@@ -1144,10 +1242,6 @@ function ensureBarcoBridge() {
           );
 
 
-        /*
-         * READY may already have arrived
-         * before timers were installed.
-         */
         finishReady();
 
       }
@@ -1160,7 +1254,7 @@ function ensureBarcoBridge() {
 
 
 /* =========================================================
-   SEND API REQUEST THROUGH EXACT BRIDGE WINDOW
+   API CALL
 ========================================================= */
 
 function barcoApi(
@@ -1177,10 +1271,7 @@ function barcoApi(
       function() {
 
         return new Promise(
-          function(
-            resolve,
-            reject
-          ) {
+          function(resolve, reject) {
 
             const id =
               'BARCO-BRIDGE-' +
@@ -1188,10 +1279,7 @@ function barcoApi(
               '-' +
               Math.random()
                 .toString(36)
-                .substring(
-                  2,
-                  8
-                )
+                .substring(2,8)
                 .toUpperCase();
 
 
@@ -1211,7 +1299,7 @@ function barcoApi(
                   );
 
                 },
-                30000
+                60000
               );
 
 
@@ -1246,17 +1334,10 @@ function barcoApi(
 
               console.log(
                 '[BaRCO CLIENT] REQUEST SENT:',
-                action,
-                id
+                action
               );
 
 
-              /*
-               * CRITICAL:
-               *
-               * Send the request to the exact nested
-               * Apps Script window that sent READY.
-               */
               barcoBridgeWindow
                 .postMessage(
                   {
@@ -1306,7 +1387,7 @@ function barcoApi(
 
 
 /* =========================================================
-   INITIALIZE BaRCO
+   INITIALIZE
 ========================================================= */
 
 window.addEventListener(
@@ -1321,17 +1402,7 @@ window.addEventListener(
 
     try {
 
-      console.log(
-        '[BaRCO CLIENT] STARTING'
-      );
-
-
       await ensureBarcoBridge();
-
-
-      console.log(
-        '[BaRCO CLIENT] CALLING INIT'
-      );
 
 
       const data =
@@ -1341,22 +1412,13 @@ window.addEventListener(
         );
 
 
-      console.log(
-        '[BaRCO CLIENT] INIT RESULT:',
-        data
-      );
-
-
       if (
         !data ||
         !data.success
       ) {
 
         throw new Error(
-          data &&
-          data.error
-            ? data.error
-            : 'Unable to load BaRCO data.'
+          'Unable to load BaRCO data.'
         );
 
       }
@@ -1367,15 +1429,7 @@ window.addEventListener(
       );
 
 
-      if (
-        document.querySelectorAll(
-          '#roadRows tr'
-        ).length === 0
-      ) {
-
-        addRoadRow();
-
-      }
+      addRoadRow();
 
 
       document
@@ -1408,13 +1462,8 @@ window.addEventListener(
     } catch(error) {
 
       console.error(
-        '[BaRCO CLIENT] INIT ERROR:',
         error
       );
-
-
-      statusBox.style.display =
-        'block';
 
 
       statusBox.className =
@@ -1439,106 +1488,62 @@ function renderForm(
   data
 ) {
 
-  document
-    .getElementById(
-      'annex'
-    )
+  document.getElementById('annex')
     .textContent =
-    data.header &&
-    data.header.annexLabel
-      ? data.header.annexLabel
-      : '';
+    data.header.annexLabel || '';
 
 
-  document
-    .getElementById(
-      'barangay'
-    )
+  document.getElementById('barangay')
     .textContent =
     [
       data.header.barangayName,
       data.header.municipality,
       data.header.province
     ]
-      .filter(Boolean)
-      .join(', ');
+    .filter(Boolean)
+    .join(', ');
 
 
-  document
-    .getElementById(
-      'reportTitle'
-    )
+  document.getElementById('reportTitle')
     .textContent =
-    data.header.reportTitle ||
-    '';
+    data.header.reportTitle || '';
 
 
-  document
-    .getElementById(
-      'reportSubtitle'
-    )
+  document.getElementById('reportSubtitle')
     .textContent =
-    data.header.reportSubtitle ||
-    '';
+    data.header.reportSubtitle || '';
 
 
-  document
-    .getElementById(
-      'dilgReference'
-    )
+  document.getElementById('dilgReference')
     .textContent =
-    data.header.dilgReference ||
-    '';
+    data.header.dilgReference || '';
 
 
-  document
-    .getElementById(
-      'slogan'
-    )
+  document.getElementById('slogan')
     .textContent =
-    data.header.slogan ||
-    '';
+    data.header.slogan || '';
 
 
-  document
-    .getElementById(
-      'reportId'
-    )
+  document.getElementById('reportId')
     .textContent =
-    data.reportId ||
-    '';
+    data.reportId || '';
 
 
-  document
-    .getElementById(
-      'preparedBy'
-    )
+  document.getElementById('preparedBy')
     .value =
-    data.report &&
-    data.report.preparedBy
-      ? data.report.preparedBy
-      : '';
+    data.report.preparedBy || '';
 
 
-  document
-    .getElementById(
-      'punongBarangay'
-    )
+  document.getElementById('punongBarangay')
     .value =
-    data.report &&
-    data.report.punongBarangay
-      ? data.report.punongBarangay
-      : '';
+    data.report.punongBarangay || '';
 
 
   const now =
     new Date();
 
 
-  document
-    .getElementById(
-      'month'
-    )
+  document.getElementById('month')
     .value =
     now.toLocaleString(
       'en-US',
@@ -1549,36 +1554,22 @@ function renderForm(
     );
 
 
-  document
-    .getElementById(
-      'year'
-    )
+  document.getElementById('year')
     .value =
     now.getFullYear();
 
 
-  document
-    .getElementById(
-      'dateOfBarco'
-    )
+  document.getElementById('dateOfBarco')
     .value =
     formatDateForInput(
       now
     );
 
-
-  document
-    .getElementById(
-      'reportStatus'
-    )
-    .value =
-    'DRAFT';
-
 }
 
 
 /* =========================================================
-   ADD ROAD ROW
+   ROAD ROW
 ========================================================= */
 
 function addRoadRow() {
@@ -1589,18 +1580,16 @@ function addRoadRow() {
     );
 
 
+  const defaultDate =
+    document.getElementById(
+      'dateOfBarco'
+    ).value;
+
+
   const tr =
     document.createElement(
       'tr'
     );
-
-
-  const defaultDate =
-    document
-      .getElementById(
-        'dateOfBarco'
-      )
-      .value || '';
 
 
   tr.innerHTML = `
@@ -1608,15 +1597,8 @@ function addRoadRow() {
     <td>
 
       <select class="conducted">
-
-        <option value="YES">
-          YES
-        </option>
-
-        <option value="NO">
-          NO
-        </option>
-
+        <option value="YES">YES</option>
+        <option value="NO">NO</option>
       </select>
 
     </td>
@@ -1625,8 +1607,8 @@ function addRoadRow() {
     <td>
 
       <input
-        type="text"
         class="roadName"
+        type="text"
         placeholder="Example: Puro – Burak Barangay Road"
       >
 
@@ -1636,8 +1618,8 @@ function addRoadRow() {
     <td>
 
       <input
-        type="number"
         class="roadLength"
+        type="number"
         min="0"
         step="0.01"
         value="0"
@@ -1650,8 +1632,8 @@ function addRoadRow() {
     <td>
 
       <input
-        type="date"
         class="clearingDate"
+        type="date"
         value="${defaultDate}"
       >
 
@@ -1683,7 +1665,6 @@ function addRoadRow() {
         type="button"
         class="btn-red"
         onclick="removeRoadRow(this)"
-        title="Remove road"
       >
         ×
       </button>
@@ -1702,10 +1683,6 @@ function addRoadRow() {
 
 }
 
-
-/* =========================================================
-   REMOVE ROAD ROW
-========================================================= */
 
 function removeRoadRow(
   button
@@ -1730,38 +1707,19 @@ function removeRoadRow(
   }
 
 
-  const row =
-    button.closest(
-      'tr'
-    );
-
-
-  if (
-    row
-  ) {
-
-    row.remove();
-
-  }
-
+  button.closest('tr').remove();
 
   computeRoadTotal();
 
 }
 
 
-/* =========================================================
-   SYNC ROAD DATES
-========================================================= */
-
 function syncRoadDates() {
 
   const date =
-    document
-      .getElementById(
-        'dateOfBarco'
-      )
-      .value;
+    document.getElementById(
+      'dateOfBarco'
+    ).value;
 
 
   document
@@ -1780,10 +1738,6 @@ function syncRoadDates() {
 }
 
 
-/* =========================================================
-   COMPUTE ROAD TOTAL
-========================================================= */
-
 function computeRoadTotal() {
 
   let total =
@@ -1797,42 +1751,22 @@ function computeRoadTotal() {
     .forEach(
       function(input) {
 
-        const value =
+        total +=
           Number(
             input.value || 0
           );
-
-
-        if (
-          Number.isFinite(
-            value
-          )
-        ) {
-
-          total +=
-            value;
-
-        }
 
       }
     );
 
 
-  document
-    .getElementById(
-      'totalRoadLength'
-    )
-    .textContent =
-    total.toFixed(
-      2
-    );
+  document.getElementById(
+    'totalRoadLength'
+  ).textContent =
+    total.toFixed(2);
 
 }
 
-
-/* =========================================================
-   COLLECT ROAD DATA
-========================================================= */
 
 function collectRoads() {
 
@@ -1845,58 +1779,41 @@ function collectRoads() {
       '#roadRows tr'
     )
     .forEach(
-      function(
-        row
-      ) {
+      function(row) {
 
         roads.push({
 
           conducted:
-            row
-              .querySelector(
-                '.conducted'
-              )
-              .value,
+            row.querySelector(
+              '.conducted'
+            ).value,
 
           roadName:
-            row
-              .querySelector(
-                '.roadName'
-              )
-              .value
-              .trim(),
+            row.querySelector(
+              '.roadName'
+            ).value.trim(),
 
           roadLength:
             Number(
-              row
-                .querySelector(
-                  '.roadLength'
-                )
-                .value || 0
+              row.querySelector(
+                '.roadLength'
+              ).value || 0
             ),
 
           clearingDate:
-            row
-              .querySelector(
-                '.clearingDate'
-              )
-              .value,
+            row.querySelector(
+              '.clearingDate'
+            ).value,
 
           actionTaken:
-            row
-              .querySelector(
-                '.actionTaken'
-              )
-              .value
-              .trim(),
+            row.querySelector(
+              '.actionTaken'
+            ).value.trim(),
 
           remarks:
-            row
-              .querySelector(
-                '.remarks'
-              )
-              .value
-              .trim()
+            row.querySelector(
+              '.remarks'
+            ).value.trim()
 
         });
 
@@ -1915,7 +1832,7 @@ function collectRoads() {
 
 async function saveDraft() {
 
-  const saveButton =
+  const button =
     document.getElementById(
       'saveButton'
     );
@@ -1925,77 +1842,16 @@ async function saveDraft() {
     collectRoads();
 
 
-  const month =
-    document
-      .getElementById(
-        'month'
-      )
-      .value;
-
-
-  const year =
-    Number(
-      document
-        .getElementById(
-          'year'
-        )
-        .value
-    );
-
-
   const dateOfBarco =
-    document
-      .getElementById(
-        'dateOfBarco'
-      )
-      .value;
+    document.getElementById(
+      'dateOfBarco'
+    ).value;
 
 
-  if (
-    !month
-  ) {
-
-    alert(
-      'Please select the report month.'
-    );
-
-    return;
-
-  }
-
-
-  if (
-    !year
-  ) {
-
-    alert(
-      'Please enter the report year.'
-    );
-
-    return;
-
-  }
-
-
-  if (
-    !dateOfBarco
-  ) {
+  if (!dateOfBarco) {
 
     alert(
       'Please select Date of BaRCO.'
-    );
-
-    return;
-
-  }
-
-
-  if (
-    roads.length === 0
-  ) {
-
-    alert(
-      'Please add at least one road.'
     );
 
     return;
@@ -2015,23 +1871,7 @@ async function saveDraft() {
 
       alert(
         'Please enter the road name for Road #' +
-        (i + 1) +
-        '.'
-      );
-
-      return;
-
-    }
-
-
-    if (
-      !roads[i].clearingDate
-    ) {
-
-      alert(
-        'Please select the clearing date for Road #' +
-        (i + 1) +
-        '.'
+        (i + 1)
       );
 
       return;
@@ -2044,37 +1884,34 @@ async function saveDraft() {
   const payload = {
 
     reportId:
-      document
-        .getElementById(
-          'reportId'
-        )
-        .textContent
-        .trim(),
+      document.getElementById(
+        'reportId'
+      ).textContent.trim(),
 
     month:
-      month,
+      document.getElementById(
+        'month'
+      ).value,
 
     year:
-      year,
+      Number(
+        document.getElementById(
+          'year'
+        ).value
+      ),
 
     dateOfBarco:
       dateOfBarco,
 
     preparedBy:
-      document
-        .getElementById(
-          'preparedBy'
-        )
-        .value
-        .trim(),
+      document.getElementById(
+        'preparedBy'
+      ).value.trim(),
 
     punongBarangay:
-      document
-        .getElementById(
-          'punongBarangay'
-        )
-        .value
-        .trim(),
+      document.getElementById(
+        'punongBarangay'
+      ).value.trim(),
 
     roads:
       roads
@@ -2082,11 +1919,11 @@ async function saveDraft() {
   };
 
 
-  saveButton.disabled =
+  button.disabled =
     true;
 
 
-  saveButton.textContent =
+  button.textContent =
     'Saving...';
 
 
@@ -2098,23 +1935,11 @@ async function saveDraft() {
 
   try {
 
-    console.log(
-      '[BaRCO CLIENT] SAVING:',
-      payload
-    );
-
-
     const result =
       await barcoApi(
         'saveDraft',
         payload
       );
-
-
-    console.log(
-      '[BaRCO CLIENT] SAVE RESULT:',
-      result
-    );
 
 
     if (
@@ -2132,51 +1957,39 @@ async function saveDraft() {
     }
 
 
-    if (
-      result.reportId
-    ) {
-
-      document
-        .getElementById(
-          'reportId'
-        )
-        .textContent =
-        result.reportId;
-
-    }
+    document.getElementById(
+      'reportId'
+    ).textContent =
+    result.reportId;
 
 
-    document
-      .getElementById(
-        'reportStatus'
-      )
-      .value =
-      result.status ||
-      'DRAFT';
+    document.getElementById(
+      'reportStatus'
+    ).value =
+    'DRAFT';
+
+
+    reportSaved =
+      true;
 
 
     showStatus(
       'success',
       'Draft saved successfully. ' +
-      Number(
-        result.roadsSaved || 0
-      ) +
+      result.roadsSaved +
       ' road entry/entries saved. ' +
       'Total road length: ' +
       Number(
-        result.totalRoadLength || 0
+        result.totalRoadLength
       ).toFixed(2) +
       ' km.'
     );
 
 
+    await loadUploadedPhotos();
+
+
   } catch(error) {
-
-    console.error(
-      '[BaRCO CLIENT] SAVE ERROR:',
-      error
-    );
-
 
     showStatus(
       'error',
@@ -2184,14 +1997,12 @@ async function saveDraft() {
       error.message
     );
 
-
   } finally {
 
-    saveButton.disabled =
+    button.disabled =
       false;
 
-
-    saveButton.textContent =
+    button.textContent =
       'Save Draft';
 
   }
@@ -2200,7 +2011,861 @@ async function saveDraft() {
 
 
 /* =========================================================
-   STATUS MESSAGE
+   PHOTO SELECTION
+========================================================= */
+
+async function handlePhotoSelection(
+  fileList
+) {
+
+  const files =
+    Array.from(
+      fileList || []
+    );
+
+
+  if (
+    files.length === 0
+  ) {
+    return;
+  }
+
+
+  const progress =
+    document.getElementById(
+      'uploadProgress'
+    );
+
+
+  progress.style.display =
+    'block';
+
+
+  progress.textContent =
+    'Preparing photos...';
+
+
+  for (
+    let i = 0;
+    i < files.length;
+    i++
+  ) {
+
+    const file =
+      files[i];
+
+
+    if (
+      !file.type.startsWith(
+        'image/'
+      )
+    ) {
+
+      continue;
+
+    }
+
+
+    try {
+
+      progress.textContent =
+        'Preparing photo ' +
+        (i + 1) +
+        ' of ' +
+        files.length +
+        '...';
+
+
+      const prepared =
+        await prepareImageForUpload(
+          file
+        );
+
+
+      selectedPhotos.push({
+
+        id:
+          'PHOTO_LOCAL_' +
+          Date.now() +
+          '_' +
+          Math.random()
+            .toString(36)
+            .substring(2,8),
+
+        originalName:
+          file.name,
+
+        fileName:
+          prepared.fileName,
+
+        mimeType:
+          prepared.mimeType,
+
+        base64:
+          prepared.base64,
+
+        preview:
+          prepared.preview,
+
+        fileSize:
+          prepared.fileSize,
+
+        caption:
+          ''
+
+      });
+
+
+    } catch(error) {
+
+      console.error(
+        'Photo preparation error:',
+        error
+      );
+
+      alert(
+        'Unable to prepare ' +
+        file.name
+      );
+
+    }
+
+  }
+
+
+  progress.style.display =
+    'none';
+
+
+  renderSelectedPhotos();
+
+
+  document.getElementById(
+    'photoInput'
+  ).value =
+    '';
+
+}
+
+
+/* =========================================================
+   RESIZE / COMPRESS IMAGE
+========================================================= */
+
+function prepareImageForUpload(
+  file
+) {
+
+  return new Promise(
+    function(resolve, reject) {
+
+      const reader =
+        new FileReader();
+
+
+      reader.onerror =
+        function() {
+
+          reject(
+            new Error(
+              'Unable to read image.'
+            )
+          );
+
+        };
+
+
+      reader.onload =
+        function(event) {
+
+          const img =
+            new Image();
+
+
+          img.onerror =
+            function() {
+
+              reject(
+                new Error(
+                  'Unable to load image.'
+                )
+              );
+
+            };
+
+
+          img.onload =
+            function() {
+
+              const MAX_DIMENSION =
+                1600;
+
+
+              let width =
+                img.width;
+
+
+              let height =
+                img.height;
+
+
+              if (
+                width >
+                MAX_DIMENSION ||
+                height >
+                MAX_DIMENSION
+              ) {
+
+                const ratio =
+                  Math.min(
+                    MAX_DIMENSION /
+                    width,
+
+                    MAX_DIMENSION /
+                    height
+                  );
+
+
+                width =
+                  Math.round(
+                    width *
+                    ratio
+                  );
+
+
+                height =
+                  Math.round(
+                    height *
+                    ratio
+                  );
+
+              }
+
+
+              const canvas =
+                document.createElement(
+                  'canvas'
+                );
+
+
+              canvas.width =
+                width;
+
+
+              canvas.height =
+                height;
+
+
+              const ctx =
+                canvas.getContext(
+                  '2d'
+                );
+
+
+              ctx.drawImage(
+                img,
+                0,
+                0,
+                width,
+                height
+              );
+
+
+              const mimeType =
+                'image/jpeg';
+
+
+              const dataUrl =
+                canvas.toDataURL(
+                  mimeType,
+                  0.82
+                );
+
+
+              const base64 =
+                dataUrl.split(
+                  ','
+                )[1];
+
+
+              const baseName =
+                file.name
+                  .replace(
+                    /\.[^.]+$/,
+                    ''
+                  )
+                  .replace(
+                    /[^a-zA-Z0-9_-]/g,
+                    '_'
+                  );
+
+
+              const fileName =
+                baseName +
+                '_' +
+                Date.now() +
+                '.jpg';
+
+
+              const approximateSize =
+                Math.round(
+                  base64.length *
+                  0.75
+                );
+
+
+              resolve({
+
+                fileName:
+                  fileName,
+
+                mimeType:
+                  mimeType,
+
+                base64:
+                  base64,
+
+                preview:
+                  dataUrl,
+
+                fileSize:
+                  approximateSize
+
+              });
+
+            };
+
+
+          img.src =
+            event.target.result;
+
+        };
+
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   RENDER SELECTED PHOTOS
+========================================================= */
+
+function renderSelectedPhotos() {
+
+  const grid =
+    document.getElementById(
+      'photoPreviewGrid'
+    );
+
+
+  const actions =
+    document.getElementById(
+      'photoActions'
+    );
+
+
+  grid.innerHTML =
+    '';
+
+
+  if (
+    selectedPhotos.length === 0
+  ) {
+
+    actions.style.display =
+      'none';
+
+    return;
+
+  }
+
+
+  actions.style.display =
+    'flex';
+
+
+  selectedPhotos.forEach(
+    function(
+      photo,
+      index
+    ) {
+
+      const card =
+        document.createElement(
+          'div'
+        );
+
+
+      card.className =
+        'photo-card';
+
+
+      card.innerHTML = `
+
+        <img
+          class="photo-image"
+          src="${photo.preview}"
+          alt="Selected photo"
+        >
+
+
+        <div class="photo-body">
+
+          <div class="photo-name">
+            ${escapeHtml(photo.originalName)}
+            <br>
+            ${formatFileSize(photo.fileSize)}
+          </div>
+
+
+          <textarea
+            class="photo-caption"
+            placeholder="Enter photo caption..."
+            oninput="updatePhotoCaption(${index}, this.value)"
+          >${escapeHtml(photo.caption)}</textarea>
+
+
+          <div class="photo-card-actions">
+
+            <button
+              type="button"
+              class="btn-red"
+              onclick="removeSelectedPhoto(${index})"
+            >
+              Remove
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+
+      grid.appendChild(
+        card
+      );
+
+    }
+  );
+
+}
+
+
+function updatePhotoCaption(
+  index,
+  value
+) {
+
+  if (
+    selectedPhotos[index]
+  ) {
+
+    selectedPhotos[
+      index
+    ].caption =
+      value;
+
+  }
+
+}
+
+
+function removeSelectedPhoto(
+  index
+) {
+
+  selectedPhotos.splice(
+    index,
+    1
+  );
+
+
+  renderSelectedPhotos();
+
+}
+
+
+function clearSelectedPhotos() {
+
+  selectedPhotos =
+    [];
+
+
+  renderSelectedPhotos();
+
+
+  document.getElementById(
+    'photoInput'
+  ).value =
+    '';
+
+}
+
+
+/* =========================================================
+   UPLOAD PHOTOS
+========================================================= */
+
+async function uploadSelectedPhotos() {
+
+  if (
+    selectedPhotos.length === 0
+  ) {
+
+    alert(
+      'Please select photos first.'
+    );
+
+    return;
+
+  }
+
+
+  if (
+    !reportSaved
+  ) {
+
+    alert(
+      'Please click Save Draft first before uploading photos.'
+    );
+
+    return;
+
+  }
+
+
+  const reportId =
+    document.getElementById(
+      'reportId'
+    ).textContent.trim();
+
+
+  if (!reportId) {
+
+    alert(
+      'Report ID is missing.'
+    );
+
+    return;
+
+  }
+
+
+  const button =
+    document.getElementById(
+      'uploadPhotosButton'
+    );
+
+
+  const progress =
+    document.getElementById(
+      'uploadProgress'
+    );
+
+
+  button.disabled =
+    true;
+
+
+  progress.style.display =
+    'block';
+
+
+  let uploaded =
+    0;
+
+
+  try {
+
+    for (
+      let i = 0;
+      i < selectedPhotos.length;
+      i++
+    ) {
+
+      const photo =
+        selectedPhotos[i];
+
+
+      progress.textContent =
+        'Uploading photo ' +
+        (i + 1) +
+        ' of ' +
+        selectedPhotos.length +
+        '...';
+
+
+      const result =
+        await barcoApi(
+          'uploadPhoto',
+          {
+
+            reportId:
+              reportId,
+
+            caption:
+              photo.caption ||
+              '',
+
+            fileName:
+              photo.fileName,
+
+            mimeType:
+              photo.mimeType,
+
+            base64:
+              photo.base64
+
+          }
+        );
+
+
+      if (
+        !result ||
+        !result.success
+      ) {
+
+        throw new Error(
+          result &&
+          result.error
+            ? result.error
+            : 'Photo upload failed.'
+        );
+
+      }
+
+
+      uploaded++;
+
+    }
+
+
+    progress.className =
+      'upload-progress';
+
+
+    progress.style.display =
+      'block';
+
+
+    progress.textContent =
+      uploaded +
+      ' photo(s) uploaded successfully.';
+
+
+    selectedPhotos =
+      [];
+
+
+    renderSelectedPhotos();
+
+
+    await loadUploadedPhotos();
+
+
+    showStatus(
+      'success',
+      uploaded +
+      ' photo(s) uploaded successfully.'
+    );
+
+
+  } catch(error) {
+
+    console.error(
+      'Photo upload error:',
+      error
+    );
+
+
+    progress.style.display =
+      'block';
+
+
+    progress.textContent =
+      'Upload error: ' +
+      error.message;
+
+
+    showStatus(
+      'error',
+      'Photo upload error: ' +
+      error.message
+    );
+
+
+  } finally {
+
+    button.disabled =
+      false;
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD UPLOADED PHOTOS
+========================================================= */
+
+async function loadUploadedPhotos() {
+
+  const reportId =
+    document.getElementById(
+      'reportId'
+    ).textContent.trim();
+
+
+  if (!reportId) {
+    return;
+  }
+
+
+  try {
+
+    const result =
+      await barcoApi(
+        'getPhotos',
+        {
+          reportId:
+            reportId
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+
+      return;
+
+    }
+
+
+    renderUploadedPhotos(
+      result.photos ||
+      []
+    );
+
+
+  } catch(error) {
+
+    console.error(
+      'Unable to load photos:',
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   DISPLAY UPLOADED PHOTOS
+========================================================= */
+
+function renderUploadedPhotos(
+  photos
+) {
+
+  const grid =
+    document.getElementById(
+      'uploadedPhotoGrid'
+    );
+
+
+  grid.innerHTML =
+    '';
+
+
+  if (
+    !photos ||
+    photos.length === 0
+  ) {
+
+    grid.innerHTML =
+      '<div class="empty-message">No uploaded photos yet.</div>';
+
+    return;
+
+  }
+
+
+  photos.forEach(
+    function(photo) {
+
+      const card =
+        document.createElement(
+          'div'
+        );
+
+
+      card.className =
+        'uploaded-photo-card';
+
+
+      card.innerHTML = `
+
+        <div class="uploaded-photo-number">
+          Photo ${escapeHtml(String(photo.photoOrder))}
+          • Page ${escapeHtml(String(photo.pageNo))}
+        </div>
+
+
+        <div class="uploaded-photo-caption">
+
+          ${
+            photo.caption
+              ? escapeHtml(photo.caption)
+              : '<em>No caption</em>'
+          }
+
+        </div>
+
+
+        <div class="uploaded-photo-meta">
+
+          ${escapeHtml(photo.fileName || '')}
+
+          <br>
+
+          ${formatFileSize(photo.fileSize || 0)}
+
+        </div>
+
+
+        <a
+          class="drive-link"
+          href="${escapeAttribute(photo.fileUrl || '#')}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open Photo in Google Drive
+        </a>
+
+      `;
+
+
+      grid.appendChild(
+        card
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   STATUS
 ========================================================= */
 
 function showStatus(
@@ -2236,7 +2901,7 @@ function showStatus(
 
 
 /* =========================================================
-   FORMAT DATE FOR HTML INPUT
+   HELPERS
 ========================================================= */
 
 function formatDateForInput(
@@ -2251,20 +2916,20 @@ function formatDateForInput(
     String(
       date.getMonth() + 1
     )
-      .padStart(
-        2,
-        '0'
-      );
+    .padStart(
+      2,
+      '0'
+    );
 
 
   const day =
     String(
       date.getDate()
     )
-      .padStart(
-        2,
-        '0'
-      );
+    .padStart(
+      2,
+      '0'
+    );
 
 
   return (
@@ -2277,7 +2942,103 @@ function formatDateForInput(
 
 }
 
+
+function formatFileSize(
+  bytes
+) {
+
+  bytes =
+    Number(
+      bytes || 0
+    );
+
+
+  if (
+    bytes < 1024
+  ) {
+
+    return (
+      bytes +
+      ' B'
+    );
+
+  }
+
+
+  if (
+    bytes <
+    1024 * 1024
+  ) {
+
+    return (
+      (
+        bytes /
+        1024
+      ).toFixed(1) +
+      ' KB'
+    );
+
+  }
+
+
+  return (
+    (
+      bytes /
+      1024 /
+      1024
+    ).toFixed(1) +
+    ' MB'
+  );
+
+}
+
+
+function escapeHtml(
+  value
+) {
+
+  return String(
+    value === undefined ||
+    value === null
+      ? ''
+      : value
+  )
+  .replace(
+    /&/g,
+    '&amp;'
+  )
+  .replace(
+    /</g,
+    '&lt;'
+  )
+  .replace(
+    />/g,
+    '&gt;'
+  )
+  .replace(
+    /"/g,
+    '&quot;'
+  )
+  .replace(
+    /'/g,
+    '&#039;'
+  );
+
+}
+
+
+function escapeAttribute(
+  value
+) {
+
+  return escapeHtml(
+    value
+  );
+
+}
+
 </script>
+
 
 </body>
 
