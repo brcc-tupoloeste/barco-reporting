@@ -769,97 +769,120 @@ async function waitForBridge() {
 
 
 /* =========================================================
-   INITIALIZE
+   BRIDGE CONFIG
+========================================================= */
+
+let barcoBridgeFrame = null;
+let barcoBridgeWindow = null;
+let barcoBridgeReady = false;
+let barcoBridgeWaiters = {};
+let barcoBridgeReadyPromise = null;
+
+
+/* =========================================================
+   RECEIVE MESSAGES FROM APPS SCRIPT BRIDGE
 ========================================================= */
 
 window.addEventListener(
-  'load',
-  async function() {
+  'message',
+  function(ev) {
 
-    const statusBox =
-      document.getElementById(
-        'statusBox'
+    const m =
+      ev.data || {};
+
+
+    /* -------------------------------------------------------
+       BRIDGE READY
+    ------------------------------------------------------- */
+
+    if (
+      m.__barcoBridgeReady === true
+    ) {
+
+      console.log(
+        '[BaRCO CLIENT] Bridge ready',
+        ev.origin
       );
-
-
-    try {
-
-      await waitForBridge();
 
 
       /*
-       * One INIT request only.
-       * No separate ping needed.
+       * IMPORTANT:
+       * Apps Script may run inside a nested
+       * googleusercontent frame.
+       *
+       * Save the EXACT window that sent READY.
        */
-      const data =
-        await barcoApi(
-          'init',
-          {}
-        );
+      barcoBridgeWindow =
+        ev.source;
+
+      barcoBridgeReady =
+        true;
 
 
-      if (
-        !data ||
-        !data.success
-      ) {
-
-        throw new Error(
-          'Unable to load BaRCO data.'
-        );
-
-      }
-
-
-      renderForm(
-        data
-      );
-
-
-      addRoadRow();
-
-
-      document
-        .getElementById(
-          'app'
+      window.dispatchEvent(
+        new Event(
+          'barco-bridge-ready-internal'
         )
-        .style.display =
-        'block';
-
-
-      statusBox.className =
-        'status success';
-
-
-      statusBox.textContent =
-        'BaRCO system ready.';
-
-
-      setTimeout(
-        function() {
-
-          statusBox.style.display =
-            'none';
-
-        },
-        1200
       );
 
 
-    } catch(error) {
+      return;
 
-      console.error(
-        '[BaRCO CLIENT]',
-        error
+    }
+
+
+    /* -------------------------------------------------------
+       API RESPONSE
+    ------------------------------------------------------- */
+
+    if (
+      m.__barcoApi !== true ||
+      !m.id
+    ) {
+
+      return;
+
+    }
+
+
+    const pending =
+      barcoBridgeWaiters[
+        m.id
+      ];
+
+
+    if (!pending) {
+      return;
+    }
+
+
+    delete barcoBridgeWaiters[
+      m.id
+    ];
+
+
+    clearTimeout(
+      pending.timer
+    );
+
+
+    if (m.ok) {
+
+      pending.resolve(
+        m.data === undefined ||
+        m.data === null
+          ? {}
+          : m.data
       );
 
+    } else {
 
-      statusBox.className =
-        'status error';
-
-
-      statusBox.textContent =
-        'Connection error: ' +
-        error.message;
+      pending.reject(
+        new Error(
+          m.error ||
+          'BaRCO request failed.'
+        )
+      );
 
     }
 
@@ -868,118 +891,344 @@ window.addEventListener(
 
 
 /* =========================================================
-   RENDER FORM
+   ENSURE BRIDGE
 ========================================================= */
 
-function renderForm(
-  data
-) {
+function ensureBarcoBridge() {
 
-  document
-    .getElementById(
-      'annex'
-    )
-    .textContent =
-    data.header.annexLabel;
+  if (
+    barcoBridgeReady &&
+    barcoBridgeWindow
+  ) {
 
+    return Promise.resolve();
 
-  document
-    .getElementById(
-      'barangay'
-    )
-    .textContent =
-    data.header.barangayName +
-    ', ' +
-    data.header.municipality +
-    ', ' +
-    data.header.province;
+  }
 
 
-  document
-    .getElementById(
-      'reportTitle'
-    )
-    .textContent =
-    data.header.reportTitle;
+  if (
+    barcoBridgeReadyPromise
+  ) {
+
+    return barcoBridgeReadyPromise;
+
+  }
 
 
-  document
-    .getElementById(
-      'reportSubtitle'
-    )
-    .textContent =
-    data.header.reportSubtitle;
+  barcoBridgeReadyPromise =
+    new Promise(
+      function(resolve, reject) {
+
+        let settled =
+          false;
 
 
-  document
-    .getElementById(
-      'dilgReference'
-    )
-    .textContent =
-    data.header.dilgReference;
+        function finishReady() {
+
+          if (settled) {
+            return;
+          }
 
 
-  document
-    .getElementById(
-      'reportId'
-    )
-    .textContent =
-    data.reportId;
+          settled =
+            true;
 
 
-  document
-    .getElementById(
-      'preparedBy'
-    )
-    .value =
-    data.report.preparedBy;
+          clearTimeout(
+            timer
+          );
 
 
-  document
-    .getElementById(
-      'punongBarangay'
-    )
-    .value =
-    data.report.punongBarangay;
+          barcoBridgeReady =
+            true;
 
 
-  const now =
-    new Date();
+          resolve();
+
+        }
 
 
-  document
-    .getElementById(
-      'month'
-    )
-    .value =
-    now.toLocaleString(
-      'en-US',
-      {
-        month:
-          'long'
+        const timer =
+          setTimeout(
+            function() {
+
+              if (settled) {
+                return;
+              }
+
+
+              settled =
+                true;
+
+
+              barcoBridgeReadyPromise =
+                null;
+
+
+              reject(
+                new Error(
+                  'BaRCO bridge did not become ready.'
+                )
+              );
+
+            },
+            25000
+          );
+
+
+        if (
+          !barcoBridgeFrame
+        ) {
+
+          barcoBridgeFrame =
+            document.getElementById(
+              'barcoBridge'
+            );
+
+
+          if (
+            !barcoBridgeFrame
+          ) {
+
+            reject(
+              new Error(
+                'BaRCO bridge iframe not found.'
+              )
+            );
+
+            return;
+
+          }
+
+
+          /*
+           * Probe after iframe load.
+           */
+          barcoBridgeFrame
+            .addEventListener(
+              'load',
+              function() {
+
+                [
+                  0,
+                  300,
+                  1000,
+                  2500
+                ].forEach(
+                  function(delay) {
+
+                    setTimeout(
+                      function() {
+
+                        if (
+                          barcoBridgeReady
+                        ) {
+                          return;
+                        }
+
+
+                        try {
+
+                          barcoBridgeFrame
+                            .contentWindow
+                            .postMessage(
+                              {
+                                __barcoBridgeProbe:
+                                  true
+                              },
+                              '*'
+                            );
+
+                        } catch (err) {}
+
+                      },
+                      delay
+                    );
+
+                  }
+                );
+
+              }
+            );
+
+        }
+
+
+        if (
+          barcoBridgeReady &&
+          barcoBridgeWindow
+        ) {
+
+          finishReady();
+
+        }
+
+
+        window.addEventListener(
+          'barco-bridge-ready-internal',
+          finishReady,
+          {
+            once:
+              true
+          }
+        );
+
       }
     );
 
 
-  document
-    .getElementById(
-      'year'
-    )
-    .value =
-    now.getFullYear();
-
-
-  document
-    .getElementById(
-      'dateOfBarco'
-    )
-    .value =
-    formatDateForInput(
-      now
-    );
+  return barcoBridgeReadyPromise;
 
 }
 
+
+/* =========================================================
+   CALL APPS SCRIPT THROUGH EXACT BRIDGE WINDOW
+========================================================= */
+
+function barcoApi(
+  action,
+  payload
+) {
+
+  payload =
+    payload || {};
+
+
+  return ensureBarcoBridge()
+    .then(
+      function() {
+
+        return new Promise(
+          function(
+            resolve,
+            reject
+          ) {
+
+            const id =
+              'BARCO-' +
+              Date.now() +
+              '-' +
+              Math.random()
+                .toString(36)
+                .substring(
+                  2,
+                  8
+                )
+                .toUpperCase();
+
+
+            const timer =
+              setTimeout(
+                function() {
+
+                  delete barcoBridgeWaiters[
+                    id
+                  ];
+
+
+                  reject(
+                    new Error(
+                      'BaRCO server request timed out.'
+                    )
+                  );
+
+                },
+                30000
+              );
+
+
+            barcoBridgeWaiters[
+              id
+            ] = {
+
+              resolve:
+                resolve,
+
+              reject:
+                reject,
+
+              timer:
+                timer
+
+            };
+
+
+            try {
+
+              /*
+               * CRITICAL FIX:
+               * Send request back to the exact
+               * googleusercontent window that
+               * sent the READY message.
+               */
+              const bridgeTarget =
+                barcoBridgeWindow;
+
+
+              if (
+                !bridgeTarget
+              ) {
+
+                throw new Error(
+                  'BaRCO bridge window is unavailable.'
+                );
+
+              }
+
+
+              bridgeTarget
+                .postMessage(
+                  {
+
+                    __barcoApiRequest:
+                      true,
+
+                    id:
+                      id,
+
+                    action:
+                      action,
+
+                    payload:
+                      payload
+
+                  },
+                  '*'
+                );
+
+
+              console.log(
+                '[BaRCO CLIENT] Request sent:',
+                action
+              );
+
+
+            } catch(error) {
+
+              clearTimeout(
+                timer
+              );
+
+
+              delete barcoBridgeWaiters[
+                id
+              ];
+
+
+              reject(
+                error
+              );
+
+            }
+
+          }
+        );
+
+      }
+    );
+
+}
 
 /* =========================================================
    ADD ROAD
