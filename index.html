@@ -510,138 +510,159 @@ function apiGet(action, params) {
 
   params = params || {};
 
-  return new Promise(
-    function(resolve, reject) {
+  return new Promise(function(resolve, reject) {
 
-      const callbackName =
-        'barcoCallback_' +
-        Date.now() +
-        '_' +
-        Math.floor(
-          Math.random() * 100000
-        );
+    const callbackName =
+      'barcoCallback_' +
+      Date.now() +
+      '_' +
+      Math.floor(Math.random() * 1000000);
 
-      const script =
-        document.createElement('script');
+    const script =
+      document.createElement('script');
 
-      let finished = false;
+    let settled = false;
 
 
-      window[callbackName] =
-        function(data) {
+    /*
+     * Register callback FIRST.
+     */
+    window[callbackName] = function(data) {
 
-          if (finished) return;
+      if (settled) {
+        return;
+      }
 
-          finished = true;
+      settled = true;
 
-          clearTimeout(timeout);
+      clearTimeout(timeoutId);
 
-          resolve(data);
+      resolve(data);
 
-          try {
-            delete window[callbackName];
-          } catch (e) {
-            window[callbackName] = undefined;
-          }
+      /*
+       * Do not immediately delete the callback.
+       * Keep a harmless no-op briefly in case
+       * the browser/script redirect fires late.
+       */
+      window[callbackName] = function() {};
 
-          if (script.parentNode) {
-            script.parentNode.removeChild(script);
-          }
+      setTimeout(function() {
 
-        };
-
-
-      script.onerror =
-        function() {
-
-          if (finished) return;
-
-          finished = true;
-
-          clearTimeout(timeout);
-
-          reject(
-            new Error(
-              'Unable to connect to BaRCO backend.'
-            )
-          );
-
-          try {
-            delete window[callbackName];
-          } catch (e) {
-            window[callbackName] = undefined;
-          }
-
-          if (script.parentNode) {
-            script.parentNode.removeChild(script);
-          }
-
-        };
-
-
-      let url =
-        API_URL +
-        '?action=' +
-        encodeURIComponent(action) +
-        '&callback=' +
-        encodeURIComponent(callbackName) +
-        '&_=' +
-        Date.now();
-
-
-      Object.keys(params).forEach(
-        function(key) {
-
-          url +=
-            '&' +
-            encodeURIComponent(key) +
-            '=' +
-            encodeURIComponent(
-              String(params[key])
-            );
-
+        try {
+          delete window[callbackName];
+        } catch (e) {
+          window[callbackName] = undefined;
         }
+
+      }, 30000);
+
+
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+
+    };
+
+
+    script.onerror = function() {
+
+      if (settled) {
+        return;
+      }
+
+      settled = true;
+
+      clearTimeout(timeoutId);
+
+      /*
+       * Keep callback defined so a late
+       * Apps Script redirect cannot throw
+       * "callback is not defined".
+       */
+      window[callbackName] = function() {};
+
+      reject(
+        new Error(
+          'Unable to connect to BaRCO backend.'
+        )
       );
 
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
 
-      script.src = url;
+    };
 
 
-      const timeout =
-        setTimeout(
-          function() {
+    let url =
+      API_URL +
+      '?action=' +
+      encodeURIComponent(action) +
+      '&callback=' +
+      encodeURIComponent(callbackName) +
+      '&_=' +
+      Date.now();
 
-            if (finished) return;
 
-            finished = true;
+    Object.keys(params).forEach(function(key) {
 
-            try {
-              delete window[callbackName];
-            } catch (e) {
-              window[callbackName] = undefined;
-            }
-
-            if (script.parentNode) {
-              script.parentNode.removeChild(script);
-            }
-
-            reject(
-              new Error(
-                'BaRCO backend request timed out.'
-              )
-            );
-
-          },
-          15000
+      url +=
+        '&' +
+        encodeURIComponent(key) +
+        '=' +
+        encodeURIComponent(
+          String(params[key])
         );
 
+    });
 
-      document.body.appendChild(
-        script
-      );
 
-    }
-  );
+    script.src = url;
+
+    script.async = true;
+
+
+    /*
+     * Apps Script sometimes redirects through
+     * googleusercontent.com and private browsing
+     * can delay that redirect substantially.
+     *
+     * 60 seconds is safer than the old 15 seconds.
+     */
+    const timeoutId =
+      setTimeout(function() {
+
+        if (settled) {
+          return;
+        }
+
+        settled = true;
+
+        /*
+         * IMPORTANT:
+         * Do NOT delete callback here.
+         * Convert it to no-op so a late response
+         * does not cause ReferenceError.
+         */
+        window[callbackName] =
+          function() {};
+
+        if (script.parentNode) {
+          script.parentNode.removeChild(script);
+        }
+
+        reject(
+          new Error(
+            'BaRCO backend request timed out.'
+          )
+        );
+
+      }, 60000);
+
+
+    document.head.appendChild(script);
+
+  });
 
 }
 
