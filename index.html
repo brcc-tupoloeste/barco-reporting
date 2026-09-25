@@ -529,6 +529,51 @@ button:disabled {
   }
 }
 
+
+/* =========================================================
+   GLOBAL ACTION OVERLAY
+========================================================= */
+
+.action-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15,23,42,.28);
+  backdrop-filter: blur(1px);
+}
+
+.action-overlay.show {
+  display: flex;
+}
+
+.action-overlay-box {
+  min-width: 220px;
+  padding: 22px 26px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 12px 35px rgba(0,0,0,.22);
+  text-align: center;
+}
+
+.action-overlay-spinner {
+  width: 38px;
+  height: 38px;
+  margin: 0 auto 12px;
+  border: 4px solid #dbeafe;
+  border-top-color: #1f4e78;
+  border-radius: 50%;
+  animation: barcoSpin .75s linear infinite;
+}
+
+.action-overlay-text {
+  color: #1f2937;
+  font-size: 14px;
+  font-weight: bold;
+}
+
 @page {
   size: 8.5in 13in;
   margin: 0.35in;
@@ -569,6 +614,24 @@ button:disabled {
 
 
 <body>
+
+<div
+  id="actionOverlay"
+  class="action-overlay"
+  aria-live="polite"
+  aria-busy="true"
+>
+  <div class="action-overlay-box">
+    <div class="action-overlay-spinner"></div>
+    <div
+      id="actionOverlayText"
+      class="action-overlay-text"
+    >
+      Saving...
+    </div>
+  </div>
+</div>
+
 
 
 <div class="page">
@@ -1631,9 +1694,6 @@ window.addEventListener(
       );
 
 
-      addRoadRow();
-
-
       document
         .getElementById(
           'app'
@@ -1642,10 +1702,21 @@ window.addEventListener(
         'block';
 
 
-      showStatus(
-        'success',
-        'BaRCO system ready.'
-      );
+      const restored =
+        await restoreLastSavedDraft();
+
+
+      if (!restored) {
+
+        addRoadRow();
+
+        showStatus(
+          'success',
+          'BaRCO system ready.',
+          false
+        );
+
+      }
 
 
       setTimeout(
@@ -1657,7 +1728,7 @@ window.addEventListener(
             'none';
 
         },
-        1200
+        1800
       );
 
 
@@ -1766,6 +1837,325 @@ function renderForm(
 
 }
 
+
+
+
+/* =========================================================
+   RESTORE LAST SAVED DRAFT AFTER REFRESH
+========================================================= */
+
+async function restoreLastSavedDraft() {
+
+  const savedReportId =
+    String(
+      localStorage.getItem(
+        'barcoLastReportId'
+      ) || ''
+    ).trim();
+
+
+  if (!savedReportId) {
+    return false;
+  }
+
+
+  try {
+
+    showActionOverlay(
+      'Restoring saved draft...'
+    );
+
+
+    const result =
+      await barcoApi(
+        'getReportFull',
+        {
+          reportId:
+            savedReportId
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success ||
+      !result.found
+    ) {
+
+      localStorage.removeItem(
+        'barcoLastReportId'
+      );
+
+      return false;
+
+    }
+
+
+    renderSavedDraft(
+      result
+    );
+
+
+    reportSaved =
+      true;
+
+
+    await loadUploadedPhotos();
+
+
+    showStatus(
+      'success',
+      'Saved draft restored.',
+      false
+    );
+
+
+    return true;
+
+
+  } catch(error) {
+
+    console.error(
+      'Draft restore error:',
+      error
+    );
+
+
+    localStorage.removeItem(
+      'barcoLastReportId'
+    );
+
+
+    return false;
+
+
+  } finally {
+
+    hideActionOverlay();
+
+  }
+
+}
+
+
+function renderSavedDraft(
+  data
+) {
+
+  const report =
+    data.report || {};
+
+
+  document.getElementById(
+    'reportId'
+  ).textContent =
+    report.reportId || '';
+
+
+  document.getElementById(
+    'month'
+  ).value =
+    report.month || 'January';
+
+
+  document.getElementById(
+    'year'
+  ).value =
+    Number(
+      report.year ||
+      new Date().getFullYear()
+    );
+
+
+  document.getElementById(
+    'dateOfBarco'
+  ).value =
+    report.dateOfBarco || '';
+
+
+  document.getElementById(
+    'preparedBy'
+  ).value =
+    report.preparedBy || '';
+
+
+  document.getElementById(
+    'punongBarangay'
+  ).value =
+    report.punongBarangay || '';
+
+
+  document.getElementById(
+    'reportStatus'
+  ).value =
+    report.status || 'DRAFT';
+
+
+  updateReportPeriod();
+
+
+  renderRoadsFromDraft(
+    data.roads || []
+  );
+
+
+  renderParticipationFromDraft(
+    data.participation || null
+  );
+
+}
+
+
+function renderRoadsFromDraft(
+  roads
+) {
+
+  const tbody =
+    document.getElementById(
+      'roadRows'
+    );
+
+
+  tbody.innerHTML =
+    '';
+
+
+  if (
+    !Array.isArray(roads) ||
+    roads.length === 0
+  ) {
+
+    addRoadRow();
+
+    computeRoadTotal();
+
+    return;
+
+  }
+
+
+  roads.forEach(
+    function(road) {
+
+      addRoadRow();
+
+
+      const row =
+        tbody.lastElementChild;
+
+
+      row.querySelector(
+        '.conducted'
+      ).value =
+        road.conducted || 'YES';
+
+
+      row.querySelector(
+        '.roadName'
+      ).value =
+        road.roadName || '';
+
+
+      row.querySelector(
+        '.roadLength'
+      ).value =
+        Number(
+          road.roadLength || 0
+        );
+
+
+      row.querySelector(
+        '.clearingDate'
+      ).value =
+        road.clearingDate || '';
+
+
+      row.querySelector(
+        '.actionTaken'
+      ).value =
+        road.actionTaken || '';
+
+
+      row.querySelector(
+        '.remarks'
+      ).value =
+        road.remarks || '';
+
+    }
+  );
+
+
+  computeRoadTotal();
+
+}
+
+
+function renderParticipationFromDraft(
+  participation
+) {
+
+  if (
+    !participation ||
+    participation.success === false
+  ) {
+
+    computeParticipation();
+    return;
+
+  }
+
+
+  document.getElementById(
+    'expectedBarangayOfficials'
+  ).value =
+    Number(
+      participation.expectedBarangayOfficials || 0
+    );
+
+
+  document.getElementById(
+    'expectedSkOfficials'
+  ).value =
+    Number(
+      participation.expectedSkOfficials || 0
+    );
+
+
+  document.getElementById(
+    'expectedBarangayTanods'
+  ).value =
+    Number(
+      participation.expectedBarangayTanods || 0
+    );
+
+
+  document.getElementById(
+    'participatedBarangayOfficials'
+  ).value =
+    Number(
+      participation.participatedBarangayOfficials || 0
+    );
+
+
+  document.getElementById(
+    'participatedSkOfficials'
+  ).value =
+    Number(
+      participation.participatedSkOfficials || 0
+    );
+
+
+  document.getElementById(
+    'participatedBarangayTanods'
+  ).value =
+    Number(
+      participation.participatedBarangayTanods || 0
+    );
+
+
+  computeParticipation();
+
+}
 
 
 /* =========================================================
@@ -2323,6 +2713,11 @@ async function saveDraft() {
     '<span class="btn-spinner"></span>Saving...';
 
 
+  showActionOverlay(
+    'Saving BaRCO draft...'
+  );
+
+
   try {
 
     const result =
@@ -2386,6 +2781,13 @@ async function saveDraft() {
     ).textContent =
       result.reportId;
     
+    
+    localStorage.setItem(
+      'barcoLastReportId',
+      result.reportId
+    );
+
+
     reportSaved = true;
 
 
@@ -2396,7 +2798,8 @@ async function saveDraft() {
 
     showStatus(
       'success',
-      'Draft and participation saved successfully.'
+      'Draft and participation saved successfully.',
+      false
     );
 
 
@@ -2408,11 +2811,15 @@ async function saveDraft() {
     showStatus(
       'error',
       'Save error: ' +
-      error.message
+      error.message,
+      false
     );
 
 
   } finally {
+
+    hideActionOverlay();
+
 
     button.disabled =
       false;
@@ -3768,6 +4175,65 @@ function escapeJsString(
   }
 
 }
+
+
+/* =========================================================
+   GLOBAL ACTION OVERLAY
+========================================================= */
+
+function showActionOverlay(
+  message
+) {
+
+  const overlay =
+    document.getElementById(
+      'actionOverlay'
+    );
+
+
+  const text =
+    document.getElementById(
+      'actionOverlayText'
+    );
+
+
+  if (text) {
+
+    text.textContent =
+      message || 'Please wait...';
+
+  }
+
+
+  if (overlay) {
+
+    overlay.classList.add(
+      'show'
+    );
+
+  }
+
+}
+
+
+function hideActionOverlay() {
+
+  const overlay =
+    document.getElementById(
+      'actionOverlay'
+    );
+
+
+  if (overlay) {
+
+    overlay.classList.remove(
+      'show'
+    );
+
+  }
+
+}
+
 
 /* =========================================================
    STATUS
