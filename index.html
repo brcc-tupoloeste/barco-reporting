@@ -1066,6 +1066,141 @@ button:disabled {
   }
 }
 
+
+/* =========================================================
+   EXACT DOCUMENT SIGNATURE PREVIEW
+========================================================= */
+
+.signature-preview-page-btn {
+  background: #7c3aed !important;
+  color: #ffffff !important;
+  border-color: #7c3aed !important;
+}
+
+.barco-page-preview-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(15, 23, 42, .78);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+.barco-page-preview-modal.open {
+  display: flex;
+}
+
+.barco-page-preview-dialog {
+  width: min(1180px, 98vw);
+  max-height: 96vh;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.35);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.barco-page-preview-header {
+  padding: 12px 15px;
+  background: #1f4e78;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.barco-page-preview-title {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.barco-page-preview-close {
+  border: 0;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #1f2937;
+  padding: 7px 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.barco-page-preview-body {
+  background: #e5e7eb;
+  padding: 14px;
+  overflow: auto;
+  flex: 1;
+  text-align: center;
+}
+
+.barco-page-preview-body img {
+  display: block;
+  max-width: none;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  background: #ffffff;
+  box-shadow: 0 3px 18px rgba(0,0,0,.22);
+}
+
+.barco-page-preview-footer {
+  padding: 10px 14px;
+  background: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.barco-page-preview-note {
+  font-size: 10px;
+  color: #64748b;
+  line-height: 1.35;
+}
+
+.barco-page-preview-actions {
+  display: flex;
+  gap: 7px;
+}
+
+.barco-page-preview-actions button {
+  border: 0;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.barco-page-preview-actions .close {
+  background: #e5e7eb;
+  color: #334155;
+}
+
+.barco-page-preview-actions .save {
+  background: #15803d;
+  color: #ffffff;
+}
+
+@media(max-width:700px) {
+  .barco-page-preview-dialog {
+    width: 100%;
+    max-height: 95vh;
+  }
+
+  .barco-page-preview-body {
+    padding: 8px;
+  }
+
+  .barco-page-preview-body img {
+    width: 130%;
+  }
+}
+
 </style>
 
 </head>
@@ -8460,6 +8595,14 @@ function BARCO_renderSignatureControl_(
 
                 <button
                   type="button"
+                  class="signature-preview-page-btn"
+                  data-action="preview-layout"
+                >
+                  Preview Page
+                </button>
+
+                <button
+                  type="button"
                   class="reset"
                   data-action="reset-layout"
                 >
@@ -8480,7 +8623,7 @@ function BARCO_renderSignatureControl_(
                 X: negative = left, positive = right.
                 Y: negative = up, positive = down.
                 Width/Height are percentages of the default signature holder.
-                After saving, generate the PDF to verify the exact placement.
+                Use Preview Page to see the exact Google Slides document before saving. You can preview unsaved X/Y/size changes.
               </div>
 
               <div class="signature-layout-source">
@@ -8523,6 +8666,12 @@ function BARCO_renderSignatureControl_(
   const resetLayoutButton =
     mount.querySelector(
       '[data-action="reset-layout"]'
+    );
+
+
+  const previewLayoutButton =
+    mount.querySelector(
+      '[data-action="preview-layout"]'
     );
 
 
@@ -8590,6 +8739,23 @@ function BARCO_renderSignatureControl_(
       function() {
 
         BARCO_saveSignatureLayoutFromMount_(
+          mount,
+          target
+        );
+
+      }
+    );
+
+  }
+
+
+  if (previewLayoutButton) {
+
+    previewLayoutButton.addEventListener(
+      'click',
+      function() {
+
+        BARCO_previewSignaturePage_(
           mount,
           target
         );
@@ -9517,6 +9683,426 @@ window.addEventListener(
       },
       80
     );
+
+  }
+);
+
+
+
+/* =========================================================
+   V29 — EXACT DOCUMENT PAGE PREVIEW
+========================================================= */
+
+let barcoPreviewSaveContext =
+  null;
+
+
+function BARCO_ensurePagePreviewModal_() {
+
+  let modal =
+    document.getElementById(
+      'barcoSignaturePagePreviewModal'
+    );
+
+
+  if (modal) {
+    return modal;
+  }
+
+
+  modal =
+    document.createElement(
+      'div'
+    );
+
+
+  modal.id =
+    'barcoSignaturePagePreviewModal';
+
+
+  modal.className =
+    'barco-page-preview-modal';
+
+
+  modal.innerHTML = `
+    <div class="barco-page-preview-dialog">
+
+      <div class="barco-page-preview-header">
+
+        <div
+          id="barcoPagePreviewTitle"
+          class="barco-page-preview-title"
+        >
+          Signature Page Preview
+        </div>
+
+        <button
+          type="button"
+          class="barco-page-preview-close"
+          data-preview-close
+        >
+          Close
+        </button>
+
+      </div>
+
+      <div class="barco-page-preview-body">
+
+        <img
+          id="barcoPagePreviewImage"
+          alt="BaRCO exact document preview"
+        >
+
+      </div>
+
+      <div class="barco-page-preview-footer">
+
+        <div class="barco-page-preview-note">
+          This preview is generated from the same Google Slides template
+          used by the final PDF. The current X/Y/Width/Height values are
+          previewed even before you click Save Position.
+        </div>
+
+        <div class="barco-page-preview-actions">
+
+          <button
+            type="button"
+            class="close"
+            data-preview-close
+          >
+            Close
+          </button>
+
+          <button
+            type="button"
+            class="save"
+            id="barcoPagePreviewSaveButton"
+          >
+            Save This Position
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+  `;
+
+
+  modal
+    .querySelectorAll(
+      '[data-preview-close]'
+    )
+    .forEach(
+      function(button) {
+
+        button.addEventListener(
+          'click',
+          BARCO_closePagePreview_
+        );
+
+      }
+    );
+
+
+  modal.addEventListener(
+    'click',
+    function(event) {
+
+      if (
+        event.target ===
+        modal
+      ) {
+
+        BARCO_closePagePreview_();
+
+      }
+
+    }
+  );
+
+
+  const saveButton =
+    modal.querySelector(
+      '#barcoPagePreviewSaveButton'
+    );
+
+
+  saveButton.addEventListener(
+    'click',
+    async function() {
+
+      if (
+        !barcoPreviewSaveContext
+      ) {
+
+        return;
+
+      }
+
+
+      const context =
+        barcoPreviewSaveContext;
+
+
+      BARCO_closePagePreview_();
+
+
+      await BARCO_saveSignatureLayoutFromMount_(
+        context.mount,
+        context.target
+      );
+
+    }
+  );
+
+
+  document.body.appendChild(
+    modal
+  );
+
+
+  return modal;
+
+}
+
+
+function BARCO_closePagePreview_() {
+
+  const modal =
+    document.getElementById(
+      'barcoSignaturePagePreviewModal'
+    );
+
+
+  if (modal) {
+
+    modal.classList.remove(
+      'open'
+    );
+
+  }
+
+}
+
+
+async function BARCO_previewSignaturePage_(
+  mount,
+  target
+) {
+
+  const reportId =
+    String(
+      document.getElementById(
+        'reportId'
+      ).textContent ||
+      ''
+    ).trim();
+
+
+  if (!reportId) {
+
+    alert(
+      'Please save the draft first before previewing the document.'
+    );
+
+    return;
+
+  }
+
+
+  const key =
+    BARCO_signatureKey_(
+      target.group,
+      target.slotNo
+    );
+
+
+  const signature =
+    barcoSignatureState[
+      key
+    ];
+
+
+  if (
+    !signature ||
+    !signature.hasSignature
+  ) {
+
+    alert(
+      'Upload the signature first before previewing its position.'
+    );
+
+    return;
+
+  }
+
+
+  const layout =
+    BARCO_readLayoutFromMount_(
+      mount,
+      target
+    );
+
+
+  const input =
+    document.getElementById(
+      target.inputId
+    );
+
+
+  const signerName =
+    input
+      ? input.value.trim()
+      : '';
+
+
+  showActionOverlay(
+    'Generating exact Page ' +
+    Number(
+      target.pageNo ||
+      layout.pageNo ||
+      1
+    ) +
+    ' preview...'
+  );
+
+
+  try {
+
+    const result =
+      await barcoApi(
+        'previewSignatureLayout',
+        {
+          reportId:
+            reportId,
+
+          layoutKey:
+            target.layoutKey,
+
+          signerName:
+            signerName,
+
+          pageNo:
+            Number(
+              target.pageNo ||
+              layout.pageNo ||
+              1
+            ),
+
+          xOffset:
+            layout.xOffset,
+
+          yOffset:
+            layout.yOffset,
+
+          widthPercent:
+            layout.widthPercent,
+
+          heightPercent:
+            layout.heightPercent
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success ||
+      !result.dataUrl
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to generate the document preview.'
+      );
+
+    }
+
+
+    const modal =
+      BARCO_ensurePagePreviewModal_();
+
+
+    const image =
+      modal.querySelector(
+        '#barcoPagePreviewImage'
+      );
+
+
+    const title =
+      modal.querySelector(
+        '#barcoPagePreviewTitle'
+      );
+
+
+    title.textContent =
+      'Page ' +
+      Number(
+        result.pageNo ||
+        target.pageNo ||
+        1
+      ) +
+      ' Preview — ' +
+      (
+        signerName ||
+        'Signature'
+      );
+
+
+    image.src =
+      result.dataUrl;
+
+
+    barcoPreviewSaveContext = {
+      mount:
+        mount,
+      target:
+        target
+    };
+
+
+    modal.classList.add(
+      'open'
+    );
+
+
+  } catch(error) {
+
+    showStatus(
+      'error',
+      'Document preview error: ' +
+      error.message,
+      false
+    );
+
+
+  } finally {
+
+    hideActionOverlay();
+
+  }
+
+}
+
+
+/*
+ * Escape closes the preview.
+ */
+document.addEventListener(
+  'keydown',
+  function(event) {
+
+    if (
+      event.key ===
+      'Escape'
+    ) {
+
+      BARCO_closePagePreview_();
+
+    }
 
   }
 );
