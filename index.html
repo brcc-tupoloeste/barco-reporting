@@ -11,6 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
+<!-- FRONTEND VERSION: V34.1 NO MONTHLY FORMAT PREVIEW -->
 
 <style>
 
@@ -1117,55 +1118,12 @@ button:disabled {
   color: #ffffff;
 }
 
-.accomp-format-preview {
-  margin-top: 20px;
-  padding: 18px;
-  border: 1px solid #d1d5db;
-  border-radius: 10px;
-}
 
-.accomp-format-preview-title {
-  font-size: 13px;
-  font-weight: 800;
-  color: #334155;
-  margin-bottom: 10px;
-}
 
-.accomp-paper-preview {
-  /* A4 PORTRAIT PREVIEW — 210mm x 297mm */
-  width: min(100%, 620px);
-  aspect-ratio: 210 / 297;
-  margin: 0 auto;
-  border: 1px solid #cbd5e1;
-  background: #ffffff;
-  padding: 38px 44px;
-  font-size: 11px;
-  line-height: 1.45;
-  box-sizing: border-box;
-  overflow: hidden;
-}
 
-.accomp-paper-preview .center {
-  text-align: center;
-}
 
-.accomp-paper-preview .report-heading {
-  margin-top: 10px;
-  font-size: 15px;
-  font-weight: 800;
-}
 
-.accomp-paper-preview ul {
-  margin-top: 18px;
-  padding-left: 23px;
-}
 
-.accomp-paper-preview .sign-area {
-  margin-top: 34px;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-  gap: 34px;
-}
 
 @media(max-width:760px) {
   .portal-cards,
@@ -1183,18 +1141,6 @@ button:disabled {
 
   .accomp-page {
     padding: 16px;
-  }
-
-  .accomp-paper-preview {
-    width: 100%;
-    aspect-ratio: 210 / 297;
-    padding: 24px 22px;
-    font-size: 9px;
-  }
-
-  .accomp-paper-preview .sign-area {
-    grid-template-columns: repeat(2, minmax(0,1fr));
-    gap: 16px;
   }
 }
 
@@ -1477,8 +1423,225 @@ button:disabled {
   .accomp-form-actions button { flex:1 1 160px; }
 }
 
+
+/* =========================================================
+   V34 — ACCOMPLISHMENT COLLAPSIBLE SECTIONS + BUSY SPINNER
+========================================================= */
+
+.accomp-collapse-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 7px;
+  margin: 0 0 10px;
+  flex-wrap: wrap;
+}
+
+.accomp-collapse-toolbar button {
+  border: 0;
+  border-radius: 6px;
+  padding: 7px 11px;
+  background: #475569;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.accomp-form-section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.accomp-section-toggle-v34 {
+  flex: 0 0 auto;
+  border: 1px solid rgba(255,255,255,.65);
+  border-radius: 5px;
+  padding: 5px 9px;
+  background: rgba(255,255,255,.14);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.accomp-form-section.collapsed-v34 .accomp-form-section-body {
+  display: none;
+}
+
+.accomp-busy-overlay-v34 {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, .55);
+  backdrop-filter: blur(1px);
+}
+
+.accomp-busy-overlay-v34.show {
+  display: flex;
+}
+
+.accomp-busy-card-v34 {
+  width: min(310px, calc(100vw - 36px));
+  padding: 22px 18px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 18px 50px rgba(0,0,0,.28);
+  text-align: center;
+}
+
+.accomp-spinner-v34 {
+  width: 38px;
+  height: 38px;
+  margin: 0 auto 12px;
+  border: 4px solid #dbe3ea;
+  border-top-color: #1f4e78;
+  border-radius: 50%;
+  animation: accompSpinV34 .8s linear infinite;
+}
+
+@keyframes accompSpinV34 {
+  to { transform: rotate(360deg); }
+}
+
+.accomp-busy-title-v34 {
+  font-size: 13px;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+.accomp-busy-text-v34 {
+  margin-top: 5px;
+  font-size: 10px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+@media(max-width:700px) {
+  .accomp-collapse-toolbar {
+    justify-content: stretch;
+  }
+
+  .accomp-collapse-toolbar button {
+    flex: 1 1 110px;
+  }
+}
+
+
+/* V34.1 — Monthly format preview permanently removed */
+#accompLandingV33 .accomp-format-preview,
+#accompLandingV33 .accomp-paper-preview,
+#accompLandingV33 .accomp-format-preview-title {
+  display: none !important;
+}
+
+
+/* =========================================================
+   V35 — GENERATED DOCUMENT MODAL
+========================================================= */
+
+.accomp-doc-modal-v35 {
+  position: fixed;
+  inset: 0;
+  z-index: 100001;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(15, 23, 42, .62);
+}
+
+.accomp-doc-modal-v35.show {
+  display: flex;
+}
+
+.accomp-doc-card-v35 {
+  width: min(390px, calc(100vw - 36px));
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 18px 55px rgba(0,0,0,.30);
+  overflow: hidden;
+}
+
+.accomp-doc-head-v35 {
+  padding: 18px 18px 10px;
+  text-align: center;
+}
+
+.accomp-doc-check-v35 {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 10px;
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #166534;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 900;
+}
+
+.accomp-doc-title-v35 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+.accomp-doc-text-v35 {
+  margin-top: 7px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+.accomp-doc-actions-v35 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  padding: 14px 18px 18px;
+}
+
+.accomp-doc-actions-v35 button,
+.accomp-doc-actions-v35 a {
+  border: 0;
+  border-radius: 8px;
+  min-height: 40px;
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.accomp-doc-view-v35 {
+  background: #1f4e78;
+  color: #ffffff;
+}
+
+.accomp-doc-close-v35 {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+@media(max-width:520px) {
+  .accomp-doc-actions-v35 {
+    grid-template-columns: 1fr;
+  }
+}
+
 </style>
 
+<!-- FRONTEND VERSION: V35 SPINNER + GENERATED DOCUMENT MODAL -->
 </head>
 
 
@@ -2495,56 +2658,7 @@ button:disabled {
     </div>
 
 
-    <div class="accomp-format-preview">
-
-      <div class="accomp-format-preview-title">
-        Monthly report format
-      </div>
-
-      <div class="accomp-paper-preview">
-
-        <div class="center">
-          Republic of the Philippines<br>
-          Province of Iloilo<br>
-          Municipality of Cabatuan<br>
-          <strong>Barangay Tupol Oeste</strong>
-
-          <div class="report-heading">
-            ACCOMPLISHMENT REPORT
-          </div>
-
-          <div>
-            For [Month] [Year]
-          </div>
-        </div>
-
-        <ul>
-          <li>Accomplishment entry 1</li>
-          <li>Accomplishment entry 2</li>
-          <li>Accomplishment entry 3</li>
-        </ul>
-
-        <div class="sign-area">
-
-          <div>
-            Submitted by:<br><br>
-            <strong>Jonel G. Rosano</strong><br>
-            Kagawad<br>
-            Committee on Agriculture &amp;<br>
-            Environmental Protection
-          </div>
-
-          <div>
-            Approved by:<br><br>
-            <strong>Joselito M. Tormon</strong><br>
-            Punong Barangay
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
+    
 
   </div>
 
@@ -2717,7 +2831,97 @@ button:disabled {
   </div><!-- /accompMonthlyScreenV33 -->
 
 
-  <div id="accompSavedModalV33" class="accomp-saved-modal">
+  
+  <!-- V34: visible spinner while saving / generating -->
+  <div
+    id="accompBusyOverlayV34"
+    class="accomp-busy-overlay-v34"
+    aria-live="polite"
+    aria-busy="true"
+  >
+    <div class="accomp-busy-card-v34">
+      <div class="accomp-spinner-v34"></div>
+
+      <div
+        id="accompBusyTitleV34"
+        class="accomp-busy-title-v34"
+      >
+        Please wait...
+      </div>
+
+      <div
+        id="accompBusyTextV34"
+        class="accomp-busy-text-v34"
+      >
+        Processing your report.
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- =====================================================
+       V35 — GENERATED DOCUMENT MODAL
+  ====================================================== -->
+  <div
+    id="accompDocumentModalV35"
+    class="accomp-doc-modal-v35"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="accompDocumentTitleV35"
+  >
+    <div class="accomp-doc-card-v35">
+
+      <div class="accomp-doc-head-v35">
+
+        <div class="accomp-doc-check-v35">
+          ✓
+        </div>
+
+        <div
+          id="accompDocumentTitleV35"
+          class="accomp-doc-title-v35"
+        >
+          PDF Generated Successfully
+        </div>
+
+        <div
+          id="accompDocumentTextV35"
+          class="accomp-doc-text-v35"
+        >
+          Your Accomplishment Report is ready.
+        </div>
+
+      </div>
+
+
+      <div class="accomp-doc-actions-v35">
+
+        <a
+          id="accompViewDocumentV35"
+          class="accomp-doc-view-v35"
+          href="#"
+          target="_blank"
+          rel="noopener"
+        >
+          View Document
+        </a>
+
+        <button
+          type="button"
+          class="accomp-doc-close-v35"
+          onclick="ACCOMP_closeDocumentModalV35()"
+        >
+          Close
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+
+
+<div id="accompSavedModalV33" class="accomp-saved-modal">
     <div class="accomp-saved-dialog">
 
       <div class="accomp-saved-header">
@@ -7282,6 +7486,8 @@ async function ACCOMP_openMonthlyV33() {
 
   window.scrollTo(0,0);
 
+  ACCOMP_setupCollapsibleSectionsV34();
+
   if (ACCOMP_initializedV33) return;
 
   ACCOMP_setStatusV33('loading','Opening Monthly Accomplishment Report...');
@@ -7472,25 +7678,63 @@ function ACCOMP_collectPayloadV33() {
 async function ACCOMP_saveDraftV33() {
   const payload = ACCOMP_collectPayloadV33();
 
-  ACCOMP_setStatusV33('loading','Saving Monthly Accomplishment Report...');
+  ACCOMP_setStatusV33(
+    'loading',
+    'Saving Monthly Accomplishment Report...'
+  );
+
+  ACCOMP_showBusyV34(
+    'Saving report...',
+    'Please wait while your Monthly Accomplishment Report is being saved.'
+  );
 
   try {
     await ensureBarcoBridge();
 
-    const result = await barcoApi('accompSaveMonthly',payload);
+    const result = await barcoApi(
+      'accompSaveMonthly',
+      payload
+    );
 
     if (!result || !result.success) {
-      throw new Error((result && result.error) || 'Unable to save report.');
+      throw new Error(
+        (result && result.error) ||
+        'Unable to save report.'
+      );
     }
 
-    ACCOMP_currentReportIdV33 = result.reportId || '';
-    ACCOMP_currentStatusV33 = result.status || ACCOMP_currentStatusV33;
+    ACCOMP_currentReportIdV33 =
+      result.reportId || '';
+
+    ACCOMP_currentStatusV33 =
+      result.status ||
+      ACCOMP_currentStatusV33;
+
     ACCOMP_updateHeaderV33();
 
-    ACCOMP_setStatusV33('success',result.message || 'Monthly accomplishment report saved.');
-    setTimeout(ACCOMP_hideStatusV33,1400);
+    ACCOMP_setStatusV33(
+      'success',
+      result.message ||
+      'Monthly accomplishment report saved.'
+    );
+
+    setTimeout(
+      ACCOMP_hideStatusV33,
+      1400
+    );
+
   } catch(error) {
-    ACCOMP_setStatusV33('error','Save error: ' + error.message);
+
+    ACCOMP_setStatusV33(
+      'error',
+      'Save error: ' +
+      error.message
+    );
+
+  } finally {
+
+    ACCOMP_hideBusyV34();
+
   }
 }
 
@@ -7506,35 +7750,92 @@ async function ACCOMP_generatePdfV33() {
     return;
   }
 
-  ACCOMP_setStatusV33('loading','Generating A4 Portrait Accomplishment PDF...');
+  ACCOMP_setStatusV33(
+    'loading',
+    'Generating A4 Portrait Accomplishment PDF...'
+  );
+
+  ACCOMP_showBusyV34(
+    'Generating PDF...',
+    'Creating your A4 Portrait Accomplishment Report. Please wait.'
+  );
 
   try {
     await ensureBarcoBridge();
 
-    const result = await barcoApi('accompGenerateMonthlyPdf',payload);
+    const result = await barcoApi(
+      'accompGenerateMonthlyPdf',
+      payload
+    );
 
     if (!result || !result.success) {
-      throw new Error((result && result.error) || 'Unable to generate PDF.');
+      throw new Error(
+        (result && result.error) ||
+        'Unable to generate PDF.'
+      );
     }
 
-    ACCOMP_currentReportIdV33 = result.reportId || ACCOMP_currentReportIdV33;
-    ACCOMP_currentStatusV33 = 'FINALIZED';
+    ACCOMP_currentReportIdV33 =
+      result.reportId ||
+      ACCOMP_currentReportIdV33;
+
+    ACCOMP_currentStatusV33 =
+      'FINALIZED';
+
     ACCOMP_updateHeaderV33();
 
     if (result.pdfUrl) {
-      const box = document.getElementById('accompFinalLinkV33');
-      const anchor = document.getElementById('accompFinalPdfAnchorV33');
+      const box =
+        document.getElementById(
+          'accompFinalLinkV33'
+        );
 
-      anchor.href = result.pdfUrl;
-      anchor.textContent = 'Open ' + (result.filename || 'Generated PDF');
-      box.style.display = 'block';
+      const anchor =
+        document.getElementById(
+          'accompFinalPdfAnchorV33'
+        );
 
-      window.open(result.pdfUrl,'_blank','noopener');
+      anchor.href =
+        result.pdfUrl;
+
+      anchor.textContent =
+        'Open ' +
+        (
+          result.filename ||
+          'Generated PDF'
+        );
+
+      box.style.display =
+        'block';
     }
 
-    ACCOMP_setStatusV33('success',result.message || 'Final PDF generated.');
+    ACCOMP_setStatusV33(
+      'success',
+      result.message ||
+      'Final PDF generated.'
+    );
+
+    /*
+     * Spinner ends first, then show a clean success modal.
+     * The browser does NOT auto-open the PDF anymore.
+     */
+    ACCOMP_hideBusyV34();
+
+    ACCOMP_showDocumentModalV35(
+      result.pdfUrl || '',
+      result.filename || 'Accomplishment Report.pdf'
+    );
+
   } catch(error) {
-    ACCOMP_setStatusV33('error','PDF generation error: ' + error.message);
+
+    ACCOMP_setStatusV33(
+      'error',
+      'PDF generation error: ' +
+      error.message
+    );
+
+    ACCOMP_hideBusyV34();
+
   }
 }
 
@@ -7736,6 +8037,491 @@ document.addEventListener(
     if (modal && event.target === modal) {
       ACCOMP_closeSavedMonthlyV33();
     }
+  }
+);
+
+
+
+/* =========================================================
+   V34 — ACCOMPLISHMENT COLLAPSIBLE SECTIONS
+========================================================= */
+
+function ACCOMP_setupCollapsibleSectionsV34() {
+
+  const screen =
+    document.getElementById(
+      'accompMonthlyScreenV33'
+    );
+
+
+  if (!screen) {
+    return;
+  }
+
+
+  const sections =
+    Array.from(
+      screen.querySelectorAll(
+        '.accomp-form-section'
+      )
+    );
+
+
+  if (!sections.length) {
+    return;
+  }
+
+
+  if (
+    !document.getElementById(
+      'accompCollapseToolbarV34'
+    )
+  ) {
+
+    const toolbar =
+      document.createElement(
+        'div'
+      );
+
+
+    toolbar.id =
+      'accompCollapseToolbarV34';
+
+
+    toolbar.className =
+      'accomp-collapse-toolbar';
+
+
+    toolbar.innerHTML = `
+      <button
+        type="button"
+        id="accompViewAllV34"
+      >
+        View All
+      </button>
+
+      <button
+        type="button"
+        id="accompHideAllV34"
+      >
+        Hide All
+      </button>
+    `;
+
+
+    sections[0]
+      .parentNode
+      .insertBefore(
+        toolbar,
+        sections[0]
+      );
+
+
+    document
+      .getElementById(
+        'accompViewAllV34'
+      )
+      .addEventListener(
+        'click',
+        function() {
+
+          sections.forEach(
+            function(section) {
+
+              section.classList.remove(
+                'collapsed-v34'
+              );
+
+
+              ACCOMP_updateSectionToggleV34(
+                section
+              );
+
+            }
+          );
+
+        }
+      );
+
+
+    document
+      .getElementById(
+        'accompHideAllV34'
+      )
+      .addEventListener(
+        'click',
+        function() {
+
+          sections.forEach(
+            function(section) {
+
+              section.classList.add(
+                'collapsed-v34'
+              );
+
+
+              ACCOMP_updateSectionToggleV34(
+                section
+              );
+
+            }
+          );
+
+        }
+      );
+
+  }
+
+
+  sections.forEach(
+    function(section, index) {
+
+      const title =
+        section.querySelector(
+          '.accomp-form-section-title'
+        );
+
+
+      if (!title) {
+        return;
+      }
+
+
+      let button =
+        title.querySelector(
+          '.accomp-section-toggle-v34'
+        );
+
+
+      if (!button) {
+
+        button =
+          document.createElement(
+            'button'
+          );
+
+
+        button.type =
+          'button';
+
+
+        button.className =
+          'accomp-section-toggle-v34';
+
+
+        button.addEventListener(
+          'click',
+          function(event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+
+            section.classList.toggle(
+              'collapsed-v34'
+            );
+
+
+            ACCOMP_updateSectionToggleV34(
+              section
+            );
+
+          }
+        );
+
+
+        title.appendChild(
+          button
+        );
+
+      }
+
+
+      /*
+       * Initial state:
+       * Report Information = visible
+       * Other sections = hidden
+       */
+      if (
+        !section.dataset.accompCollapseReadyV34
+      ) {
+
+        if (index === 0) {
+
+          section.classList.remove(
+            'collapsed-v34'
+          );
+
+        } else {
+
+          section.classList.add(
+            'collapsed-v34'
+          );
+
+        }
+
+
+        section.dataset.accompCollapseReadyV34 =
+          '1';
+
+      }
+
+
+      ACCOMP_updateSectionToggleV34(
+        section
+      );
+
+    }
+  );
+
+}
+
+
+function ACCOMP_updateSectionToggleV34(
+  section
+) {
+
+  const button =
+    section.querySelector(
+      '.accomp-section-toggle-v34'
+    );
+
+
+  if (!button) {
+    return;
+  }
+
+
+  const hidden =
+    section.classList.contains(
+      'collapsed-v34'
+    );
+
+
+  button.textContent =
+    hidden
+      ? 'View'
+      : 'Hide';
+
+
+  button.setAttribute(
+    'aria-expanded',
+    hidden
+      ? 'false'
+      : 'true'
+  );
+
+}
+
+
+/* =========================================================
+   V34 — SAVING / PDF SPINNER
+========================================================= */
+
+function ACCOMP_showBusyV34(
+  title,
+  message
+) {
+
+  const overlay =
+    document.getElementById(
+      'accompBusyOverlayV34'
+    );
+
+
+  if (!overlay) {
+    return;
+  }
+
+
+  const titleElement =
+    document.getElementById(
+      'accompBusyTitleV34'
+    );
+
+
+  const textElement =
+    document.getElementById(
+      'accompBusyTextV34'
+    );
+
+
+  if (titleElement) {
+
+    titleElement.textContent =
+      title ||
+      'Please wait...';
+
+  }
+
+
+  if (textElement) {
+
+    textElement.textContent =
+      message ||
+      'Processing your report.';
+
+  }
+
+
+  overlay.classList.add(
+    'show'
+  );
+
+
+  document.body.style.overflow =
+    'hidden';
+
+}
+
+
+function ACCOMP_hideBusyV34() {
+
+  const overlay =
+    document.getElementById(
+      'accompBusyOverlayV34'
+    );
+
+
+  if (overlay) {
+
+    overlay.classList.remove(
+      'show'
+    );
+
+  }
+
+
+  document.body.style.overflow =
+    '';
+
+}
+
+
+
+
+/* =========================================================
+   V35 — GENERATED DOCUMENT MODAL
+========================================================= */
+
+function ACCOMP_showDocumentModalV35(
+  pdfUrl,
+  filename
+) {
+
+  const modal =
+    document.getElementById(
+      'accompDocumentModalV35'
+    );
+
+
+  const title =
+    document.getElementById(
+      'accompDocumentTitleV35'
+    );
+
+
+  const message =
+    document.getElementById(
+      'accompDocumentTextV35'
+    );
+
+
+  const viewButton =
+    document.getElementById(
+      'accompViewDocumentV35'
+    );
+
+
+  if (!modal) {
+    return;
+  }
+
+
+  if (title) {
+    title.textContent =
+      'PDF Generated Successfully';
+  }
+
+
+  if (message) {
+    message.textContent =
+      filename
+        ? filename + ' is ready to view.'
+        : 'Your Accomplishment Report is ready to view.';
+  }
+
+
+  if (viewButton) {
+
+    viewButton.href =
+      pdfUrl || '#';
+
+
+    viewButton.style.display =
+      pdfUrl
+        ? 'flex'
+        : 'none';
+
+  }
+
+
+  modal.classList.add(
+    'show'
+  );
+
+
+  document.body.style.overflow =
+    'hidden';
+
+}
+
+
+function ACCOMP_closeDocumentModalV35() {
+
+  const modal =
+    document.getElementById(
+      'accompDocumentModalV35'
+    );
+
+
+  if (modal) {
+
+    modal.classList.remove(
+      'show'
+    );
+
+  }
+
+
+  document.body.style.overflow =
+    '';
+
+}
+
+
+/*
+ * Clicking outside the success card closes the modal.
+ */
+document.addEventListener(
+  'click',
+  function(event) {
+
+    const modal =
+      document.getElementById(
+        'accompDocumentModalV35'
+      );
+
+
+    if (
+      modal &&
+      event.target === modal
+    ) {
+
+      ACCOMP_closeDocumentModalV35();
+
+    }
+
   }
 );
 
