@@ -1493,10 +1493,7 @@ button:disabled {
       <div class="section-body">
 
         <div class="signatory-note" style="margin-bottom:14px;">
-          Digital signatures are private Drive files. Save the draft first,
-          then use Upload Signature. The Punong Barangay signature is reused
-          automatically on Page 1 and Page 4. Exact-name matches can also reuse
-          a previously uploaded signature.
+          Digital signatures are private Drive files. Save the draft first, then use Upload Signature. PNG/JPG files are automatically cleaned and converted to transparent PNG before upload. The Punong Barangay signature is reused automatically on Page 1 and Page 4. Exact-name matches can also reuse a previously uploaded signature.
         </div>
 
 
@@ -2809,6 +2806,614 @@ function BARCO_chooseSignature_(
 }
 
 
+
+/* =========================================================
+   TRANSPARENT SIGNATURE PROCESSING
+   ---------------------------------------------------------
+   Converts uploaded PNG/JPG into a transparent PNG:
+   - removes near-white background
+   - preserves dark/colored signature strokes
+   - softly fades light gray edge pixels
+   - auto-crops transparent margins
+========================================================= */
+
+async function BARCO_processSignatureToTransparentPng_(
+  file
+) {
+
+  const sourceDataUrl =
+    await BARCO_readFileAsDataUrl_(
+      file
+    );
+
+
+  const image =
+    await BARCO_loadImageFromDataUrl_(
+      sourceDataUrl
+    );
+
+
+  const maxDimension =
+    1600;
+
+
+  let drawWidth =
+    image.naturalWidth ||
+    image.width;
+
+
+  let drawHeight =
+    image.naturalHeight ||
+    image.height;
+
+
+  if (
+    drawWidth >
+      maxDimension ||
+    drawHeight >
+      maxDimension
+  ) {
+
+    const scale =
+      Math.min(
+        maxDimension /
+          drawWidth,
+        maxDimension /
+          drawHeight
+      );
+
+
+    drawWidth =
+      Math.max(
+        1,
+        Math.round(
+          drawWidth *
+          scale
+        )
+      );
+
+
+    drawHeight =
+      Math.max(
+        1,
+        Math.round(
+          drawHeight *
+          scale
+        )
+      );
+
+  }
+
+
+  const canvas =
+    document.createElement(
+      'canvas'
+    );
+
+
+  canvas.width =
+    drawWidth;
+
+  canvas.height =
+    drawHeight;
+
+
+  const ctx =
+    canvas.getContext(
+      '2d',
+      {
+        willReadFrequently:
+          true
+      }
+    );
+
+
+  ctx.clearRect(
+    0,
+    0,
+    drawWidth,
+    drawHeight
+  );
+
+
+  ctx.drawImage(
+    image,
+    0,
+    0,
+    drawWidth,
+    drawHeight
+  );
+
+
+  const imageData =
+    ctx.getImageData(
+      0,
+      0,
+      drawWidth,
+      drawHeight
+    );
+
+
+  const pixels =
+    imageData.data;
+
+
+  /*
+   * White-removal thresholds.
+   * 248+ becomes fully transparent.
+   * 218–248 gets a soft alpha fade.
+   */
+  const transparentAt =
+    248;
+
+  const fadeStart =
+    218;
+
+
+  for (
+    let i = 0;
+    i < pixels.length;
+    i += 4
+  ) {
+
+    const r =
+      pixels[i];
+
+    const g =
+      pixels[i + 1];
+
+    const b =
+      pixels[i + 2];
+
+    const originalAlpha =
+      pixels[i + 3];
+
+
+    if (
+      originalAlpha ===
+      0
+    ) {
+
+      continue;
+
+    }
+
+
+    /*
+     * Perceived brightness.
+     * Works well for black/blue ink on white paper.
+     */
+    const brightness =
+      (
+        0.299 *
+        r
+      ) +
+      (
+        0.587 *
+        g
+      ) +
+      (
+        0.114 *
+        b
+      );
+
+
+    const minChannel =
+      Math.min(
+        r,
+        g,
+        b
+      );
+
+
+    /*
+     * Only treat very light pixels as background.
+     * This preserves colored signature strokes.
+     */
+    if (
+      brightness >=
+        transparentAt &&
+      minChannel >=
+        235
+    ) {
+
+      pixels[i + 3] =
+        0;
+
+
+    } else if (
+      brightness >
+        fadeStart &&
+      minChannel >
+        195
+    ) {
+
+      const keep =
+        (
+          transparentAt -
+          brightness
+        ) /
+        (
+          transparentAt -
+          fadeStart
+        );
+
+
+      const softenedAlpha =
+        Math.max(
+          0,
+          Math.min(
+            255,
+            Math.round(
+              originalAlpha *
+              keep
+            )
+          )
+        );
+
+
+      pixels[i + 3] =
+        softenedAlpha;
+
+    }
+
+  }
+
+
+  ctx.putImageData(
+    imageData,
+    0,
+    0
+  );
+
+
+  const cropped =
+    BARCO_cropTransparentSignatureCanvas_(
+      canvas
+    );
+
+
+  const transparentDataUrl =
+    cropped.toDataURL(
+      'image/png'
+    );
+
+
+  return {
+    dataUrl:
+      transparentDataUrl,
+    mimeType:
+      'image/png',
+    fileName:
+      BARCO_signaturePngName_(
+        file.name
+      ),
+    width:
+      cropped.width,
+    height:
+      cropped.height
+  };
+
+}
+
+
+function BARCO_cropTransparentSignatureCanvas_(
+  sourceCanvas
+) {
+
+  const ctx =
+    sourceCanvas.getContext(
+      '2d',
+      {
+        willReadFrequently:
+          true
+      }
+    );
+
+
+  const width =
+    sourceCanvas.width;
+
+  const height =
+    sourceCanvas.height;
+
+
+  const data =
+    ctx
+      .getImageData(
+        0,
+        0,
+        width,
+        height
+      )
+      .data;
+
+
+  let minX =
+    width;
+
+  let minY =
+    height;
+
+  let maxX =
+    -1;
+
+  let maxY =
+    -1;
+
+
+  for (
+    let y = 0;
+    y < height;
+    y++
+  ) {
+
+    for (
+      let x = 0;
+      x < width;
+      x++
+    ) {
+
+      const alpha =
+        data[
+          (
+            (
+              y *
+              width
+            ) +
+            x
+          ) *
+          4 +
+          3
+        ];
+
+
+      if (
+        alpha >
+        12
+      ) {
+
+        if (
+          x <
+          minX
+        ) {
+          minX =
+            x;
+        }
+
+
+        if (
+          y <
+          minY
+        ) {
+          minY =
+            y;
+        }
+
+
+        if (
+          x >
+          maxX
+        ) {
+          maxX =
+            x;
+        }
+
+
+        if (
+          y >
+          maxY
+        ) {
+          maxY =
+            y;
+        }
+
+      }
+
+    }
+
+  }
+
+
+  /*
+   * If nothing remains after cleanup,
+   * keep the original canvas instead of returning blank.
+   */
+  if (
+    maxX <
+      minX ||
+    maxY <
+      minY
+  ) {
+
+    return sourceCanvas;
+
+  }
+
+
+  const padding =
+    Math.max(
+      8,
+      Math.round(
+        Math.max(
+          width,
+          height
+        ) *
+        0.025
+      )
+    );
+
+
+  minX =
+    Math.max(
+      0,
+      minX -
+      padding
+    );
+
+
+  minY =
+    Math.max(
+      0,
+      minY -
+      padding
+    );
+
+
+  maxX =
+    Math.min(
+      width - 1,
+      maxX +
+      padding
+    );
+
+
+  maxY =
+    Math.min(
+      height - 1,
+      maxY +
+      padding
+    );
+
+
+  const cropWidth =
+    Math.max(
+      1,
+      maxX -
+      minX +
+      1
+    );
+
+
+  const cropHeight =
+    Math.max(
+      1,
+      maxY -
+      minY +
+      1
+    );
+
+
+  const output =
+    document.createElement(
+      'canvas'
+    );
+
+
+  output.width =
+    cropWidth;
+
+  output.height =
+    cropHeight;
+
+
+  const outCtx =
+    output.getContext(
+      '2d'
+    );
+
+
+  outCtx.clearRect(
+    0,
+    0,
+    cropWidth,
+    cropHeight
+  );
+
+
+  outCtx.drawImage(
+    sourceCanvas,
+    minX,
+    minY,
+    cropWidth,
+    cropHeight,
+    0,
+    0,
+    cropWidth,
+    cropHeight
+  );
+
+
+  return output;
+
+}
+
+
+function BARCO_loadImageFromDataUrl_(
+  dataUrl
+) {
+
+  return new Promise(
+    function(resolve, reject) {
+
+      const image =
+        new Image();
+
+
+      image.onload =
+        function() {
+
+          resolve(
+            image
+          );
+
+        };
+
+
+      image.onerror =
+        function() {
+
+          reject(
+            new Error(
+              'Unable to process the signature image.'
+            )
+          );
+
+        };
+
+
+      image.src =
+        dataUrl;
+
+    }
+  );
+
+}
+
+
+function BARCO_signaturePngName_(
+  originalName
+) {
+
+  const base =
+    String(
+      originalName ||
+      'signature'
+    )
+      .replace(
+        /\.[^.]+$/,
+        ''
+      )
+      .replace(
+        /[^a-zA-Z0-9_-]+/g,
+        '_'
+      )
+      .replace(
+        /^_+|_+$/g,
+        ''
+      ) ||
+    'signature';
+
+
+  return (
+    base +
+    '_transparent.png'
+  );
+
+}
+
+
+
 async function BARCO_handleSignatureFileSelected_(
   event
 ) {
@@ -2836,7 +3441,7 @@ async function BARCO_handleSignatureFileSelected_(
   ) {
 
     alert(
-      'Please select a PNG or JPG signature image.'
+      'Please select a PNG or JPG signature image. It will be converted to transparent PNG automatically.'
     );
 
     return;
@@ -2863,16 +3468,20 @@ async function BARCO_handleSignatureFileSelected_(
 
 
   showActionOverlay(
-    'Uploading digital signature...'
+    'Removing background and uploading transparent signature...'
   );
 
 
   try {
 
-    const dataUrl =
-      await BARCO_readFileAsDataUrl_(
+    const processed =
+      await BARCO_processSignatureToTransparentPng_(
         file
       );
+
+
+    const dataUrl =
+      processed.dataUrl;
 
 
     const base64 =
@@ -2893,9 +3502,9 @@ async function BARCO_handleSignatureFileSelected_(
           name:
             target.name,
           fileName:
-            file.name,
+            processed.fileName,
           mimeType:
-            file.type,
+            processed.mimeType,
           dataBase64:
             base64
         }
