@@ -260,7 +260,7 @@ button:disabled {
 
 .photo-summary {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0,1fr));
+  grid-template-columns: repeat(2, minmax(0,1fr));
   gap: 12px;
   margin-bottom: 16px;
 }
@@ -1086,7 +1086,7 @@ button:disabled {
 
 .accomp-cards {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0,1fr));
+  grid-template-columns: repeat(2, minmax(0,1fr));
   gap: 14px;
   margin-top: 12px;
 }
@@ -1639,9 +1639,35 @@ button:disabled {
   }
 }
 
+
+.accomp-report-sort-v36 {
+  margin-top: 12px;
+}
+
+.accomp-report-sort-v36 label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 10px;
+  font-weight: 800;
+  color: #334155;
+}
+
+.accomp-report-sort-v36 select {
+  width: 100%;
+  min-height: 36px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  padding: 8px 10px;
+  background: #ffffff;
+  color: #1f2937;
+  font-size: 11px;
+  font-weight: 700;
+  box-sizing: border-box;
+}
+
 </style>
 
-<!-- FRONTEND VERSION: V35 SPINNER + GENERATED DOCUMENT MODAL -->
+<!-- FRONTEND VERSION: V36 COMBINED QUARTERLY/ANNUAL CARD -->
 </head>
 
 
@@ -2628,30 +2654,34 @@ button:disabled {
       </div>
 
       <div class="accomp-card">
-        <h3>Quarterly Report</h3>
-        <p>
-          Will automatically consolidate finalized monthly reports
-          for Q1, Q2, Q3 or Q4.
-        </p>
-        <button
-          type="button"
-          onclick="ACCOMP_quarterlyComingSoonV33()"
-        >
-          Quarterly Report
-        </button>
-      </div>
+        <h3>Quarterly / Annual Reports</h3>
 
-      <div class="accomp-card">
-        <h3>Annual Report</h3>
         <p>
-          Will automatically consolidate the finalized monthly
-          accomplishments for the selected year.
+          Consolidated reports generated from finalized Monthly
+          Accomplishment Reports.
         </p>
+
+        <div class="accomp-report-sort-v36">
+          <label for="accompReportTypeV36">
+            Report Type
+          </label>
+
+          <select id="accompReportTypeV36">
+            <option value="quarterly">
+              Quarterly Report
+            </option>
+
+            <option value="annual">
+              Annual Report
+            </option>
+          </select>
+        </div>
+
         <button
           type="button"
-          onclick="ACCOMP_annualComingSoonV33()"
+          onclick="ACCOMP_openSortedReportV36()"
         >
-          Annual Report
+          Open Selected Report
         </button>
       </div>
 
@@ -8524,6 +8554,39 @@ document.addEventListener(
 
   }
 );
+
+
+
+
+/* =========================================================
+   V36 — ONE CARD FOR QUARTERLY / ANNUAL
+========================================================= */
+
+function ACCOMP_openSortedReportV36() {
+
+  const select =
+    document.getElementById(
+      'accompReportTypeV36'
+    );
+
+
+  const type =
+    select
+      ? select.value
+      : 'quarterly';
+
+
+  if (type === 'annual') {
+
+    ACCOMP_annualComingSoonV33();
+    return;
+
+  }
+
+
+  ACCOMP_quarterlyComingSoonV33();
+
+}
 
 </script>
 
