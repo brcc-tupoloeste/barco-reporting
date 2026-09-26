@@ -1198,6 +1198,285 @@ button:disabled {
   }
 }
 
+
+/* =========================================================
+   V33 — MONTHLY ACCOMPLISHMENT REPORT
+========================================================= */
+
+.accomp-monthly-screen { display:none; }
+
+.accomp-editor-toolbar {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+
+.accomp-editor-toolbar-left,
+.accomp-editor-toolbar-right {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.accomp-editor-toolbar button,
+.accomp-form-actions button,
+.accomp-add-entry {
+  border:0;
+  border-radius:7px;
+  padding:9px 13px;
+  font-size:11px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.accomp-btn-secondary { background:#64748b; color:#fff; }
+.accomp-btn-blue { background:#1f4e78; color:#fff; }
+.accomp-btn-green { background:#15803d; color:#fff; }
+
+.accomp-status {
+  display:none;
+  margin-bottom:12px;
+  border-radius:7px;
+  padding:10px 12px;
+  font-size:11px;
+  line-height:1.4;
+}
+
+.accomp-status.loading { display:block; background:#dbeafe; color:#1e40af; }
+.accomp-status.success { display:block; background:#dcfce7; color:#166534; }
+.accomp-status.error { display:block; background:#fee2e2; color:#991b1b; }
+
+.accomp-form-section {
+  border:1px solid #dbe3ea;
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:14px;
+  background:#fff;
+}
+
+.accomp-form-section-title {
+  background:#24577f;
+  color:#fff;
+  padding:10px 13px;
+  font-size:12px;
+  font-weight:800;
+}
+
+.accomp-form-section-body { padding:14px; }
+
+.accomp-form-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+
+.accomp-field label {
+  display:block;
+  margin-bottom:5px;
+  font-size:10px;
+  font-weight:800;
+  color:#334155;
+}
+
+.accomp-field input,
+.accomp-field select {
+  width:100%;
+  border:1px solid #cbd5e1;
+  border-radius:6px;
+  padding:9px 10px;
+  background:#fff;
+  color:#111827;
+  font-size:11px;
+  box-sizing:border-box;
+}
+
+.accomp-meta {
+  margin-top:7px;
+  color:#64748b;
+  font-size:10px;
+}
+
+.accomp-entry-row {
+  display:grid;
+  grid-template-columns:34px minmax(0,1fr) 74px;
+  gap:8px;
+  align-items:start;
+  margin-bottom:9px;
+}
+
+.accomp-entry-no {
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:#e2e8f0;
+  color:#334155;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:10px;
+  font-weight:800;
+  margin-top:2px;
+}
+
+.accomp-entry-row textarea {
+  width:100%;
+  min-height:66px;
+  resize:vertical;
+  border:1px solid #cbd5e1;
+  border-radius:6px;
+  padding:9px 10px;
+  box-sizing:border-box;
+  font-size:11px;
+  line-height:1.45;
+}
+
+.accomp-entry-remove {
+  border:0;
+  border-radius:6px;
+  background:#dc2626;
+  color:#fff;
+  padding:9px 8px;
+  font-size:10px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.accomp-add-entry { background:#15803d; color:#fff; }
+
+.accomp-form-actions {
+  display:flex;
+  justify-content:flex-end;
+  gap:9px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+.accomp-report-id-line {
+  margin-top:5px;
+  font-size:10px;
+  color:#64748b;
+}
+
+.accomp-report-id-line strong { color:#334155; }
+
+.accomp-final-link {
+  display:none;
+  margin-top:10px;
+  text-align:right;
+}
+
+.accomp-final-link a {
+  display:inline-block;
+  border-radius:6px;
+  padding:8px 12px;
+  background:#7c3aed;
+  color:#fff;
+  text-decoration:none;
+  font-size:11px;
+  font-weight:800;
+}
+
+.accomp-saved-modal {
+  position:fixed;
+  inset:0;
+  z-index:99990;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(15,23,42,.65);
+}
+
+.accomp-saved-modal.open { display:flex; }
+
+.accomp-saved-dialog {
+  width:min(820px,97vw);
+  max-height:90vh;
+  overflow:hidden;
+  border-radius:10px;
+  background:#fff;
+  box-shadow:0 18px 55px rgba(0,0,0,.28);
+}
+
+.accomp-saved-header {
+  background:#1f4e78;
+  color:#fff;
+  padding:12px 14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.accomp-saved-header strong { font-size:13px; }
+
+.accomp-saved-header button {
+  border:0;
+  border-radius:5px;
+  background:#fff;
+  color:#334155;
+  padding:6px 10px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.accomp-saved-body {
+  max-height:calc(90vh - 55px);
+  overflow:auto;
+  padding:12px;
+}
+
+.accomp-saved-table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:10px;
+}
+
+.accomp-saved-table th,
+.accomp-saved-table td {
+  border:1px solid #dbe3ea;
+  padding:8px;
+  text-align:left;
+  vertical-align:middle;
+}
+
+.accomp-saved-table th {
+  background:#f1f5f9;
+  color:#334155;
+}
+
+.accomp-saved-table button {
+  border:0;
+  border-radius:5px;
+  background:#1f4e78;
+  color:#fff;
+  padding:6px 9px;
+  font-size:9px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.accomp-status-badge {
+  display:inline-block;
+  padding:3px 7px;
+  border-radius:999px;
+  font-size:9px;
+  font-weight:800;
+}
+
+.accomp-status-badge.draft { background:#fef3c7; color:#92400e; }
+.accomp-status-badge.finalized { background:#dcfce7; color:#166534; }
+
+@media(max-width:700px) {
+  .accomp-form-grid { grid-template-columns:1fr; }
+  .accomp-entry-row { grid-template-columns:28px minmax(0,1fr); }
+  .accomp-entry-remove { grid-column:2; justify-self:start; }
+  .accomp-form-actions { justify-content:stretch; }
+  .accomp-form-actions button { flex:1 1 160px; }
+}
+
 </style>
 
 </head>
@@ -2150,7 +2429,7 @@ button:disabled {
     </button>
   </div>
 
-  <div class="accomp-page">
+  <div class="accomp-page" id="accompLandingV33">
 
     <div class="accomp-header">
 
@@ -2179,7 +2458,7 @@ button:disabled {
         </p>
         <button
           type="button"
-          onclick="BARCO_accomplishmentComingSoonV32('Monthly')"
+          onclick="ACCOMP_openMonthlyV33()"
         >
           Monthly Accomplishment
         </button>
@@ -2193,7 +2472,7 @@ button:disabled {
         </p>
         <button
           type="button"
-          onclick="BARCO_accomplishmentComingSoonV32('Quarterly')"
+          onclick="ACCOMP_quarterlyComingSoonV33()"
         >
           Quarterly Report
         </button>
@@ -2207,7 +2486,7 @@ button:disabled {
         </p>
         <button
           type="button"
-          onclick="BARCO_accomplishmentComingSoonV32('Annual')"
+          onclick="ACCOMP_annualComingSoonV33()"
         >
           Annual Report
         </button>
@@ -2267,6 +2546,191 @@ button:disabled {
 
     </div>
 
+  </div>
+
+
+  </div><!-- /accompLandingV33 -->
+
+
+  <div
+    id="accompMonthlyScreenV33"
+    class="accomp-page accomp-monthly-screen"
+  >
+
+    <div class="accomp-editor-toolbar">
+
+      <div class="accomp-editor-toolbar-left">
+        <button type="button" class="accomp-btn-secondary" onclick="ACCOMP_backToMenuV33()">
+          ← Accomplishment Reports
+        </button>
+
+        <button type="button" class="accomp-btn-secondary" onclick="ACCOMP_newMonthlyV33()">
+          New Monthly Report
+        </button>
+      </div>
+
+      <div class="accomp-editor-toolbar-right">
+        <button type="button" class="accomp-btn-blue" onclick="ACCOMP_showSavedMonthlyV33()">
+          Saved Monthly Reports
+        </button>
+      </div>
+
+    </div>
+
+
+    <div id="accompStatusV33" class="accomp-status"></div>
+
+
+    <div class="accomp-header">
+      <div class="barangay-name">BARANGAY TUPOL OESTE</div>
+
+      <h1>
+        Committee on Agriculture and Environmental Protection
+      </h1>
+
+      <h2>Monthly Accomplishment Report</h2>
+
+      <div class="accomp-report-id-line">
+        Report ID:
+        <strong id="accompReportIdV33">NEW</strong>
+        &nbsp;•&nbsp;
+        Status:
+        <strong id="accompReportStatusV33">DRAFT</strong>
+      </div>
+    </div>
+
+
+    <div class="accomp-form-section">
+      <div class="accomp-form-section-title">Report Information</div>
+
+      <div class="accomp-form-section-body">
+        <div class="accomp-form-grid">
+
+          <div class="accomp-field">
+            <label for="accompMonthV33">Month</label>
+            <select id="accompMonthV33">
+              <option>January</option>
+              <option>February</option>
+              <option>March</option>
+              <option>April</option>
+              <option>May</option>
+              <option>June</option>
+              <option>July</option>
+              <option>August</option>
+              <option>September</option>
+              <option>October</option>
+              <option>November</option>
+              <option>December</option>
+            </select>
+          </div>
+
+          <div class="accomp-field">
+            <label for="accompYearV33">Year</label>
+            <input id="accompYearV33" type="number" min="2000" max="2100">
+          </div>
+
+        </div>
+
+        <div class="accomp-meta">
+          Final PDF: A4 Portrait • one Monthly Accomplishment Report per month/year.
+        </div>
+      </div>
+    </div>
+
+
+    <div class="accomp-form-section">
+      <div class="accomp-form-section-title">Accomplishments</div>
+
+      <div class="accomp-form-section-body">
+
+        <div id="accompEntriesV33"></div>
+
+        <button type="button" class="accomp-add-entry" onclick="ACCOMP_addEntryV33('')">
+          + Add Accomplishment
+        </button>
+
+        <div class="accomp-meta">
+          Each item becomes one bullet in the final Accomplishment Report.
+        </div>
+      </div>
+    </div>
+
+
+    <div class="accomp-form-section">
+      <div class="accomp-form-section-title">Submitted / Approved By</div>
+
+      <div class="accomp-form-section-body">
+        <div class="accomp-form-grid">
+
+          <div>
+            <div class="accomp-field">
+              <label for="accompSubmittedByV33">Submitted By</label>
+              <input id="accompSubmittedByV33" type="text">
+            </div>
+
+            <div class="accomp-field" style="margin-top:10px;">
+              <label for="accompSubmittedDesignationV33">Designation</label>
+              <input id="accompSubmittedDesignationV33" type="text">
+            </div>
+
+            <div class="accomp-field" style="margin-top:10px;">
+              <label for="accompCommitteeV33">Committee</label>
+              <input id="accompCommitteeV33" type="text">
+            </div>
+          </div>
+
+
+          <div>
+            <div class="accomp-field">
+              <label for="accompApprovedByV33">Approved By</label>
+              <input id="accompApprovedByV33" type="text">
+            </div>
+
+            <div class="accomp-field" style="margin-top:10px;">
+              <label for="accompApprovedDesignationV33">Designation</label>
+              <input id="accompApprovedDesignationV33" type="text">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="accomp-form-actions">
+      <button type="button" class="accomp-btn-green" onclick="ACCOMP_saveDraftV33()">
+        Save Draft
+      </button>
+
+      <button type="button" class="accomp-btn-blue" onclick="ACCOMP_generatePdfV33()">
+        Generate Final PDF
+      </button>
+    </div>
+
+
+    <div id="accompFinalLinkV33" class="accomp-final-link">
+      <a id="accompFinalPdfAnchorV33" href="#" target="_blank" rel="noopener">
+        Open Generated PDF
+      </a>
+    </div>
+
+  </div><!-- /accompMonthlyScreenV33 -->
+
+
+  <div id="accompSavedModalV33" class="accomp-saved-modal">
+    <div class="accomp-saved-dialog">
+
+      <div class="accomp-saved-header">
+        <strong>Saved Monthly Accomplishment Reports</strong>
+
+        <button type="button" onclick="ACCOMP_closeSavedMonthlyV33()">
+          Close
+        </button>
+      </div>
+
+      <div id="accompSavedBodyV33" class="accomp-saved-body"></div>
+
+    </div>
   </div>
 
 </div>
@@ -6796,6 +7260,484 @@ if (
   );
 
 }
+
+
+
+/* =========================================================
+   V33 — MONTHLY ACCOMPLISHMENT REPORT
+========================================================= */
+
+let ACCOMP_initializedV33 = false;
+let ACCOMP_currentReportIdV33 = '';
+let ACCOMP_currentStatusV33 = 'DRAFT';
+let ACCOMP_entryCounterV33 = 0;
+
+
+async function ACCOMP_openMonthlyV33() {
+  const landing = document.getElementById('accompLandingV33');
+  const monthly = document.getElementById('accompMonthlyScreenV33');
+
+  if (landing) landing.style.display = 'none';
+  if (monthly) monthly.style.display = 'block';
+
+  window.scrollTo(0,0);
+
+  if (ACCOMP_initializedV33) return;
+
+  ACCOMP_setStatusV33('loading','Opening Monthly Accomplishment Report...');
+
+  try {
+    await ensureBarcoBridge();
+
+    const result = await barcoApi('accompInitMonthly',{});
+
+    if (!result || !result.success) {
+      throw new Error((result && result.error) || 'Unable to initialize the Accomplishment module.');
+    }
+
+    ACCOMP_applyDefaultsV33(result.defaults || {});
+    ACCOMP_initializedV33 = true;
+
+    ACCOMP_setStatusV33('success','Monthly Accomplishment Report ready.');
+    setTimeout(ACCOMP_hideStatusV33,1200);
+  } catch(error) {
+    ACCOMP_setStatusV33('error','Accomplishment module error: ' + error.message);
+  }
+}
+
+
+function ACCOMP_backToMenuV33() {
+  const landing = document.getElementById('accompLandingV33');
+  const monthly = document.getElementById('accompMonthlyScreenV33');
+
+  if (landing) landing.style.display = 'block';
+  if (monthly) monthly.style.display = 'none';
+
+  window.scrollTo(0,0);
+}
+
+
+function ACCOMP_quarterlyComingSoonV33() {
+  alert('Quarterly Report will automatically consolidate FINALIZED Monthly Accomplishment Reports. We will connect this after the Monthly module is working.');
+}
+
+
+function ACCOMP_annualComingSoonV33() {
+  alert('Annual Report will automatically consolidate FINALIZED Monthly Accomplishment Reports for the selected year. We will connect this after the Monthly module is working.');
+}
+
+
+function ACCOMP_applyDefaultsV33(defaults) {
+  document.getElementById('accompMonthV33').value =
+    defaults.month || 'January';
+
+  document.getElementById('accompYearV33').value =
+    Number(defaults.year || new Date().getFullYear());
+
+  document.getElementById('accompSubmittedByV33').value =
+    defaults.submittedBy || 'Jonel G. Rosano';
+
+  document.getElementById('accompSubmittedDesignationV33').value =
+    defaults.submittedDesignation || 'Kagawad';
+
+  document.getElementById('accompCommitteeV33').value =
+    defaults.committee || 'Committee on Agriculture & Environmental Protection';
+
+  document.getElementById('accompApprovedByV33').value =
+    defaults.approvedBy || 'Joselito M. Tormon';
+
+  document.getElementById('accompApprovedDesignationV33').value =
+    defaults.approvedDesignation || 'Punong Barangay';
+
+  ACCOMP_currentReportIdV33 = '';
+  ACCOMP_currentStatusV33 = 'DRAFT';
+  ACCOMP_updateHeaderV33();
+
+  document.getElementById('accompEntriesV33').innerHTML = '';
+  ACCOMP_entryCounterV33 = 0;
+  ACCOMP_addEntryV33('');
+  ACCOMP_hidePdfLinkV33();
+}
+
+
+async function ACCOMP_newMonthlyV33() {
+  const confirmed = confirm(
+    'Start a new Monthly Accomplishment Report? Unsaved changes on the current form will be cleared.'
+  );
+
+  if (!confirmed) return;
+
+  ACCOMP_setStatusV33('loading','Preparing a new monthly report...');
+
+  try {
+    await ensureBarcoBridge();
+
+    const result = await barcoApi('accompInitMonthly',{});
+    ACCOMP_applyDefaultsV33(result.defaults || {});
+
+    ACCOMP_setStatusV33('success','New monthly report ready.');
+    setTimeout(ACCOMP_hideStatusV33,1000);
+  } catch(error) {
+    ACCOMP_setStatusV33('error',error.message);
+  }
+}
+
+
+function ACCOMP_addEntryV33(value) {
+  ACCOMP_entryCounterV33++;
+
+  const container = document.getElementById('accompEntriesV33');
+  const row = document.createElement('div');
+
+  row.className = 'accomp-entry-row';
+  row.dataset.entryToken = String(ACCOMP_entryCounterV33);
+
+  row.innerHTML = `
+    <div class="accomp-entry-no"></div>
+
+    <textarea
+      class="accomp-entry-text"
+      placeholder="Enter accomplishment..."
+    ></textarea>
+
+    <button
+      type="button"
+      class="accomp-entry-remove"
+    >
+      Remove
+    </button>
+  `;
+
+  row.querySelector('.accomp-entry-text').value = String(value || '');
+
+  row.querySelector('.accomp-entry-remove').addEventListener(
+    'click',
+    function() {
+      const rows = container.querySelectorAll('.accomp-entry-row');
+
+      if (rows.length <= 1) {
+        row.querySelector('.accomp-entry-text').value = '';
+        return;
+      }
+
+      row.remove();
+      ACCOMP_renumberEntriesV33();
+    }
+  );
+
+  container.appendChild(row);
+  ACCOMP_renumberEntriesV33();
+}
+
+
+function ACCOMP_renumberEntriesV33() {
+  document.querySelectorAll('#accompEntriesV33 .accomp-entry-row')
+    .forEach(function(row,index) {
+      const no = row.querySelector('.accomp-entry-no');
+      if (no) no.textContent = String(index + 1);
+    });
+}
+
+
+function ACCOMP_collectEntriesV33() {
+  return Array.from(
+    document.querySelectorAll('#accompEntriesV33 .accomp-entry-text')
+  )
+    .map(function(textarea){
+      return String(textarea.value || '').trim();
+    })
+    .filter(Boolean);
+}
+
+
+function ACCOMP_collectPayloadV33() {
+  return {
+    reportId: ACCOMP_currentReportIdV33,
+    month: document.getElementById('accompMonthV33').value,
+    year: Number(
+      document.getElementById('accompYearV33').value ||
+      new Date().getFullYear()
+    ),
+    status: ACCOMP_currentStatusV33,
+    submittedBy: document.getElementById('accompSubmittedByV33').value.trim(),
+    submittedDesignation: document.getElementById('accompSubmittedDesignationV33').value.trim(),
+    committee: document.getElementById('accompCommitteeV33').value.trim(),
+    approvedBy: document.getElementById('accompApprovedByV33').value.trim(),
+    approvedDesignation: document.getElementById('accompApprovedDesignationV33').value.trim(),
+    accomplishments: ACCOMP_collectEntriesV33()
+  };
+}
+
+
+async function ACCOMP_saveDraftV33() {
+  const payload = ACCOMP_collectPayloadV33();
+
+  ACCOMP_setStatusV33('loading','Saving Monthly Accomplishment Report...');
+
+  try {
+    await ensureBarcoBridge();
+
+    const result = await barcoApi('accompSaveMonthly',payload);
+
+    if (!result || !result.success) {
+      throw new Error((result && result.error) || 'Unable to save report.');
+    }
+
+    ACCOMP_currentReportIdV33 = result.reportId || '';
+    ACCOMP_currentStatusV33 = result.status || ACCOMP_currentStatusV33;
+    ACCOMP_updateHeaderV33();
+
+    ACCOMP_setStatusV33('success',result.message || 'Monthly accomplishment report saved.');
+    setTimeout(ACCOMP_hideStatusV33,1400);
+  } catch(error) {
+    ACCOMP_setStatusV33('error','Save error: ' + error.message);
+  }
+}
+
+
+async function ACCOMP_generatePdfV33() {
+  const payload = ACCOMP_collectPayloadV33();
+
+  if (!payload.accomplishments.length) {
+    ACCOMP_setStatusV33(
+      'error',
+      'Add at least one accomplishment before generating the final PDF.'
+    );
+    return;
+  }
+
+  ACCOMP_setStatusV33('loading','Generating A4 Portrait Accomplishment PDF...');
+
+  try {
+    await ensureBarcoBridge();
+
+    const result = await barcoApi('accompGenerateMonthlyPdf',payload);
+
+    if (!result || !result.success) {
+      throw new Error((result && result.error) || 'Unable to generate PDF.');
+    }
+
+    ACCOMP_currentReportIdV33 = result.reportId || ACCOMP_currentReportIdV33;
+    ACCOMP_currentStatusV33 = 'FINALIZED';
+    ACCOMP_updateHeaderV33();
+
+    if (result.pdfUrl) {
+      const box = document.getElementById('accompFinalLinkV33');
+      const anchor = document.getElementById('accompFinalPdfAnchorV33');
+
+      anchor.href = result.pdfUrl;
+      anchor.textContent = 'Open ' + (result.filename || 'Generated PDF');
+      box.style.display = 'block';
+
+      window.open(result.pdfUrl,'_blank','noopener');
+    }
+
+    ACCOMP_setStatusV33('success',result.message || 'Final PDF generated.');
+  } catch(error) {
+    ACCOMP_setStatusV33('error','PDF generation error: ' + error.message);
+  }
+}
+
+
+async function ACCOMP_showSavedMonthlyV33() {
+  const modal = document.getElementById('accompSavedModalV33');
+  const body = document.getElementById('accompSavedBodyV33');
+
+  modal.classList.add('open');
+  body.innerHTML =
+    '<div style="padding:18px;text-align:center;">Loading saved reports...</div>';
+
+  try {
+    await ensureBarcoBridge();
+
+    const result = await barcoApi('accompListMonthly',{});
+    const reports = result && Array.isArray(result.reports)
+      ? result.reports
+      : [];
+
+    if (!reports.length) {
+      body.innerHTML =
+        '<div style="padding:18px;text-align:center;color:#64748b;">No saved Monthly Accomplishment Reports yet.</div>';
+      return;
+    }
+
+    body.innerHTML = `
+      <table class="accomp-saved-table">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Year</th>
+            <th>Status</th>
+            <th>Report ID</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          ${
+            reports.map(function(item) {
+              const statusClass =
+                String(item.status || '').toLowerCase() === 'finalized'
+                  ? 'finalized'
+                  : 'draft';
+
+              return `
+                <tr>
+                  <td>${escapeHtml(item.month || '')}</td>
+                  <td>${Number(item.year || 0)}</td>
+                  <td>
+                    <span class="accomp-status-badge ${statusClass}">
+                      ${escapeHtml(item.status || 'DRAFT')}
+                    </span>
+                  </td>
+                  <td>${escapeHtml(item.reportId || '')}</td>
+                  <td>
+                    <button
+                      type="button"
+                      onclick="ACCOMP_openSavedReportV33('${escapeHtml(item.reportId || '')}')"
+                    >
+                      Open
+                    </button>
+                  </td>
+                </tr>
+              `;
+            }).join('')
+          }
+        </tbody>
+      </table>
+    `;
+  } catch(error) {
+    body.innerHTML =
+      '<div style="padding:18px;color:#991b1b;">' +
+      escapeHtml(error.message) +
+      '</div>';
+  }
+}
+
+
+function ACCOMP_closeSavedMonthlyV33() {
+  document.getElementById('accompSavedModalV33').classList.remove('open');
+}
+
+
+async function ACCOMP_openSavedReportV33(reportId) {
+  ACCOMP_closeSavedMonthlyV33();
+  ACCOMP_setStatusV33('loading','Opening saved Monthly Accomplishment Report...');
+
+  try {
+    const result = await barcoApi('accompGetMonthly',{reportId:reportId});
+
+    if (!result || !result.success || !result.found) {
+      throw new Error('Saved accomplishment report was not found.');
+    }
+
+    const report = result.report || {};
+
+    ACCOMP_currentReportIdV33 = report.reportId || reportId;
+    ACCOMP_currentStatusV33 = report.status || 'DRAFT';
+
+    document.getElementById('accompMonthV33').value =
+      report.month || 'January';
+
+    document.getElementById('accompYearV33').value =
+      Number(report.year || new Date().getFullYear());
+
+    document.getElementById('accompSubmittedByV33').value =
+      report.submittedBy || '';
+
+    document.getElementById('accompSubmittedDesignationV33').value =
+      report.submittedDesignation || '';
+
+    document.getElementById('accompCommitteeV33').value =
+      report.committee || '';
+
+    document.getElementById('accompApprovedByV33').value =
+      report.approvedBy || '';
+
+    document.getElementById('accompApprovedDesignationV33').value =
+      report.approvedDesignation || '';
+
+    const entriesBox = document.getElementById('accompEntriesV33');
+    entriesBox.innerHTML = '';
+    ACCOMP_entryCounterV33 = 0;
+
+    const entries = Array.isArray(result.accomplishments)
+      ? result.accomplishments
+      : [];
+
+    if (entries.length) {
+      entries.forEach(function(item){
+        ACCOMP_addEntryV33(item.accomplishment || '');
+      });
+    } else {
+      ACCOMP_addEntryV33('');
+    }
+
+    ACCOMP_updateHeaderV33();
+
+    if (report.pdfUrl) {
+      const box = document.getElementById('accompFinalLinkV33');
+      const anchor = document.getElementById('accompFinalPdfAnchorV33');
+
+      anchor.href = report.pdfUrl;
+      anchor.textContent = 'Open Generated PDF';
+      box.style.display = 'block';
+    } else {
+      ACCOMP_hidePdfLinkV33();
+    }
+
+    ACCOMP_setStatusV33('success','Saved Monthly Accomplishment Report opened.');
+    setTimeout(ACCOMP_hideStatusV33,1200);
+    window.scrollTo(0,0);
+  } catch(error) {
+    ACCOMP_setStatusV33('error','Open report error: ' + error.message);
+  }
+}
+
+
+function ACCOMP_updateHeaderV33() {
+  document.getElementById('accompReportIdV33').textContent =
+    ACCOMP_currentReportIdV33 || 'NEW';
+
+  document.getElementById('accompReportStatusV33').textContent =
+    ACCOMP_currentStatusV33 || 'DRAFT';
+}
+
+
+function ACCOMP_setStatusV33(type,message) {
+  const box = document.getElementById('accompStatusV33');
+  if (!box) return;
+
+  box.className = 'accomp-status ' + type;
+  box.textContent = message;
+}
+
+
+function ACCOMP_hideStatusV33() {
+  const box = document.getElementById('accompStatusV33');
+  if (!box) return;
+
+  box.className = 'accomp-status';
+  box.textContent = '';
+}
+
+
+function ACCOMP_hidePdfLinkV33() {
+  const box = document.getElementById('accompFinalLinkV33');
+  if (box) box.style.display = 'none';
+}
+
+
+document.addEventListener(
+  'click',
+  function(event) {
+    const modal = document.getElementById('accompSavedModalV33');
+
+    if (modal && event.target === modal) {
+      ACCOMP_closeSavedMonthlyV33();
+    }
+  }
+);
 
 </script>
 
