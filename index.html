@@ -842,6 +842,116 @@ button:disabled {
 
 }
 
+
+/* =========================================================
+   DIGITAL SIGNATURE UI
+========================================================= */
+
+.signature-control {
+  margin-top: 7px;
+  padding: 8px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 7px;
+  background: #ffffff;
+}
+
+.signature-control.compact {
+  margin-top: 6px;
+}
+
+.signature-control-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.signature-preview-box {
+  width: 92px;
+  height: 42px;
+  border: 1px solid #dbe1e8;
+  border-radius: 5px;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+
+.signature-preview-box img {
+  max-width: 88px;
+  max-height: 38px;
+  object-fit: contain;
+  display: block;
+}
+
+.signature-preview-empty {
+  font-size: 9px;
+  color: #94a3b8;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.signature-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.signature-btn {
+  border: 0;
+  border-radius: 5px;
+  padding: 6px 9px;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.signature-btn.upload {
+  background: #1f4e78;
+  color: #ffffff;
+}
+
+.signature-btn.remove {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.signature-btn:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.signature-status {
+  margin-top: 5px;
+  font-size: 9px;
+  color: #64748b;
+}
+
+.signatory-entry {
+  min-width: 0;
+}
+
+.signature-help {
+  margin-top: 5px;
+  font-size: 9px;
+  color: #64748b;
+  line-height: 1.35;
+}
+
+@media(max-width:700px) {
+  .signature-preview-box {
+    width: 80px;
+    height: 38px;
+  }
+
+  .signature-preview-box img {
+    max-width: 76px;
+    max-height: 34px;
+  }
+}
+
 </style>
 
 </head>
@@ -1077,6 +1187,8 @@ button:disabled {
               type="text"
             >
 
+            <div id="signatureMount_preparedBy"></div>
+
           </div>
 
 
@@ -1088,6 +1200,8 @@ button:disabled {
               id="punongBarangay"
               type="text"
             >
+
+            <div id="signatureMount_punongBarangay"></div>
 
           </div>
 
@@ -1378,6 +1492,14 @@ button:disabled {
 
       <div class="section-body">
 
+        <div class="signatory-note" style="margin-bottom:14px;">
+          Digital signatures are private Drive files. Save the draft first,
+          then use Upload Signature. The Punong Barangay signature is reused
+          automatically on Page 1 and Page 4. Exact-name matches can also reuse
+          a previously uploaded signature.
+        </div>
+
+
         <div class="signatory-top-grid">
 
           <div class="field">
@@ -1387,6 +1509,8 @@ button:disabled {
               class="signatory-input"
               type="text"
             >
+
+            <div id="signatureMount_signatoryPunongBarangay"></div>
           </div>
 
           <div class="field">
@@ -1396,6 +1520,8 @@ button:disabled {
               class="signatory-input"
               type="text"
             >
+
+            <div id="signatureMount_signatorySkChairperson"></div>
           </div>
 
         </div>
@@ -2108,6 +2234,9 @@ window.addEventListener(
       setupSignatoryInputs();
 
 
+      setupDigitalSignatureUI();
+
+
       renderForm(
         data
       );
@@ -2167,6 +2296,1094 @@ window.addEventListener(
 
   }
 );
+
+
+
+
+/* =========================================================
+   DIGITAL SIGNATURES
+========================================================= */
+
+const barcoSignatureState =
+  {};
+
+let barcoSignatureUploadTarget =
+  null;
+
+
+function BARCO_signatureKey_(
+  group,
+  slotNo
+) {
+
+  return (
+    String(group || '')
+      .trim()
+      .toUpperCase() +
+    '|' +
+    Number(slotNo || 1)
+  );
+
+}
+
+
+function setupDigitalSignatureUI() {
+
+  const targets = [
+    {
+      inputId:
+        'preparedBy',
+      group:
+        'PREPARED BY',
+      slotNo:
+        1
+    },
+    {
+      inputId:
+        'punongBarangay',
+      group:
+        'PUNONG BARANGAY',
+      slotNo:
+        1
+    },
+    {
+      inputId:
+        'signatoryPunongBarangay',
+      group:
+        'PUNONG BARANGAY',
+      slotNo:
+        1
+    },
+    {
+      inputId:
+        'signatorySkChairperson',
+      group:
+        'SK CHAIRPERSON',
+      slotNo:
+        1
+    }
+  ];
+
+
+  for (
+    let i = 1;
+    i <= 7;
+    i++
+  ) {
+
+    targets.push({
+      inputId:
+        'sbMember' + i,
+      group:
+        'SB MEMBER',
+      slotNo:
+        i
+    });
+
+    targets.push({
+      inputId:
+        'skMember' + i,
+      group:
+        'SK MEMBER',
+      slotNo:
+        i
+    });
+
+  }
+
+
+  for (
+    let i = 1;
+    i <= 10;
+    i++
+  ) {
+
+    targets.push({
+      inputId:
+        'tanodMember' + i,
+      group:
+        'BARANGAY TANOD',
+      slotNo:
+        i
+    });
+
+  }
+
+
+  targets.forEach(
+    function(target) {
+
+      BARCO_attachSignatureControl_(
+        target
+      );
+
+    }
+  );
+
+
+  /*
+   * Keep the two Punong Barangay name fields in sync.
+   */
+  const page1Pb =
+    document.getElementById(
+      'punongBarangay'
+    );
+
+  const page4Pb =
+    document.getElementById(
+      'signatoryPunongBarangay'
+    );
+
+
+  if (
+    page1Pb &&
+    page4Pb
+  ) {
+
+    page1Pb.addEventListener(
+      'input',
+      function() {
+
+        page4Pb.value =
+          page1Pb.value;
+
+      }
+    );
+
+
+    page4Pb.addEventListener(
+      'input',
+      function() {
+
+        page1Pb.value =
+          page4Pb.value;
+
+      }
+    );
+
+  }
+
+
+  let picker =
+    document.getElementById(
+      'barcoSignatureFilePicker'
+    );
+
+
+  if (!picker) {
+
+    picker =
+      document.createElement(
+        'input'
+      );
+
+    picker.id =
+      'barcoSignatureFilePicker';
+
+    picker.type =
+      'file';
+
+    picker.accept =
+      'image/png,image/jpeg';
+
+    picker.style.display =
+      'none';
+
+    picker.addEventListener(
+      'change',
+      BARCO_handleSignatureFileSelected_
+    );
+
+    document.body.appendChild(
+      picker
+    );
+
+  }
+
+}
+
+
+function BARCO_attachSignatureControl_(
+  target
+) {
+
+  const mount =
+    document.getElementById(
+      'signatureMount_' +
+      target.inputId
+    );
+
+  if (!mount) {
+    return;
+  }
+
+
+  const key =
+    BARCO_signatureKey_(
+      target.group,
+      target.slotNo
+    );
+
+
+  mount.dataset.signatureKey =
+    key;
+
+  mount.dataset.signatureGroup =
+    target.group;
+
+  mount.dataset.signatureSlot =
+    String(
+      target.slotNo
+    );
+
+  mount.dataset.signatureInput =
+    target.inputId;
+
+
+  BARCO_renderSignatureControl_(
+    mount,
+    target
+  );
+
+}
+
+
+function BARCO_renderSignatureControl_(
+  mount,
+  target
+) {
+
+  const key =
+    BARCO_signatureKey_(
+      target.group,
+      target.slotNo
+    );
+
+
+  const state =
+    barcoSignatureState[key] ||
+    {
+      hasSignature:
+        false,
+      source:
+        'NONE',
+      fileId:
+        '',
+      previewDataUrl:
+        ''
+    };
+
+
+  const hasSignature =
+    !!state.hasSignature;
+
+
+  const sourceText =
+    state.source === 'REUSED'
+      ? 'Reused by exact name'
+      : (
+          hasSignature
+            ? 'Uploaded for this report'
+            : (
+                state.status === 'REMOVED'
+                  ? 'Removed for this report'
+                  : 'No signature'
+              )
+        );
+
+
+  mount.innerHTML = `
+    <div class="signature-control compact">
+
+      <div class="signature-control-head">
+
+        <div class="signature-preview-box">
+          ${
+            state.previewDataUrl
+              ? (
+                  '<img alt="Signature preview" src="' +
+                  state.previewDataUrl +
+                  '">'
+                )
+              : (
+                  '<div class="signature-preview-empty">' +
+                  (
+                    hasSignature
+                      ? 'Signature uploaded'
+                      : 'No signature'
+                  ) +
+                  '</div>'
+                )
+          }
+        </div>
+
+        <div>
+
+          <div class="signature-actions">
+
+            <button
+              type="button"
+              class="signature-btn upload"
+              data-action="upload"
+            >
+              ${
+                hasSignature
+                  ? 'Replace Signature'
+                  : 'Upload Signature'
+              }
+            </button>
+
+            <button
+              type="button"
+              class="signature-btn remove"
+              data-action="remove"
+              ${
+                hasSignature
+                  ? ''
+                  : 'disabled'
+              }
+            >
+              Remove
+            </button>
+
+          </div>
+
+          <div class="signature-status">
+            ${escapeHtml(sourceText)}
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  `;
+
+
+  const uploadButton =
+    mount.querySelector(
+      '[data-action="upload"]'
+    );
+
+  const removeButton =
+    mount.querySelector(
+      '[data-action="remove"]'
+    );
+
+
+  if (uploadButton) {
+
+    uploadButton.addEventListener(
+      'click',
+      function() {
+
+        BARCO_chooseSignature_(
+          target
+        );
+
+      }
+    );
+
+  }
+
+
+  if (removeButton) {
+
+    removeButton.addEventListener(
+      'click',
+      function() {
+
+        BARCO_removeSignature_(
+          target
+        );
+
+      }
+    );
+
+  }
+
+}
+
+
+function BARCO_renderAllSignatureControls_() {
+
+  document
+    .querySelectorAll(
+      '[data-signature-key]'
+    )
+    .forEach(
+      function(mount) {
+
+        BARCO_renderSignatureControl_(
+          mount,
+          {
+            inputId:
+              mount.dataset.signatureInput,
+            group:
+              mount.dataset.signatureGroup,
+            slotNo:
+              Number(
+                mount.dataset.signatureSlot ||
+                1
+              )
+          }
+        );
+
+      }
+    );
+
+}
+
+
+function BARCO_chooseSignature_(
+  target
+) {
+
+  const reportId =
+    String(
+      document.getElementById(
+        'reportId'
+      ).textContent || ''
+    ).trim();
+
+
+  if (!reportId) {
+
+    alert(
+      'Please click Save Draft first before uploading a digital signature.'
+    );
+
+    return;
+
+  }
+
+
+  const input =
+    document.getElementById(
+      target.inputId
+    );
+
+
+  const name =
+    input
+      ? input.value.trim()
+      : '';
+
+
+  if (!name) {
+
+    alert(
+      'Please enter the name first before uploading the signature.'
+    );
+
+    return;
+
+  }
+
+
+  barcoSignatureUploadTarget = {
+    reportId:
+      reportId,
+    inputId:
+      target.inputId,
+    group:
+      target.group,
+    slotNo:
+      target.slotNo,
+    name:
+      name
+  };
+
+
+  const picker =
+    document.getElementById(
+      'barcoSignatureFilePicker'
+    );
+
+
+  picker.value =
+    '';
+
+  picker.click();
+
+}
+
+
+async function BARCO_handleSignatureFileSelected_(
+  event
+) {
+
+  const file =
+    event.target &&
+    event.target.files
+      ? event.target.files[0]
+      : null;
+
+
+  if (
+    !file ||
+    !barcoSignatureUploadTarget
+  ) {
+
+    return;
+
+  }
+
+
+  if (
+    file.type !== 'image/png' &&
+    file.type !== 'image/jpeg'
+  ) {
+
+    alert(
+      'Please select a PNG or JPG signature image.'
+    );
+
+    return;
+
+  }
+
+
+  if (
+    file.size >
+    1572864
+  ) {
+
+    alert(
+      'Signature image must be 1.5 MB or smaller.'
+    );
+
+    return;
+
+  }
+
+
+  const target =
+    barcoSignatureUploadTarget;
+
+
+  showActionOverlay(
+    'Uploading digital signature...'
+  );
+
+
+  try {
+
+    const dataUrl =
+      await BARCO_readFileAsDataUrl_(
+        file
+      );
+
+
+    const base64 =
+      dataUrl.split(',')[1] ||
+      '';
+
+
+    const result =
+      await barcoApi(
+        'uploadSignature',
+        {
+          reportId:
+            target.reportId,
+          group:
+            target.group,
+          slotNo:
+            target.slotNo,
+          name:
+            target.name,
+          fileName:
+            file.name,
+          mimeType:
+            file.type,
+          dataBase64:
+            base64
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Signature upload failed.'
+      );
+
+    }
+
+
+    const key =
+      BARCO_signatureKey_(
+        target.group,
+        target.slotNo
+      );
+
+
+    barcoSignatureState[key] = {
+      ...result,
+      hasSignature:
+        true,
+      previewDataUrl:
+        dataUrl
+    };
+
+
+    BARCO_renderAllSignatureControls_();
+
+
+    showStatus(
+      'success',
+      'Digital signature uploaded.',
+      false
+    );
+
+
+  } catch(error) {
+
+    showStatus(
+      'error',
+      'Signature upload error: ' +
+      error.message,
+      false
+    );
+
+
+  } finally {
+
+    hideActionOverlay();
+
+    barcoSignatureUploadTarget =
+      null;
+
+  }
+
+}
+
+
+function BARCO_readFileAsDataUrl_(
+  file
+) {
+
+  return new Promise(
+    function(resolve, reject) {
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        function() {
+
+          resolve(
+            String(
+              reader.result || ''
+            )
+          );
+
+        };
+
+
+      reader.onerror =
+        function() {
+
+          reject(
+            new Error(
+              'Unable to read signature image.'
+            )
+          );
+
+        };
+
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
+  );
+
+}
+
+
+async function BARCO_removeSignature_(
+  target
+) {
+
+  const reportId =
+    String(
+      document.getElementById(
+        'reportId'
+      ).textContent || ''
+    ).trim();
+
+
+  if (!reportId) {
+    return;
+  }
+
+
+  const input =
+    document.getElementById(
+      target.inputId
+    );
+
+
+  const name =
+    input
+      ? input.value.trim()
+      : '';
+
+
+  const confirmed =
+    confirm(
+      'Remove the digital signature for this report?'
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  showActionOverlay(
+    'Removing digital signature...'
+  );
+
+
+  try {
+
+    const result =
+      await barcoApi(
+        'removeSignature',
+        {
+          reportId:
+            reportId,
+          group:
+            target.group,
+          slotNo:
+            target.slotNo,
+          name:
+            name
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to remove signature.'
+      );
+
+    }
+
+
+    const key =
+      BARCO_signatureKey_(
+        target.group,
+        target.slotNo
+      );
+
+
+    barcoSignatureState[key] = {
+      hasSignature:
+        false,
+      status:
+        'REMOVED',
+      source:
+        'REPORT',
+      fileId:
+        '',
+      previewDataUrl:
+        ''
+    };
+
+
+    BARCO_renderAllSignatureControls_();
+
+
+    showStatus(
+      'success',
+      'Digital signature removed for this report.',
+      false
+    );
+
+
+  } catch(error) {
+
+    showStatus(
+      'error',
+      'Signature remove error: ' +
+      error.message,
+      false
+    );
+
+
+  } finally {
+
+    hideActionOverlay();
+
+  }
+
+}
+
+
+async function loadReportSignatures(
+  reportId
+) {
+
+  reportId =
+    String(
+      reportId || ''
+    ).trim();
+
+
+  if (!reportId) {
+
+    return;
+
+  }
+
+
+  const result =
+    await barcoApi(
+      'getReportSignatures',
+      {
+        reportId:
+          reportId
+      }
+    );
+
+
+  if (
+    !result ||
+    !result.success
+  ) {
+
+    return;
+
+  }
+
+
+  BARCO_setSignatureState_(
+    'PREPARED BY',
+    1,
+    result.preparedBy
+  );
+
+
+  BARCO_setSignatureState_(
+    'PUNONG BARANGAY',
+    1,
+    result.punongBarangay
+  );
+
+
+  BARCO_setSignatureState_(
+    'SK CHAIRPERSON',
+    1,
+    result.skChairperson
+  );
+
+
+  const sb =
+    Array.isArray(
+      result.sbMembers
+    )
+      ? result.sbMembers
+      : [];
+
+
+  const sk =
+    Array.isArray(
+      result.skMembers
+    )
+      ? result.skMembers
+      : [];
+
+
+  const tanods =
+    Array.isArray(
+      result.tanods
+    )
+      ? result.tanods
+      : [];
+
+
+  for (
+    let i = 1;
+    i <= 7;
+    i++
+  ) {
+
+    BARCO_setSignatureState_(
+      'SB MEMBER',
+      i,
+      sb[i - 1]
+    );
+
+
+    BARCO_setSignatureState_(
+      'SK MEMBER',
+      i,
+      sk[i - 1]
+    );
+
+  }
+
+
+  for (
+    let i = 1;
+    i <= 10;
+    i++
+  ) {
+
+    BARCO_setSignatureState_(
+      'BARANGAY TANOD',
+      i,
+      tanods[i - 1]
+    );
+
+  }
+
+
+  BARCO_renderAllSignatureControls_();
+
+
+  const uniqueFiles =
+    {};
+
+
+  Object.keys(
+    barcoSignatureState
+  )
+    .forEach(
+      function(key) {
+
+        const state =
+          barcoSignatureState[key];
+
+
+        if (
+          state &&
+          state.hasSignature &&
+          state.fileId
+        ) {
+
+          uniqueFiles[
+            state.fileId
+          ] =
+            true;
+
+        }
+
+      }
+    );
+
+
+  await Promise.all(
+    Object.keys(
+      uniqueFiles
+    )
+      .map(
+        async function(fileId) {
+
+          try {
+
+            const preview =
+              await barcoApi(
+                'getSignaturePreview',
+                {
+                  fileId:
+                    fileId
+                }
+              );
+
+
+            if (
+              preview &&
+              preview.success &&
+              preview.dataUrl
+            ) {
+
+              Object.keys(
+                barcoSignatureState
+              )
+                .forEach(
+                  function(key) {
+
+                    if (
+                      barcoSignatureState[key] &&
+                      barcoSignatureState[key].fileId ===
+                        fileId
+                    ) {
+
+                      barcoSignatureState[key].previewDataUrl =
+                        preview.dataUrl;
+
+                    }
+
+                  }
+                );
+
+            }
+
+          } catch(error) {
+
+            console.warn(
+              'Signature preview error:',
+              error
+            );
+
+          }
+
+        }
+      )
+  );
+
+
+  BARCO_renderAllSignatureControls_();
+
+}
+
+
+function BARCO_setSignatureState_(
+  group,
+  slotNo,
+  data
+) {
+
+  const key =
+    BARCO_signatureKey_(
+      group,
+      slotNo
+    );
+
+
+  barcoSignatureState[key] = {
+    ...(data || {}),
+    hasSignature:
+      !!(
+        data &&
+        data.hasSignature
+      ),
+    previewDataUrl:
+      ''
+  };
+
+}
 
 
 
@@ -2237,17 +3454,25 @@ function BARCO_buildSignatoryList_(
         ${i}.
       </div>
 
-      <input
-        id="${prefix}${i}"
-        class="signatory-input"
-        type="text"
-        autocomplete="off"
-        placeholder="${
-          prefix === 'tanodMember'
-            ? 'Name or leave blank if vacant'
-            : 'Name'
-        }"
-      >
+      <div class="signatory-entry">
+
+        <input
+          id="${prefix}${i}"
+          class="signatory-input"
+          type="text"
+          autocomplete="off"
+          placeholder="${
+            prefix === 'tanodMember'
+              ? 'Name or leave blank if vacant'
+              : 'Name'
+          }"
+        >
+
+        <div
+          id="signatureMount_${prefix}${i}"
+        ></div>
+
+      </div>
     `;
 
     container.appendChild(
@@ -2845,6 +4070,11 @@ async function openDraftById(
     );
 
 
+    await loadReportSignatures(
+      reportId
+    );
+
+
     reportSaved =
       true;
 
@@ -2965,6 +4195,11 @@ async function restoreLastSavedDraft() {
 
 
     await loadReportSignatories(
+      savedReportId
+    );
+
+
+    await loadReportSignatures(
       savedReportId
     );
 
@@ -3870,6 +5105,11 @@ async function saveDraft() {
 
 
     await saveReportSignatoriesForReport(
+      result.reportId
+    );
+
+
+    await loadReportSignatures(
       result.reportId
     );
 
