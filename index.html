@@ -842,6 +842,84 @@ button:disabled {
 
 }
 
+
+/* =========================================================
+   V31 — COLLAPSIBLE REPORT SECTIONS
+========================================================= */
+
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.section-collapse-button {
+  flex: 0 0 auto;
+  border: 1px solid rgba(255,255,255,.75);
+  border-radius: 6px;
+  background: rgba(255,255,255,.14);
+  color: #ffffff;
+  padding: 6px 11px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.section-collapse-button:hover {
+  background: rgba(255,255,255,.24);
+}
+
+.section.collapsed .section-body {
+  display: none;
+}
+
+.section.collapsed .section-collapse-button::before {
+  content: "View";
+}
+
+.section:not(.collapsed) .section-collapse-button::before {
+  content: "Hide";
+}
+
+.section-collapse-button span {
+  display: none;
+}
+
+.section-collapse-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin: 0 0 12px;
+  flex-wrap: wrap;
+}
+
+.section-collapse-toolbar button {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 7px 11px;
+  background: #ffffff;
+  color: #334155;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.section-collapse-toolbar button:hover {
+  background: #f1f5f9;
+}
+
+@media(max-width:700px) {
+  .section-title {
+    gap: 8px;
+  }
+
+  .section-collapse-button {
+    padding: 5px 9px;
+    font-size: 10px;
+  }
+}
+
 </style>
 
 </head>
@@ -5690,6 +5768,343 @@ function escapeHtml(
   .replace(/>/g,'&gt;')
   .replace(/"/g,'&quot;')
   .replace(/'/g,'&#039;');
+
+}
+
+
+
+/* =========================================================
+   V31 — COLLAPSIBLE REPORT SECTIONS
+   ---------------------------------------------------------
+   Keeps the form shorter without changing any BaRCO data.
+   First section opens by default; the rest start collapsed.
+========================================================= */
+
+function BARCO_setupCollapsibleSectionsV31() {
+
+  const sections =
+    Array.from(
+      document.querySelectorAll(
+        '.section'
+      )
+    );
+
+
+  if (!sections.length) {
+    return;
+  }
+
+
+  /*
+   * Optional quick controls above the first section.
+   */
+  if (
+    !document.getElementById(
+      'barcoSectionCollapseToolbar'
+    )
+  ) {
+
+    const toolbar =
+      document.createElement(
+        'div'
+      );
+
+
+    toolbar.id =
+      'barcoSectionCollapseToolbar';
+
+
+    toolbar.className =
+      'section-collapse-toolbar';
+
+
+    toolbar.innerHTML = `
+      <button
+        type="button"
+        id="barcoViewAllSections"
+      >
+        View All
+      </button>
+
+      <button
+        type="button"
+        id="barcoHideAllSections"
+      >
+        Hide All
+      </button>
+    `;
+
+
+    sections[0]
+      .parentNode
+      .insertBefore(
+        toolbar,
+        sections[0]
+      );
+
+
+    document
+      .getElementById(
+        'barcoViewAllSections'
+      )
+      .addEventListener(
+        'click',
+        function() {
+
+          sections.forEach(
+            function(section) {
+
+              section.classList.remove(
+                'collapsed'
+              );
+
+
+              BARCO_updateSectionToggleV31_(
+                section
+              );
+
+            }
+          );
+
+        }
+      );
+
+
+    document
+      .getElementById(
+        'barcoHideAllSections'
+      )
+      .addEventListener(
+        'click',
+        function() {
+
+          sections.forEach(
+            function(section) {
+
+              section.classList.add(
+                'collapsed'
+              );
+
+
+              BARCO_updateSectionToggleV31_(
+                section
+              );
+
+            }
+          );
+
+        }
+      );
+
+  }
+
+
+  sections.forEach(
+    function(section, index) {
+
+      const title =
+        section.querySelector(
+          '.section-title'
+        );
+
+
+      const body =
+        section.querySelector(
+          '.section-body'
+        );
+
+
+      if (
+        !title ||
+        !body
+      ) {
+        return;
+      }
+
+
+      if (
+        title.querySelector(
+          '.section-collapse-button'
+        )
+      ) {
+        return;
+      }
+
+
+      const button =
+        document.createElement(
+          'button'
+        );
+
+
+      button.type =
+        'button';
+
+
+      button.className =
+        'section-collapse-button';
+
+
+      button.setAttribute(
+        'aria-expanded',
+        index === 0
+          ? 'true'
+          : 'false'
+      );
+
+
+      button.innerHTML =
+        '<span>Toggle</span>';
+
+
+      title.appendChild(
+        button
+      );
+
+
+      /*
+       * Keep Report Information open on load.
+       * Collapse the remaining sections to reduce scrolling.
+       */
+      if (
+        index === 0
+      ) {
+
+        section.classList.remove(
+          'collapsed'
+        );
+
+
+      } else {
+
+        section.classList.add(
+          'collapsed'
+        );
+
+      }
+
+
+      button.addEventListener(
+        'click',
+        function(event) {
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+
+          section.classList.toggle(
+            'collapsed'
+          );
+
+
+          BARCO_updateSectionToggleV31_(
+            section
+          );
+
+        }
+      );
+
+
+      /*
+       * Also allow clicking the title itself.
+       */
+      title.addEventListener(
+        'click',
+        function(event) {
+
+          if (
+            event.target ===
+            button ||
+            button.contains(
+              event.target
+            )
+          ) {
+            return;
+          }
+
+
+          section.classList.toggle(
+            'collapsed'
+          );
+
+
+          BARCO_updateSectionToggleV31_(
+            section
+          );
+
+        }
+      );
+
+
+      BARCO_updateSectionToggleV31_(
+        section
+      );
+
+    }
+  );
+
+}
+
+
+function BARCO_updateSectionToggleV31_(
+  section
+) {
+
+  const button =
+    section.querySelector(
+      '.section-collapse-button'
+    );
+
+
+  if (!button) {
+    return;
+  }
+
+
+  const isCollapsed =
+    section.classList.contains(
+      'collapsed'
+    );
+
+
+  button.setAttribute(
+    'aria-expanded',
+    isCollapsed
+      ? 'false'
+      : 'true'
+  );
+
+}
+
+
+/*
+ * Run after the page has been built.
+ */
+if (
+  document.readyState ===
+  'loading'
+) {
+
+  document.addEventListener(
+    'DOMContentLoaded',
+    function() {
+
+      setTimeout(
+        BARCO_setupCollapsibleSectionsV31,
+        0
+      );
+
+    }
+  );
+
+
+} else {
+
+  setTimeout(
+    BARCO_setupCollapsibleSectionsV31,
+    0
+  );
 
 }
 
