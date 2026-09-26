@@ -10,7 +10,7 @@
   content="width=device-width, initial-scale=1.0"
 >
 
-<title>BaRCO Report Generator</title>
+<title>Committee on Agriculture and Environmental Protection</title>
 
 <style>
 
@@ -920,6 +920,277 @@ button:disabled {
   }
 }
 
+
+/* =========================================================
+   V32 — COMMITTEE PORTAL / MODULE CARDS
+========================================================= */
+
+.portal-home {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.portal-shell {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0,0,0,.10);
+  overflow: hidden;
+}
+
+.portal-header {
+  padding: 28px 22px;
+  text-align: center;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.portal-kicker {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.portal-barangay {
+  margin-top: 5px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #b91c1c;
+}
+
+.portal-title {
+  margin-top: 8px;
+  font-size: 25px;
+  font-weight: 800;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.portal-subtitle {
+  margin-top: 7px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.portal-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 18px;
+  padding: 24px;
+}
+
+.portal-card {
+  border: 1px solid #dbe3ea;
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 22px;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  text-align: left;
+}
+
+.portal-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(15,23,42,.10);
+  border-color: #94a3b8;
+}
+
+.portal-card-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eef2f7;
+  font-size: 25px;
+}
+
+.portal-card-title {
+  margin-top: 14px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+.portal-card-text {
+  margin-top: 7px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+.portal-card-action {
+  margin-top: 15px;
+  color: #1f4e78;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.module-screen {
+  display: none;
+}
+
+.module-topbar {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 10px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.module-back-button {
+  border: 0;
+  border-radius: 7px;
+  padding: 9px 13px;
+  background: #475569;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* Accomplishment module landing */
+.accomp-page {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+  padding: 24px;
+}
+
+.accomp-header {
+  text-align: center;
+  padding: 8px 10px 20px;
+}
+
+.accomp-header .barangay-name {
+  color: #b91c1c;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.accomp-header h1 {
+  margin: 7px 0 0;
+  font-size: 22px;
+}
+
+.accomp-header h2 {
+  margin: 6px 0 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.accomp-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.accomp-card {
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 18px;
+  background: #f8fafc;
+}
+
+.accomp-card h3 {
+  margin: 0;
+  font-size: 15px;
+  color: #1f4e78;
+}
+
+.accomp-card p {
+  margin: 8px 0 0;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.accomp-card button {
+  margin-top: 13px;
+  width: 100%;
+  background: #1f4e78;
+  color: #ffffff;
+}
+
+.accomp-format-preview {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+}
+
+.accomp-format-preview-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #334155;
+  margin-bottom: 10px;
+}
+
+.accomp-paper-preview {
+  max-width: 690px;
+  margin: 0 auto;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  padding: 22px 28px;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.accomp-paper-preview .center {
+  text-align: center;
+}
+
+.accomp-paper-preview .report-heading {
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.accomp-paper-preview ul {
+  margin-top: 18px;
+  padding-left: 23px;
+}
+
+.accomp-paper-preview .sign-area {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 40px;
+}
+
+@media(max-width:760px) {
+  .portal-cards,
+  .accomp-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .portal-title {
+    font-size: 21px;
+  }
+
+  .portal-cards {
+    padding: 16px;
+  }
+
+  .accomp-page {
+    padding: 16px;
+  }
+
+  .accomp-paper-preview {
+    padding: 18px;
+  }
+
+  .accomp-paper-preview .sign-area {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
 </style>
 
 </head>
@@ -983,6 +1254,119 @@ button:disabled {
   </div>
 </div>
 
+
+
+<!-- =======================================================
+     COMMITTEE PORTAL HOME
+======================================================== -->
+
+<div
+  id="portalHome"
+  class="portal-home"
+>
+
+  <div class="portal-shell">
+
+    <div class="portal-header">
+
+      <div class="portal-kicker">
+        Republic of the Philippines<br>
+        Province of Iloilo · Municipality of Cabatuan
+      </div>
+
+      <div class="portal-barangay">
+        BARANGAY TUPOL OESTE
+      </div>
+
+      <div class="portal-title">
+        Committee on Agriculture and Environmental Protection
+      </div>
+
+      <div class="portal-subtitle">
+        Reporting and Documentation Portal
+      </div>
+
+    </div>
+
+
+    <div class="portal-cards">
+
+      <div
+        class="portal-card"
+        role="button"
+        tabindex="0"
+        onclick="BARCO_openModuleV32()"
+        onkeydown="if(event.key==='Enter'){BARCO_openModuleV32();}"
+      >
+
+        <div class="portal-card-icon">🛣️</div>
+
+        <div class="portal-card-title">
+          BaRCO Reporting
+        </div>
+
+        <div class="portal-card-text">
+          Monthly Barangay Road Clearing Operations report,
+          participation, photo documentation, signatories and PDF.
+        </div>
+
+        <div class="portal-card-action">
+          Open BaRCO →
+        </div>
+
+      </div>
+
+
+      <div
+        class="portal-card"
+        role="button"
+        tabindex="0"
+        onclick="BARCO_openAccomplishmentV32()"
+        onkeydown="if(event.key==='Enter'){BARCO_openAccomplishmentV32();}"
+      >
+
+        <div class="portal-card-icon">📋</div>
+
+        <div class="portal-card-title">
+          Accomplishment Reports
+        </div>
+
+        <div class="portal-card-text">
+          Monthly accomplishment reports with future automatic
+          Quarterly and Annual consolidation.
+        </div>
+
+        <div class="portal-card-action">
+          Open Accomplishment →
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =======================================================
+     BARCO MODULE
+======================================================== -->
+
+<div
+  id="barcoModule"
+  class="module-screen"
+>
+
+  <div class="module-topbar">
+    <button
+      type="button"
+      class="module-back-button"
+      onclick="BARCO_backToPortalV32()"
+    >
+      ← Back to Committee Portal
+    </button>
+  </div>
 
 <div class="page">
 
@@ -1737,6 +2121,150 @@ button:disabled {
 
 
 
+</div><!-- /barcoModule -->
+
+
+<!-- =======================================================
+     ACCOMPLISHMENT MODULE
+======================================================== -->
+
+<div
+  id="accomplishmentModule"
+  class="module-screen"
+>
+
+  <div class="module-topbar">
+    <button
+      type="button"
+      class="module-back-button"
+      onclick="BARCO_backToPortalV32()"
+    >
+      ← Back to Committee Portal
+    </button>
+  </div>
+
+  <div class="accomp-page">
+
+    <div class="accomp-header">
+
+      <div class="barangay-name">
+        BARANGAY TUPOL OESTE
+      </div>
+
+      <h1>
+        Committee on Agriculture and Environmental Protection
+      </h1>
+
+      <h2>
+        Accomplishment Reports
+      </h2>
+
+    </div>
+
+
+    <div class="accomp-cards">
+
+      <div class="accomp-card">
+        <h3>Monthly Report</h3>
+        <p>
+          Encode the month's accomplishments using the same
+          simple bullet-style format as the existing barangay report.
+        </p>
+        <button
+          type="button"
+          onclick="BARCO_accomplishmentComingSoonV32('Monthly')"
+        >
+          Monthly Accomplishment
+        </button>
+      </div>
+
+      <div class="accomp-card">
+        <h3>Quarterly Report</h3>
+        <p>
+          Will automatically consolidate finalized monthly reports
+          for Q1, Q2, Q3 or Q4.
+        </p>
+        <button
+          type="button"
+          onclick="BARCO_accomplishmentComingSoonV32('Quarterly')"
+        >
+          Quarterly Report
+        </button>
+      </div>
+
+      <div class="accomp-card">
+        <h3>Annual Report</h3>
+        <p>
+          Will automatically consolidate the finalized monthly
+          accomplishments for the selected year.
+        </p>
+        <button
+          type="button"
+          onclick="BARCO_accomplishmentComingSoonV32('Annual')"
+        >
+          Annual Report
+        </button>
+      </div>
+
+    </div>
+
+
+    <div class="accomp-format-preview">
+
+      <div class="accomp-format-preview-title">
+        Monthly report format
+      </div>
+
+      <div class="accomp-paper-preview">
+
+        <div class="center">
+          Republic of the Philippines<br>
+          Province of Iloilo<br>
+          Municipality of Cabatuan<br>
+          <strong>Barangay Tupol Oeste</strong>
+
+          <div class="report-heading">
+            ACCOMPLISHMENT REPORT
+          </div>
+
+          <div>
+            For [Month] [Year]
+          </div>
+        </div>
+
+        <ul>
+          <li>Accomplishment entry 1</li>
+          <li>Accomplishment entry 2</li>
+          <li>Accomplishment entry 3</li>
+        </ul>
+
+        <div class="sign-area">
+
+          <div>
+            Submitted by:<br><br>
+            <strong>Jonel G. Rosano</strong><br>
+            Kagawad<br>
+            Committee on Agriculture &amp;<br>
+            Environmental Protection
+          </div>
+
+          <div>
+            Approved by:<br><br>
+            <strong>Joselito M. Tormon</strong><br>
+            Punong Barangay
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
 <script>
 
 /************************************************************
@@ -2167,81 +2695,235 @@ function barcoApi(
    INITIALIZE
 ========================================================= */
 
-window.addEventListener(
-  'load',
-  async function() {
-
-    try {
-
-      await ensureBarcoBridge();
+let BARCO_moduleInitializedV32 = false;
+let BARCO_moduleInitializingV32 = false;
 
 
-      const data =
-        await barcoApi(
-          'init',
-          {}
-        );
+/* =========================================================
+   V32 — PORTAL NAVIGATION
+========================================================= */
+
+function BARCO_showOnlyV32(
+  screenId
+) {
+
+  [
+    'portalHome',
+    'barcoModule',
+    'accomplishmentModule'
+  ]
+    .forEach(
+      function(id) {
+
+        const element =
+          document.getElementById(
+            id
+          );
 
 
-      setupSignatoryInputs();
+        if (!element) {
+          return;
+        }
 
 
-      renderForm(
-        data
-      );
-
-
-      document
-        .getElementById(
-          'app'
-        )
-        .style.display =
-        'block';
-
-
-      const restored =
-        await restoreLastSavedDraft();
-
-
-      if (!restored) {
-
-        addRoadRow();
-
-
-        await loadDefaultSignatories();
-
-
-        showStatus(
-          'success',
-          'BaRCO system ready.',
-          false
-        );
+        element.style.display =
+          id === screenId
+            ? 'block'
+            : 'none';
 
       }
+    );
 
 
-      setTimeout(
-        function() {
+  window.scrollTo(
+    0,
+    0
+  );
 
-          document.getElementById(
-            'statusBox'
-          ).style.display =
-            'none';
+}
 
-        },
-        1800
+
+function BARCO_backToPortalV32() {
+
+  BARCO_showOnlyV32(
+    'portalHome'
+  );
+
+}
+
+
+async function BARCO_openModuleV32() {
+
+  BARCO_showOnlyV32(
+    'barcoModule'
+  );
+
+
+  if (
+    BARCO_moduleInitializedV32 ||
+    BARCO_moduleInitializingV32
+  ) {
+
+    return;
+
+  }
+
+
+  BARCO_moduleInitializingV32 =
+    true;
+
+
+  const statusBox =
+    document.getElementById(
+      'statusBox'
+    );
+
+
+  if (statusBox) {
+
+    statusBox.style.display =
+      'block';
+
+  }
+
+
+  showStatus(
+    'loading',
+    'Connecting to BaRCO backend...',
+    false
+  );
+
+
+  try {
+
+    await ensureBarcoBridge();
+
+
+    const data =
+      await barcoApi(
+        'init',
+        {}
       );
 
 
-    } catch(error) {
+    setupSignatoryInputs();
+
+
+    renderForm(
+      data
+    );
+
+
+    document
+      .getElementById(
+        'app'
+      )
+      .style.display =
+      'block';
+
+
+    const restored =
+      await restoreLastSavedDraft();
+
+
+    if (!restored) {
+
+      addRoadRow();
+
+
+      await loadDefaultSignatories();
+
 
       showStatus(
-        'error',
-        'Connection error: ' +
-        error.message
+        'success',
+        'BaRCO system ready.',
+        false
       );
 
     }
+
+
+    BARCO_moduleInitializedV32 =
+      true;
+
+
+    /*
+     * Apply collapsible behavior now that the BaRCO module
+     * has actually been opened.
+     */
+    setTimeout(
+      BARCO_setupCollapsibleSectionsV31,
+      0
+    );
+
+
+    setTimeout(
+      function() {
+
+        if (statusBox) {
+
+          statusBox.style.display =
+            'none';
+
+        }
+
+      },
+      1800
+    );
+
+
+  } catch(error) {
+
+    showStatus(
+      'error',
+      'Connection error: ' +
+      error.message
+    );
+
+
+  } finally {
+
+    BARCO_moduleInitializingV32 =
+      false;
+
+  }
+
+}
+
+
+function BARCO_openAccomplishmentV32() {
+
+  BARCO_showOnlyV32(
+    'accomplishmentModule'
+  );
+
+}
+
+
+function BARCO_accomplishmentComingSoonV32(
+  type
+) {
+
+  alert(
+    type +
+    ' Accomplishment Report module is the next section to build.'
+  );
+
+}
+
+
+/*
+ * IMPORTANT:
+ * Do not connect to Apps Script on first page load.
+ * The portal dashboard is shown immediately.
+ */
+window.addEventListener(
+  'load',
+  function() {
+
+    BARCO_showOnlyV32(
+      'portalHome'
+    );
 
   }
 );
