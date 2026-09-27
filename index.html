@@ -1665,9 +1665,143 @@ button:disabled {
   box-sizing: border-box;
 }
 
+
+/* =========================================================
+   V37 — QUARTERLY / ANNUAL CONSOLIDATED REPORT SCREEN
+========================================================= */
+
+.accomp-consolidated-screen-v37 {
+  display: none;
+}
+
+.accomp-consolidated-summary-v37 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.accomp-summary-box-v37 {
+  border: 1px solid #dbe3ea;
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 12px;
+}
+
+.accomp-summary-box-v37 .value {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1f4e78;
+}
+
+.accomp-summary-box-v37 .label {
+  margin-top: 3px;
+  font-size: 9px;
+  color: #64748b;
+}
+
+.accomp-source-table-v37 {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10px;
+}
+
+.accomp-source-table-v37 th,
+.accomp-source-table-v37 td {
+  border: 1px solid #dbe3ea;
+  padding: 8px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.accomp-source-table-v37 th {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.accomp-source-ok-v37 {
+  color: #166534;
+  font-weight: 800;
+}
+
+.accomp-missing-v37 {
+  margin-top: 12px;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  background: #fffbeb;
+  padding: 10px 12px;
+  color: #92400e;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.accomp-ready-v37 {
+  margin-top: 12px;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  background: #f0fdf4;
+  padding: 10px 12px;
+  color: #166534;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.accomp-empty-v37 {
+  padding: 18px;
+  text-align: center;
+  color: #64748b;
+  font-size: 10px;
+}
+
+.accomp-consolidated-actions-v37 {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.accomp-consolidated-actions-v37 button {
+  border: 0;
+  border-radius: 7px;
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.accomp-refresh-v37 {
+  background: #64748b;
+  color: #ffffff;
+}
+
+.accomp-generate-v37 {
+  background: #1f4e78;
+  color: #ffffff;
+}
+
+.accomp-generate-v37:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+@media(max-width:700px) {
+  .accomp-consolidated-summary-v37 {
+    grid-template-columns: 1fr;
+  }
+
+  .accomp-consolidated-actions-v37 {
+    justify-content: stretch;
+  }
+
+  .accomp-consolidated-actions-v37 button {
+    flex: 1 1 150px;
+  }
+}
+
 </style>
 
-<!-- FRONTEND VERSION: V36 COMBINED QUARTERLY/ANNUAL CARD -->
+<!-- FRONTEND VERSION: V37 QUARTERLY/ANNUAL AUTO CONSOLIDATION -->
 </head>
 
 
@@ -2861,6 +2995,197 @@ button:disabled {
   </div><!-- /accompMonthlyScreenV33 -->
 
 
+
+
+  <!-- =====================================================
+       V37 — QUARTERLY / ANNUAL CONSOLIDATED REPORT
+  ====================================================== -->
+  <div
+    id="accompConsolidatedScreenV37"
+    class="accomp-page accomp-consolidated-screen-v37"
+  >
+
+    <div class="accomp-editor-toolbar">
+
+      <div class="accomp-editor-toolbar-left">
+
+        <button
+          type="button"
+          class="accomp-btn-secondary"
+          onclick="ACCOMP_backToMenuV37()"
+        >
+          ← Accomplishment Reports
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div
+      id="accompConsolidatedStatusV37"
+      class="accomp-status"
+    ></div>
+
+
+    <div class="accomp-header">
+
+      <div class="barangay-name">
+        BARANGAY TUPOL OESTE
+      </div>
+
+      <h1>
+        Committee on Agriculture and Environmental Protection
+      </h1>
+
+      <h2 id="accompConsolidatedHeadingV37">
+        Quarterly Accomplishment Report
+      </h2>
+
+    </div>
+
+
+    <div class="accomp-form-section">
+
+      <div class="accomp-form-section-title">
+        Report Selection
+      </div>
+
+      <div class="accomp-form-section-body">
+
+        <div class="accomp-form-grid">
+
+          <div class="accomp-field">
+            <label for="accompConsolidatedTypeV37">
+              Report Type
+            </label>
+
+            <select
+              id="accompConsolidatedTypeV37"
+              onchange="ACCOMP_consolidatedTypeChangedV37()"
+            >
+              <option value="quarterly">
+                Quarterly Report
+              </option>
+
+              <option value="annual">
+                Annual Report
+              </option>
+            </select>
+          </div>
+
+
+          <div class="accomp-field">
+            <label for="accompConsolidatedYearV37">
+              Year
+            </label>
+
+            <input
+              id="accompConsolidatedYearV37"
+              type="number"
+              min="2000"
+              max="2100"
+              onchange="ACCOMP_refreshConsolidatedV37()"
+            >
+          </div>
+
+
+          <div
+            id="accompQuarterFieldV37"
+            class="accomp-field"
+          >
+            <label for="accompConsolidatedQuarterV37">
+              Quarter
+            </label>
+
+            <select
+              id="accompConsolidatedQuarterV37"
+              onchange="ACCOMP_refreshConsolidatedV37()"
+            >
+              <option value="Q1">
+                Q1 — January to March
+              </option>
+
+              <option value="Q2">
+                Q2 — April to June
+              </option>
+
+              <option value="Q3">
+                Q3 — July to September
+              </option>
+
+              <option value="Q4">
+                Q4 — October to December
+              </option>
+            </select>
+          </div>
+
+        </div>
+
+
+        <div class="accomp-meta">
+          Only FINALIZED Monthly Accomplishment Reports are included.
+          Draft monthly reports are automatically excluded.
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="accomp-form-section">
+
+      <div class="accomp-form-section-title">
+        Finalized Monthly Reports
+      </div>
+
+      <div class="accomp-form-section-body">
+
+        <div
+          id="accompConsolidatedSummaryV37"
+          class="accomp-consolidated-summary-v37"
+        >
+        </div>
+
+
+        <div
+          id="accompConsolidatedSourcesV37"
+        >
+          <div class="accomp-empty-v37">
+            Select the report period to load finalized monthly reports.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="accomp-consolidated-actions-v37">
+
+      <button
+        type="button"
+        class="accomp-refresh-v37"
+        onclick="ACCOMP_refreshConsolidatedV37()"
+      >
+        Refresh Monthly Sources
+      </button>
+
+      <button
+        type="button"
+        id="accompGenerateConsolidatedV37"
+        class="accomp-generate-v37"
+        onclick="ACCOMP_generateConsolidatedV37()"
+        disabled
+      >
+        Generate Quarterly PDF
+      </button>
+
+    </div>
+
+  </div><!-- /accompConsolidatedScreenV37 -->
+
+
   
   <!-- V34: visible spinner while saving / generating -->
   <div
@@ -3601,6 +3926,18 @@ function BARCO_openAccomplishmentV32() {
   BARCO_showOnlyV32(
     'accomplishmentModule'
   );
+
+
+  if (
+    typeof ACCOMP_backToMenuV37 ===
+    'function'
+  ) {
+
+    ACCOMP_backToMenuV37(
+      false
+    );
+
+  }
 
 }
 
@@ -8559,32 +8896,803 @@ document.addEventListener(
 
 
 /* =========================================================
-   V36 — ONE CARD FOR QUARTERLY / ANNUAL
+   V37 — QUARTERLY / ANNUAL CONSOLIDATION
 ========================================================= */
+
+let ACCOMP_consolidatedLoadedV37 =
+  null;
+
 
 function ACCOMP_openSortedReportV36() {
 
-  const select =
+  const sourceSelect =
     document.getElementById(
       'accompReportTypeV36'
     );
 
 
   const type =
-    select
-      ? select.value
+    sourceSelect
+      ? sourceSelect.value
       : 'quarterly';
 
 
-  if (type === 'annual') {
+  ACCOMP_openConsolidatedV37(
+    type
+  );
 
-    ACCOMP_annualComingSoonV33();
-    return;
+}
+
+
+function ACCOMP_openConsolidatedV37(
+  type
+) {
+
+  const landing =
+    document.getElementById(
+      'accompLandingV33'
+    );
+
+
+  const monthly =
+    document.getElementById(
+      'accompMonthlyScreenV33'
+    );
+
+
+  const consolidated =
+    document.getElementById(
+      'accompConsolidatedScreenV37'
+    );
+
+
+  if (landing) {
+    landing.style.display =
+      'none';
+  }
+
+
+  if (monthly) {
+    monthly.style.display =
+      'none';
+  }
+
+
+  if (consolidated) {
+    consolidated.style.display =
+      'block';
+  }
+
+
+  const typeSelect =
+    document.getElementById(
+      'accompConsolidatedTypeV37'
+    );
+
+
+  if (typeSelect) {
+
+    typeSelect.value =
+      String(
+        type ||
+        'quarterly'
+      ).toLowerCase() ===
+        'annual'
+        ? 'annual'
+        : 'quarterly';
 
   }
 
 
-  ACCOMP_quarterlyComingSoonV33();
+  const now =
+    new Date();
+
+
+  const yearInput =
+    document.getElementById(
+      'accompConsolidatedYearV37'
+    );
+
+
+  if (
+    yearInput &&
+    !yearInput.value
+  ) {
+
+    yearInput.value =
+      now.getFullYear();
+
+  }
+
+
+  const quarterSelect =
+    document.getElementById(
+      'accompConsolidatedQuarterV37'
+    );
+
+
+  if (
+    quarterSelect &&
+    !quarterSelect.dataset.defaultAppliedV37
+  ) {
+
+    const currentQuarter =
+      'Q' +
+      (
+        Math.floor(
+          now.getMonth() /
+          3
+        ) +
+        1
+      );
+
+
+    quarterSelect.value =
+      currentQuarter;
+
+
+    quarterSelect.dataset.defaultAppliedV37 =
+      '1';
+
+  }
+
+
+  ACCOMP_consolidatedTypeChangedV37(
+    false
+  );
+
+
+  ACCOMP_refreshConsolidatedV37();
+
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+}
+
+
+function ACCOMP_backToMenuV37(
+  scrollTop
+) {
+
+  const landing =
+    document.getElementById(
+      'accompLandingV33'
+    );
+
+
+  const monthly =
+    document.getElementById(
+      'accompMonthlyScreenV33'
+    );
+
+
+  const consolidated =
+    document.getElementById(
+      'accompConsolidatedScreenV37'
+    );
+
+
+  if (landing) {
+    landing.style.display =
+      'block';
+  }
+
+
+  if (monthly) {
+    monthly.style.display =
+      'none';
+  }
+
+
+  if (consolidated) {
+    consolidated.style.display =
+      'none';
+  }
+
+
+  if (
+    scrollTop !==
+    false
+  ) {
+
+    window.scrollTo(
+      0,
+      0
+    );
+
+  }
+
+}
+
+
+function ACCOMP_consolidatedTypeChangedV37(
+  refresh
+) {
+
+  const type =
+    document.getElementById(
+      'accompConsolidatedTypeV37'
+    ).value;
+
+
+  const quarterField =
+    document.getElementById(
+      'accompQuarterFieldV37'
+    );
+
+
+  const heading =
+    document.getElementById(
+      'accompConsolidatedHeadingV37'
+    );
+
+
+  const generateButton =
+    document.getElementById(
+      'accompGenerateConsolidatedV37'
+    );
+
+
+  if (
+    type ===
+      'annual'
+  ) {
+
+    if (quarterField) {
+      quarterField.style.display =
+        'none';
+    }
+
+
+    if (heading) {
+      heading.textContent =
+        'Annual Accomplishment Report';
+    }
+
+
+    if (generateButton) {
+      generateButton.textContent =
+        'Generate Annual PDF';
+    }
+
+
+  } else {
+
+    if (quarterField) {
+      quarterField.style.display =
+        'block';
+    }
+
+
+    if (heading) {
+      heading.textContent =
+        'Quarterly Accomplishment Report';
+    }
+
+
+    if (generateButton) {
+      generateButton.textContent =
+        'Generate Quarterly PDF';
+    }
+
+  }
+
+
+  if (
+    refresh !==
+    false
+  ) {
+
+    ACCOMP_refreshConsolidatedV37();
+
+  }
+
+}
+
+
+function ACCOMP_collectConsolidatedPayloadV37() {
+
+  const type =
+    document.getElementById(
+      'accompConsolidatedTypeV37'
+    ).value;
+
+
+  return {
+    reportType:
+      type,
+
+    year:
+      Number(
+        document.getElementById(
+          'accompConsolidatedYearV37'
+        ).value ||
+        new Date().getFullYear()
+      ),
+
+    quarter:
+      type ===
+        'quarterly'
+        ? document.getElementById(
+            'accompConsolidatedQuarterV37'
+          ).value
+        : ''
+  };
+
+}
+
+
+async function ACCOMP_refreshConsolidatedV37() {
+
+  const payload =
+    ACCOMP_collectConsolidatedPayloadV37();
+
+
+  const sources =
+    document.getElementById(
+      'accompConsolidatedSourcesV37'
+    );
+
+
+  const summary =
+    document.getElementById(
+      'accompConsolidatedSummaryV37'
+    );
+
+
+  const generateButton =
+    document.getElementById(
+      'accompGenerateConsolidatedV37'
+    );
+
+
+  if (generateButton) {
+    generateButton.disabled =
+      true;
+  }
+
+
+  if (sources) {
+
+    sources.innerHTML =
+      '<div class="accomp-empty-v37">Loading finalized monthly reports...</div>';
+
+  }
+
+
+  if (summary) {
+    summary.innerHTML =
+      '';
+  }
+
+
+  ACCOMP_setConsolidatedStatusV37(
+    'loading',
+    'Checking finalized Monthly Accomplishment Reports...'
+  );
+
+
+  try {
+
+    await ensureBarcoBridge();
+
+
+    const result =
+      await barcoApi(
+        'accompGetConsolidatedStatus',
+        payload
+      );
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to load the consolidated report sources.'
+      );
+
+    }
+
+
+    ACCOMP_consolidatedLoadedV37 =
+      result;
+
+
+    ACCOMP_renderConsolidatedStatusV37(
+      result
+    );
+
+
+    if (generateButton) {
+
+      generateButton.disabled =
+        !result.canGenerate;
+
+    }
+
+
+    ACCOMP_setConsolidatedStatusV37(
+      'success',
+      result.canGenerate
+        ? (
+            result.periodLabel +
+            ' is ready to generate.'
+          )
+        : (
+            'No finalized monthly reports are available for ' +
+            result.periodLabel +
+            '.'
+          )
+    );
+
+
+    setTimeout(
+      ACCOMP_hideConsolidatedStatusV37,
+      1400
+    );
+
+
+  } catch(error) {
+
+    ACCOMP_consolidatedLoadedV37 =
+      null;
+
+
+    ACCOMP_setConsolidatedStatusV37(
+      'error',
+      'Load error: ' +
+      error.message
+    );
+
+
+    if (sources) {
+
+      sources.innerHTML =
+        '<div class="accomp-empty-v37">' +
+        escapeHtml(
+          error.message
+        ) +
+        '</div>';
+
+    }
+
+  }
+
+}
+
+
+function ACCOMP_renderConsolidatedStatusV37(
+  data
+) {
+
+  const summary =
+    document.getElementById(
+      'accompConsolidatedSummaryV37'
+    );
+
+
+  const sources =
+    document.getElementById(
+      'accompConsolidatedSourcesV37'
+    );
+
+
+  const finalized =
+    Array.isArray(
+      data.finalizedMonths
+    )
+      ? data.finalizedMonths
+      : [];
+
+
+  const missing =
+    Array.isArray(
+      data.missingMonths
+    )
+      ? data.missingMonths
+      : [];
+
+
+  if (summary) {
+
+    summary.innerHTML = `
+      <div class="accomp-summary-box-v37">
+        <div class="value">
+          ${Number(data.finalizedMonthCount || 0)}
+        </div>
+        <div class="label">
+          Finalized Monthly Reports
+        </div>
+      </div>
+
+      <div class="accomp-summary-box-v37">
+        <div class="value">
+          ${Number(data.totalAccomplishments || 0)}
+        </div>
+        <div class="label">
+          Total Accomplishments
+        </div>
+      </div>
+
+      <div class="accomp-summary-box-v37">
+        <div class="value">
+          ${escapeHtml(data.periodLabel || '')}
+        </div>
+        <div class="label">
+          Report Period
+        </div>
+      </div>
+    `;
+
+  }
+
+
+  if (!sources) {
+    return;
+  }
+
+
+  let html =
+    '';
+
+
+  if (finalized.length) {
+
+    html += `
+      <table class="accomp-source-table-v37">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Report ID</th>
+            <th>Accomplishments</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          ${
+            finalized
+              .map(
+                function(item) {
+
+                  return `
+                    <tr>
+                      <td>
+                        ${escapeHtml(item.month || '')}
+                      </td>
+
+                      <td>
+                        ${escapeHtml(item.reportId || '')}
+                      </td>
+
+                      <td>
+                        ${Number(item.accomplishmentCount || 0)}
+                      </td>
+
+                      <td class="accomp-source-ok-v37">
+                        FINALIZED
+                      </td>
+                    </tr>
+                  `;
+
+                }
+              )
+              .join('')
+          }
+        </tbody>
+      </table>
+    `;
+
+
+    html += `
+      <div class="accomp-ready-v37">
+        These finalized Monthly Accomplishment Reports will be
+        consolidated automatically. No re-encoding is required.
+      </div>
+    `;
+
+
+  } else {
+
+    html += `
+      <div class="accomp-empty-v37">
+        No FINALIZED Monthly Accomplishment Reports found for this period.
+      </div>
+    `;
+
+  }
+
+
+  if (missing.length) {
+
+    html += `
+      <div class="accomp-missing-v37">
+        <strong>Not included:</strong>
+        ${
+          missing
+            .map(
+              function(item) {
+
+                return (
+                  escapeHtml(
+                    item.month ||
+                    ''
+                  ) +
+                  ' (' +
+                  escapeHtml(
+                    item.status ||
+                    ''
+                  ) +
+                  ')'
+                );
+
+              }
+            )
+            .join(
+              ', '
+            )
+        }.
+        Only FINALIZED monthly reports are included in the generated document.
+      </div>
+    `;
+
+  }
+
+
+  sources.innerHTML =
+    html;
+
+}
+
+
+async function ACCOMP_generateConsolidatedV37() {
+
+  const payload =
+    ACCOMP_collectConsolidatedPayloadV37();
+
+
+  const reportName =
+    payload.reportType ===
+      'annual'
+      ? 'Annual Accomplishment Report'
+      : 'Quarterly Accomplishment Report';
+
+
+  ACCOMP_showBusyV34(
+    'Generating PDF...',
+    'Consolidating finalized Monthly Accomplishment Reports into the ' +
+    reportName +
+    '.'
+  );
+
+
+  try {
+
+    await ensureBarcoBridge();
+
+
+    const result =
+      await barcoApi(
+        'accompGenerateConsolidatedPdf',
+        payload
+      );
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to generate the consolidated report.'
+      );
+
+    }
+
+
+    ACCOMP_hideBusyV34();
+
+
+    ACCOMP_showDocumentModalV35(
+      result.pdfUrl ||
+      '',
+      result.filename ||
+      (
+        reportName +
+        '.pdf'
+      )
+    );
+
+
+    ACCOMP_setConsolidatedStatusV37(
+      'success',
+      result.message ||
+      'Consolidated PDF generated successfully.'
+    );
+
+
+    /*
+     * Refresh so the source list remains visible and current.
+     */
+    ACCOMP_consolidatedLoadedV37 =
+      result;
+
+
+  } catch(error) {
+
+    ACCOMP_hideBusyV34();
+
+
+    ACCOMP_setConsolidatedStatusV37(
+      'error',
+      'PDF generation error: ' +
+      error.message
+    );
+
+  }
+
+}
+
+
+function ACCOMP_setConsolidatedStatusV37(
+  type,
+  message
+) {
+
+  const box =
+    document.getElementById(
+      'accompConsolidatedStatusV37'
+    );
+
+
+  if (!box) {
+    return;
+  }
+
+
+  box.className =
+    'accomp-status ' +
+    type;
+
+
+  box.textContent =
+    message;
+
+}
+
+
+function ACCOMP_hideConsolidatedStatusV37() {
+
+  const box =
+    document.getElementById(
+      'accompConsolidatedStatusV37'
+    );
+
+
+  if (!box) {
+    return;
+  }
+
+
+  box.className =
+    'accomp-status';
+
+
+  box.textContent =
+    '';
 
 }
 
