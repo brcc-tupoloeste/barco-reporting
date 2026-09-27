@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.13 PRINT PROFILES + MOBILE BACK BUTTON -->
+<!-- FRONTEND VERSION: V37.14 NATIVE PDF VIEWER BACK + PRINT -->
 
 <style>
 
@@ -2726,6 +2726,7 @@ button:hover:not(:disabled),
           href="#"
           target="_blank"
           rel="noopener noreferrer"
+          onclick="BARCO_openGeneratedPdfV3714(event)"
         >
           Open PDF
         </a>
@@ -3712,8 +3713,9 @@ button:hover:not(:disabled),
           href="#"
           target="_blank"
           rel="noopener"
+          onclick="ACCOMP_openGeneratedPdfV3714(event)"
         >
-          View Document
+          Open PDF
         </a>
 
         <button
@@ -6983,6 +6985,211 @@ async function generateFinalPdf() {
 
 
 
+
+
+
+function BARCO_hasNativeAndroidPdfViewerV3714() {
+
+  return !!(
+    window.AndroidPrint &&
+    typeof window.AndroidPrint.openBase64Pdf ===
+      'function'
+  );
+
+}
+
+
+async function BARCO_openGeneratedPdfV3714(
+  event
+) {
+
+  if (
+    !BARCO_hasNativeAndroidPdfViewerV3714()
+  ) {
+    return;
+  }
+
+
+  if (event) {
+    event.preventDefault();
+  }
+
+
+  const data =
+    BARCO_lastGeneratedPdfV377 ||
+    {};
+
+
+  if (!data.fileId) {
+
+    alert(
+      'Please generate the BaRCO PDF first.'
+    );
+
+    return;
+  }
+
+
+  showActionOverlay(
+    'Opening generated BaRCO PDF...'
+  );
+
+
+  try {
+
+    const result =
+      await barcoApi(
+        'getPdfForPrint',
+        {
+          fileId:
+            data.fileId
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success ||
+      !result.base64
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to load the generated PDF.'
+      );
+
+    }
+
+
+    window.AndroidPrint.openBase64Pdf(
+      String(
+        result.base64
+      ),
+      String(
+        result.fileName ||
+        data.fileName ||
+        'BaRCO-Report.pdf'
+      ),
+      'BARCO_LONG_BOND_LANDSCAPE'
+    );
+
+
+    hideActionOverlay();
+
+
+  } catch(error) {
+
+    hideActionOverlay();
+
+
+    alert(
+      'Open PDF error: ' +
+      error.message
+    );
+
+  }
+
+}
+
+
+async function ACCOMP_openGeneratedPdfV3714(
+  event
+) {
+
+  if (
+    !BARCO_hasNativeAndroidPdfViewerV3714()
+  ) {
+    return;
+  }
+
+
+  if (event) {
+    event.preventDefault();
+  }
+
+
+  const data =
+    ACCOMP_lastGeneratedPdfV3711 ||
+    {};
+
+
+  if (!data.fileId) {
+
+    alert(
+      'Please generate the Accomplishment PDF first.'
+    );
+
+    return;
+  }
+
+
+  ACCOMP_showBusyV34(
+    'Opening PDF...',
+    'Preparing the generated Accomplishment Report.'
+  );
+
+
+  try {
+
+    const result =
+      await barcoApi(
+        'getPdfForPrint',
+        {
+          fileId:
+            data.fileId
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success ||
+      !result.base64
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to load the generated PDF.'
+      );
+
+    }
+
+
+    window.AndroidPrint.openBase64Pdf(
+      String(
+        result.base64
+      ),
+      String(
+        result.fileName ||
+        data.filename ||
+        'Accomplishment-Report.pdf'
+      ),
+      'ACCOMPLISHMENT_A4_PORTRAIT'
+    );
+
+
+    ACCOMP_hideBusyV34();
+
+
+  } catch(error) {
+
+    ACCOMP_hideBusyV34();
+
+
+    alert(
+      'Open PDF error: ' +
+      error.message
+    );
+
+  }
+
+}
 
 
 function BARCO_hasNativeAndroidPrintV3712() {
@@ -10430,6 +10637,9 @@ function ACCOMP_showDocumentModalV35(
       fileId
         ? 'flex'
         : 'none';
+
+    printButton.style.width =
+      '100%';
 
   }
 
