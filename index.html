@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.11 ACCOMPLISHMENT PRINT BUTTON -->
+<!-- FRONTEND VERSION: V37.12 ANDROID NATIVE PDF PRINT -->
 
 <style>
 
@@ -6951,6 +6951,48 @@ async function generateFinalPdf() {
 
 
 
+
+function BARCO_hasNativeAndroidPrintV3712() {
+
+  return !!(
+    window.AndroidPrint &&
+    typeof window.AndroidPrint.printBase64Pdf ===
+      'function'
+  );
+
+}
+
+
+function BARCO_sendPdfToNativePrintV3712(
+  base64,
+  filename
+) {
+
+  if (
+    !BARCO_hasNativeAndroidPrintV3712()
+  ) {
+
+    return false;
+
+  }
+
+
+  window.AndroidPrint.printBase64Pdf(
+    String(
+      base64 || ''
+    ),
+    String(
+      filename ||
+      'Tupol-Oeste-Report.pdf'
+    )
+  );
+
+
+  return true;
+
+}
+
+
 async function BARCO_printGeneratedPdfV377() {
 
   const data =
@@ -7016,6 +7058,22 @@ async function BARCO_printGeneratedPdfV377() {
         ) ||
         'Unable to prepare PDF for printing.'
       );
+
+    }
+
+
+    if (
+      BARCO_sendPdfToNativePrintV3712(
+        result.base64,
+        result.fileName ||
+        data.fileName ||
+        'BaRCO-Report.pdf'
+      )
+    ) {
+
+      hideActionOverlay();
+
+      return;
 
     }
 
@@ -10418,6 +10476,22 @@ async function ACCOMP_printGeneratedPdfV3711() {
         ) ||
         'Unable to prepare the PDF for printing.'
       );
+
+    }
+
+
+    if (
+      BARCO_sendPdfToNativePrintV3712(
+        result.base64,
+        result.fileName ||
+        data.filename ||
+        'Accomplishment-Report.pdf'
+      )
+    ) {
+
+      ACCOMP_hideBusyV34();
+
+      return;
 
     }
 
