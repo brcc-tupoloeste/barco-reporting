@@ -1801,7 +1801,7 @@ button:disabled {
 
 </style>
 
-<!-- FRONTEND VERSION: V37 QUARTERLY/ANNUAL AUTO CONSOLIDATION -->
+<!-- FRONTEND VERSION: V37.1 SILENT BACKEND CONNECTION -->
 </head>
 
 
@@ -1981,10 +1981,9 @@ button:disabled {
 
   <div
     id="statusBox"
-    class="status loading"
-  >
-    Connecting to BaRCO backend...
-  </div>
+    class="status"
+    style="display:none;"
+  ></div>
 
 
   <div
@@ -3809,19 +3808,19 @@ async function BARCO_openModuleV32() {
     );
 
 
+  /*
+   * Connect silently. Do not show the old
+   * "Connecting to BaRCO backend..." banner.
+   */
   if (statusBox) {
 
     statusBox.style.display =
-      'block';
+      'none';
+
+    statusBox.textContent =
+      '';
 
   }
-
-
-  showStatus(
-    'loading',
-    'Connecting to BaRCO backend...',
-    false
-  );
 
 
   try {
@@ -3864,11 +3863,15 @@ async function BARCO_openModuleV32() {
       await loadDefaultSignatories();
 
 
-      showStatus(
-        'success',
-        'BaRCO system ready.',
-        false
-      );
+      if (statusBox) {
+
+        statusBox.style.display =
+          'none';
+
+        statusBox.textContent =
+          '';
+
+      }
 
     }
 
@@ -3887,22 +3890,17 @@ async function BARCO_openModuleV32() {
     );
 
 
-    setTimeout(
-      function() {
-
-        if (statusBox) {
-
-          statusBox.style.display =
-            'none';
-
-        }
-
-      },
-      1800
-    );
 
 
   } catch(error) {
+
+    if (statusBox) {
+
+      statusBox.style.display =
+        'block';
+
+    }
+
 
     showStatus(
       'error',
@@ -3922,6 +3920,23 @@ async function BARCO_openModuleV32() {
 
 
 function BARCO_openAccomplishmentV32() {
+
+  const barcoStatus =
+    document.getElementById(
+      'statusBox'
+    );
+
+
+  if (barcoStatus) {
+
+    barcoStatus.style.display =
+      'none';
+
+    barcoStatus.textContent =
+      '';
+
+  }
+
 
   BARCO_showOnlyV32(
     'accomplishmentModule'
