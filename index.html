@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.4 STRICT MODULE SEPARATION -->
+<!-- FRONTEND VERSION: V37.6 BARCO SECTION ORDER -->
 
 <style>
 
@@ -2641,95 +2641,6 @@ button:hover:not(:disabled),
 
 
 
-    <!-- PAGE 4 SIGNATORIES -->
-
-    <div class="section">
-
-      <div class="section-title">
-        Page 4 — Certification / Signatories
-      </div>
-
-      <div class="section-body">
-
-        <div class="signatory-top-grid">
-
-          <div class="field">
-            <label>Punong Barangay</label>
-            <input
-              id="signatoryPunongBarangay"
-              class="signatory-input"
-              type="text"
-            >
-          </div>
-
-          <div class="field">
-            <label>SK Chairperson</label>
-            <input
-              id="signatorySkChairperson"
-              class="signatory-input"
-              type="text"
-            >
-          </div>
-
-        </div>
-
-
-        <div class="signatory-groups">
-
-          <div class="signatory-panel">
-
-            <div class="signatory-panel-title">
-              Sangguniang Barangay Members
-            </div>
-
-            <div
-              id="sbMemberInputs"
-              class="signatory-list"
-            ></div>
-
-          </div>
-
-
-          <div class="signatory-panel">
-
-            <div class="signatory-panel-title">
-              Sangguniang Kabataan Members
-            </div>
-
-            <div
-              id="skMemberInputs"
-              class="signatory-list"
-            ></div>
-
-          </div>
-
-
-          <div class="signatory-panel full">
-
-            <div class="signatory-panel-title">
-              Barangay Tanods — Maximum 10
-            </div>
-
-            <div
-              id="tanodInputs"
-              class="signatory-list"
-            ></div>
-
-            <div class="signatory-note">
-              Vacant/blank Tanod fields are automatically ignored in the PDF.
-              The remaining names are compacted, centered, and evenly aligned
-              on Page 4.
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-
     <!-- PHOTO DOCUMENTATION -->
 
     <div class="section">
@@ -2815,6 +2726,8 @@ button:hover:not(:disabled),
           <strong>6 photos on Page 2</strong> and
           <strong>9 photos on Page 3</strong>.
           Maximum of <strong>15 photos per report</strong>.
+          Selected photos are automatically uploaded before
+          <strong>Generate Final PDF</strong>.
 
         </div>
 
@@ -2920,6 +2833,95 @@ button:hover:not(:disabled),
 
         </div>
 
+
+      </div>
+
+    </div>
+
+
+    <!-- PAGE 4 SIGNATORIES -->
+
+    <div class="section">
+
+      <div class="section-title">
+        Page 4 — Certification / Signatories
+      </div>
+
+      <div class="section-body">
+
+        <div class="signatory-top-grid">
+
+          <div class="field">
+            <label>Punong Barangay</label>
+            <input
+              id="signatoryPunongBarangay"
+              class="signatory-input"
+              type="text"
+            >
+          </div>
+
+          <div class="field">
+            <label>SK Chairperson</label>
+            <input
+              id="signatorySkChairperson"
+              class="signatory-input"
+              type="text"
+            >
+          </div>
+
+        </div>
+
+
+        <div class="signatory-groups">
+
+          <div class="signatory-panel">
+
+            <div class="signatory-panel-title">
+              Sangguniang Barangay Members
+            </div>
+
+            <div
+              id="sbMemberInputs"
+              class="signatory-list"
+            ></div>
+
+          </div>
+
+
+          <div class="signatory-panel">
+
+            <div class="signatory-panel-title">
+              Sangguniang Kabataan Members
+            </div>
+
+            <div
+              id="skMemberInputs"
+              class="signatory-list"
+            ></div>
+
+          </div>
+
+
+          <div class="signatory-panel full">
+
+            <div class="signatory-panel-title">
+              Barangay Tanods — Maximum 10
+            </div>
+
+            <div
+              id="tanodInputs"
+              class="signatory-list"
+            ></div>
+
+            <div class="signatory-note">
+              Vacant/blank Tanod fields are automatically ignored in the PDF.
+              The remaining names are compacted, centered, and evenly aligned
+              on Page 4.
+            </div>
+
+          </div>
+
+        </div>
 
       </div>
 
@@ -6067,6 +6069,104 @@ async function generateFinalPdf() {
 
     reportSaved =
       true;
+
+
+    /*
+     * IMPORTANT:
+     * A photo selected in the browser is only a local preview until
+     * uploadPhoto succeeds. Before generating the PDF, automatically
+     * upload every pending selected photo so PHOTO DOCUMENTATION and
+     * Google Drive are already complete.
+     */
+    if (
+      selectedPhotos.length >
+      0
+    ) {
+
+      showActionOverlay(
+        'Uploading selected photos before PDF generation...'
+      );
+
+
+      const pendingPhotos =
+        selectedPhotos.slice();
+
+
+      for (
+        let i = 0;
+        i < pendingPhotos.length;
+        i++
+      ) {
+
+        const photo =
+          pendingPhotos[i];
+
+
+        showActionOverlay(
+          'Uploading photo ' +
+          (i + 1) +
+          ' of ' +
+          pendingPhotos.length +
+          ' before PDF generation...'
+        );
+
+
+        const uploadResult =
+          await barcoApi(
+            'uploadPhoto',
+            {
+
+              reportId:
+                reportId,
+
+              caption:
+                photo.caption || '',
+
+              fileName:
+                photo.fileName,
+
+              mimeType:
+                photo.mimeType,
+
+              base64:
+                photo.base64
+
+            }
+          );
+
+
+        if (
+          !uploadResult ||
+          !uploadResult.success
+        ) {
+
+          throw new Error(
+            (
+              uploadResult &&
+              uploadResult.error
+            ) ||
+            (
+              'Photo ' +
+              (i + 1) +
+              ' could not be uploaded.'
+            )
+          );
+
+        }
+
+      }
+
+
+      selectedPhotos =
+        [];
+
+
+      renderSelectedPhotos();
+
+
+      await loadUploadedPhotos();
+
+    }
 
 
     const participation =
