@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.6 BARCO SECTION ORDER -->
+<!-- FRONTEND VERSION: V37.7 BARCO LOADER + PRINT PDF -->
 
 <style>
 
@@ -2010,6 +2010,109 @@ button:hover:not(:disabled),
   display: none;
 }
 
+
+/* =========================================================
+   V37.7 — BaRCO INITIAL LOADER + GENERATED PDF ACTIONS
+========================================================= */
+
+.barco-initial-loader-v377 {
+  display: none;
+  min-height: 180px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 28px 18px;
+}
+
+.barco-initial-loader-v377.show {
+  display: flex;
+}
+
+.barco-initial-loader-card-v377 {
+  width: min(360px, 92%);
+  padding: 24px 22px;
+  border: 1px solid #d7e8db;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #fbfefb 0%, #f2f9f3 100%);
+  box-shadow: 0 8px 24px rgba(45, 106, 79, .10);
+}
+
+.barco-initial-spinner-v377 {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 14px;
+  border: 4px solid #d7eadc;
+  border-top-color: #2d6a4f;
+  border-radius: 50%;
+  animation: barcoSpin .75s linear infinite;
+}
+
+.barco-initial-title-v377 {
+  color: #214d37;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.barco-initial-text-v377 {
+  margin-top: 6px;
+  color: #60776a;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.pdf-result-actions-v377 {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.pdf-result-actions-v377 a,
+.pdf-result-actions-v377 button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0;
+  min-height: 36px;
+  padding: 9px 14px;
+  border: 0;
+  border-radius: 7px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.pdf-result-actions-v377 .pdf-open-v377 {
+  background: #2d6a4f;
+}
+
+.pdf-result-actions-v377 .pdf-print-v377 {
+  background: #1f4e78;
+}
+
+.pdf-result-actions-v377 .pdf-download-v377 {
+  background: #64748b;
+}
+
+.pdf-result-actions-v377 button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+@media(max-width:520px) {
+  .pdf-result-actions-v377 {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .pdf-result-actions-v377 a,
+  .pdf-result-actions-v377 button {
+    width: 100%;
+  }
+}
+
 </style>
 
 <!-- FRONTEND VERSION: V37.1 SILENT BACKEND CONNECTION -->
@@ -2189,6 +2292,29 @@ button:hover:not(:disabled),
   </div>
 
 <div class="page">
+
+  <div
+    id="barcoInitialLoaderV377"
+    class="barco-initial-loader-v377"
+    aria-live="polite"
+    aria-busy="true"
+  >
+    <div class="barco-initial-loader-card-v377">
+      <div class="barco-initial-spinner-v377"></div>
+
+      <div class="barco-initial-title-v377">
+        Loading BaRCO Reporting...
+      </div>
+
+      <div
+        id="barcoInitialLoaderTextV377"
+        class="barco-initial-text-v377"
+      >
+        Connecting to the database and preparing the monthly report.
+      </div>
+    </div>
+  </div>
+
 
   <div
     id="statusBox"
@@ -2493,14 +2619,39 @@ button:hover:not(:disabled),
         class="pdf-result-file"
       ></div>
 
-      <a
-        id="pdfResultLink"
-        href="#"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Open PDF
-      </a>
+      <div class="pdf-result-actions-v377">
+
+        <a
+          id="pdfResultLink"
+          class="pdf-open-v377"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open PDF
+        </a>
+
+        <button
+          id="pdfResultPrintV377"
+          class="pdf-print-v377"
+          type="button"
+          onclick="BARCO_printGeneratedPdfV377()"
+        >
+          Print PDF
+        </button>
+
+        <a
+          id="pdfResultDownloadV377"
+          class="pdf-download-v377"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          download
+        >
+          Download PDF
+        </a>
+
+      </div>
     </div>
 
 
@@ -3983,6 +4134,62 @@ function BARCO_backToPortalV32() {
 }
 
 
+
+function BARCO_showInitialLoaderV377(
+  message
+) {
+
+  const loader =
+    document.getElementById(
+      'barcoInitialLoaderV377'
+    );
+
+
+  const text =
+    document.getElementById(
+      'barcoInitialLoaderTextV377'
+    );
+
+
+  if (text) {
+
+    text.textContent =
+      message ||
+      'Connecting to the database and preparing the monthly report.';
+
+  }
+
+
+  if (loader) {
+
+    loader.classList.add(
+      'show'
+    );
+
+  }
+
+}
+
+
+function BARCO_hideInitialLoaderV377() {
+
+  const loader =
+    document.getElementById(
+      'barcoInitialLoaderV377'
+    );
+
+
+  if (loader) {
+
+    loader.classList.remove(
+      'show'
+    );
+
+  }
+
+}
+
+
 async function BARCO_openModuleV32() {
 
   BARCO_showOnlyV32(
@@ -3991,13 +4198,41 @@ async function BARCO_openModuleV32() {
 
 
   if (
-    BARCO_moduleInitializedV32 ||
-    BARCO_moduleInitializingV32
+    BARCO_moduleInitializedV32
   ) {
+
+    BARCO_hideInitialLoaderV377();
+
+    const readyApp =
+      document.getElementById(
+        'app'
+      );
+
+    if (readyApp) {
+      readyApp.style.display = 'block';
+    }
 
     return;
 
   }
+
+
+  if (
+    BARCO_moduleInitializingV32
+  ) {
+
+    BARCO_showInitialLoaderV377(
+      'BaRCO is still loading. Please wait...'
+    );
+
+    return;
+
+  }
+
+
+  BARCO_showInitialLoaderV377(
+    'Connecting to the database and preparing the monthly report...'
+  );
 
 
   BARCO_moduleInitializingV32 =
@@ -4045,12 +4280,9 @@ async function BARCO_openModuleV32() {
     );
 
 
-    document
-      .getElementById(
-        'app'
-      )
-      .style.display =
-      'block';
+    BARCO_showInitialLoaderV377(
+      'Loading saved BaRCO data and report settings...'
+    );
 
 
     const restored =
@@ -4078,6 +4310,23 @@ async function BARCO_openModuleV32() {
     }
 
 
+    const readyApp =
+      document.getElementById(
+        'app'
+      );
+
+
+    if (readyApp) {
+
+      readyApp.style.display =
+        'block';
+
+    }
+
+
+    BARCO_hideInitialLoaderV377();
+
+
     BARCO_moduleInitializedV32 =
       true;
 
@@ -4095,6 +4344,9 @@ async function BARCO_openModuleV32() {
 
 
   } catch(error) {
+
+    BARCO_hideInitialLoaderV377();
+
 
     if (statusBox) {
 
@@ -5934,6 +6186,14 @@ async function saveDraft() {
    GENERATE FINAL PDF
 ========================================================= */
 
+let BARCO_lastGeneratedPdfV377 = {
+  fileId: '',
+  fileName: '',
+  fileUrl: '',
+  downloadUrl: ''
+};
+
+
 async function generateFinalPdf() {
 
   const button =
@@ -6281,6 +6541,46 @@ async function generateFinalPdf() {
       '#';
 
 
+    const downloadLink =
+      document.getElementById(
+        'pdfResultDownloadV377'
+      );
+
+
+    if (downloadLink) {
+
+      downloadLink.href =
+        result.downloadUrl ||
+        result.fileUrl ||
+        '#';
+
+    }
+
+
+    BARCO_lastGeneratedPdfV377 = {
+      fileId:
+        String(
+          result.fileId || ''
+        ),
+
+      fileName:
+        String(
+          result.fileName ||
+          getBarcoPdfFileName()
+        ),
+
+      fileUrl:
+        String(
+          result.fileUrl || ''
+        ),
+
+      downloadUrl:
+        String(
+          result.downloadUrl || ''
+        )
+    };
+
+
     box.classList.add(
       'show'
     );
@@ -6322,6 +6622,258 @@ async function generateFinalPdf() {
 
     button.textContent =
       'Generate Final PDF';
+
+  }
+
+}
+
+
+
+
+async function BARCO_printGeneratedPdfV377() {
+
+  const data =
+    BARCO_lastGeneratedPdfV377 ||
+    {};
+
+
+  if (!data.fileId) {
+
+    alert(
+      'Please generate the BaRCO PDF first.'
+    );
+
+    return;
+
+  }
+
+
+  const button =
+    document.getElementById(
+      'pdfResultPrintV377'
+    );
+
+
+  if (button) {
+
+    button.disabled =
+      true;
+
+    button.textContent =
+      'Preparing Print...';
+
+  }
+
+
+  showActionOverlay(
+    'Preparing generated PDF for printing...'
+  );
+
+
+  try {
+
+    const result =
+      await barcoApi(
+        'getPdfForPrint',
+        {
+          fileId:
+            data.fileId
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success ||
+      !result.base64
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to prepare PDF for printing.'
+      );
+
+    }
+
+
+    const binary =
+      atob(
+        result.base64
+      );
+
+
+    const bytes =
+      new Uint8Array(
+        binary.length
+      );
+
+
+    for (
+      let i = 0;
+      i < binary.length;
+      i++
+    ) {
+
+      bytes[i] =
+        binary.charCodeAt(
+          i
+        );
+
+    }
+
+
+    const blob =
+      new Blob(
+        [bytes],
+        {
+          type:
+            result.mimeType ||
+            'application/pdf'
+        }
+      );
+
+
+    const blobUrl =
+      URL.createObjectURL(
+        blob
+      );
+
+
+    const frame =
+      document.createElement(
+        'iframe'
+      );
+
+
+    frame.style.position =
+      'fixed';
+
+    frame.style.right =
+      '0';
+
+    frame.style.bottom =
+      '0';
+
+    frame.style.width =
+      '1px';
+
+    frame.style.height =
+      '1px';
+
+    frame.style.opacity =
+      '0';
+
+    frame.style.border =
+      '0';
+
+
+    frame.onload =
+      function() {
+
+        hideActionOverlay();
+
+
+        setTimeout(
+          function() {
+
+            try {
+
+              frame
+                .contentWindow
+                .focus();
+
+
+              frame
+                .contentWindow
+                .print();
+
+            } catch(error) {
+
+              window.open(
+                blobUrl,
+                '_blank'
+              );
+
+            }
+
+
+            setTimeout(
+              function() {
+
+                try {
+                  frame.remove();
+                } catch(e) {}
+
+
+                URL.revokeObjectURL(
+                  blobUrl
+                );
+
+              },
+              60000
+            );
+
+          },
+          500
+        );
+
+      };
+
+
+    document.body.appendChild(
+      frame
+    );
+
+
+    frame.src =
+      blobUrl;
+
+
+  } catch(error) {
+
+    hideActionOverlay();
+
+
+    /*
+     * Fallback: open the Google Drive PDF viewer so the
+     * user still has access to its Print icon.
+     */
+    if (data.fileUrl) {
+
+      window.open(
+        data.fileUrl,
+        '_blank'
+      );
+
+
+      alert(
+        'Direct print could not start automatically. ' +
+        'The generated PDF was opened so you can use its Print button.'
+      );
+
+    } else {
+
+      alert(
+        'Print error: ' +
+        error.message
+      );
+
+    }
+
+  } finally {
+
+    if (button) {
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        'Print PDF';
+
+    }
 
   }
 
