@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.7 BARCO LOADER + PRINT PDF -->
+<!-- FRONTEND VERSION: V37.8 ROAD-LINKED PHOTO + AI CAPTION -->
 
 <style>
 
@@ -2113,6 +2113,62 @@ button:hover:not(:disabled),
   }
 }
 
+
+/* =========================================================
+   V37.8 — ROAD-LINKED PHOTO + AI CAPTION
+========================================================= */
+
+.photo-road-link-v378 {
+  margin: 8px 0;
+}
+
+.photo-road-link-v378 label {
+  display: block;
+  margin-bottom: 4px;
+  color: #355b46;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.photo-road-link-v378 select {
+  width: 100%;
+  padding: 8px 9px;
+  border: 1px solid #c9ddcf;
+  border-radius: 6px;
+  background: #fcfffc;
+  color: #1f3b2c;
+  font-size: 11px;
+}
+
+.photo-road-summary-v378 {
+  margin: 7px 0 9px;
+  padding: 8px 9px;
+  border: 1px solid #d7e8db;
+  border-radius: 7px;
+  background: #f4faf5;
+  color: #456455;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.ai-caption-button-v378 {
+  background: #5b7c38 !important;
+  color: #fff !important;
+}
+
+.road-photo-actions-v378 {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+.road-photo-actions-v378 button {
+  padding: 7px 9px;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
 </style>
 
 <!-- FRONTEND VERSION: V37.1 SILENT BACKEND CONNECTION -->
@@ -2541,8 +2597,8 @@ button:hover:not(:disabled),
                   Remarks / MOV
                 </th>
 
-                <th style="width:70px;">
-                  Remove
+                <th style="width:125px;">
+                  Photo / Remove
                 </th>
 
               </tr>
@@ -2877,8 +2933,10 @@ button:hover:not(:disabled),
           <strong>6 photos on Page 2</strong> and
           <strong>9 photos on Page 3</strong>.
           Maximum of <strong>15 photos per report</strong>.
-          Selected photos are automatically uploaded before
-          <strong>Generate Final PDF</strong>.
+          Use the <strong>Photos</strong> button beside a road entry to
+          link photos to the correct road/location. After upload, use
+          <strong>Generate AI Caption</strong>. Selected photos are automatically
+          uploaded before <strong>Generate Final PDF</strong>.
 
         </div>
 
@@ -3671,6 +3729,7 @@ let barcoBridgeReadyPromise = null;
 const barcoBridgeWaiters = {};
 
 let selectedPhotos = [];
+let BARCO_photoRoadSequenceV378 = 0;
 
 let uploadedPhotoCount = 0;
   let reportSaved = false;
@@ -5865,13 +5924,27 @@ function addRoadRow() {
     </td>
 
     <td>
-      <button
-        class="btn-red"
-        type="button"
-        onclick="removeRoadRow(this)"
-      >
-        ×
-      </button>
+      <div class="road-photo-actions-v378">
+
+        <button
+          class="btn-blue"
+          type="button"
+          onclick="BARCO_selectPhotosForRoadV378(this)"
+          title="Add photos for this road entry"
+        >
+          Photos
+        </button>
+
+        <button
+          class="btn-red"
+          type="button"
+          onclick="removeRoadRow(this)"
+          title="Remove road entry"
+        >
+          ×
+        </button>
+
+      </div>
     </td>
 
   `;
@@ -5882,6 +5955,231 @@ function addRoadRow() {
   ).appendChild(
     tr
   );
+
+}
+
+
+
+function BARCO_selectPhotosForRoadV378(
+  button
+) {
+
+  const row =
+    button.closest(
+      'tr'
+    );
+
+
+  const rows =
+    Array.from(
+      document.querySelectorAll(
+        '#roadRows tr'
+      )
+    );
+
+
+  const index =
+    rows.indexOf(
+      row
+    );
+
+
+  if (index < 0) {
+    return;
+  }
+
+
+  const roadName =
+    (
+      row.querySelector(
+        '.roadName'
+      )?.value || ''
+    ).trim();
+
+
+  if (!roadName) {
+
+    alert(
+      'Please enter the Road / Street / Alley name first.'
+    );
+
+    return;
+
+  }
+
+
+  BARCO_photoRoadSequenceV378 =
+    index + 1;
+
+
+  const input =
+    document.getElementById(
+      'photoInput'
+    );
+
+
+  if (input) {
+    input.click();
+  }
+
+}
+
+
+function BARCO_getCurrentRoadOptionsV378() {
+
+  return Array.from(
+    document.querySelectorAll(
+      '#roadRows tr'
+    )
+  )
+  .map(
+    function(row, index) {
+
+      return {
+        sequenceNo:
+          index + 1,
+
+        roadName:
+          (
+            row.querySelector(
+              '.roadName'
+            )?.value || ''
+          ).trim(),
+
+        clearingDate:
+          (
+            row.querySelector(
+              '.clearingDate'
+            )?.value || ''
+          ).trim(),
+
+        actionTaken:
+          (
+            row.querySelector(
+              '.actionTaken'
+            )?.value || ''
+          ).trim()
+      };
+
+    }
+  )
+  .filter(
+    function(item) {
+      return !!item.roadName;
+    }
+  );
+
+}
+
+
+function BARCO_buildRoadOptionsHtmlV378(
+  selectedSequence
+) {
+
+  const roads =
+    BARCO_getCurrentRoadOptionsV378();
+
+
+  let html =
+    '<option value="0">— Select related road / location —</option>';
+
+
+  roads.forEach(
+    function(road) {
+
+      html +=
+        '<option value="' +
+        escapeHtml(
+          road.sequenceNo
+        ) +
+        '"' +
+        (
+          Number(selectedSequence) ===
+          Number(road.sequenceNo)
+            ? ' selected'
+            : ''
+        ) +
+        '>' +
+        escapeHtml(
+          road.roadName
+        ) +
+        '</option>';
+
+    }
+  );
+
+
+  return html;
+
+}
+
+
+function BARCO_getRoadSummaryV378(
+  sequenceNo
+) {
+
+  const road =
+    BARCO_getCurrentRoadOptionsV378()
+      .find(
+        function(item) {
+          return (
+            Number(item.sequenceNo) ===
+            Number(sequenceNo)
+          );
+        }
+      );
+
+
+  if (!road) {
+    return 'No related road selected.';
+  }
+
+
+  return [
+    road.roadName,
+    road.clearingDate || '',
+    road.actionTaken || ''
+  ]
+  .filter(Boolean)
+  .join(' • ');
+
+}
+
+
+function BARCO_updateSelectedPhotoRoadV378(
+  index,
+  sequenceNo
+) {
+
+  if (
+    !selectedPhotos[index]
+  ) {
+    return;
+  }
+
+
+  selectedPhotos[index]
+    .roadSequenceNo =
+    Number(
+      sequenceNo || 0
+    );
+
+
+  const summary =
+    document.getElementById(
+      'selected_photo_road_summary_' +
+      index
+    );
+
+
+  if (summary) {
+
+    summary.textContent =
+      BARCO_getRoadSummaryV378(
+        sequenceNo
+      );
+
+  }
 
 }
 
@@ -6381,6 +6679,12 @@ async function generateFinalPdf() {
 
               caption:
                 photo.caption || '',
+
+
+              roadSequenceNo:
+                Number(
+                  photo.roadSequenceNo || 0
+                ),
 
               fileName:
                 photo.fileName,
@@ -7086,7 +7390,12 @@ async function handlePhotoSelection(
         prepared.preview,
 
       caption:
-        ''
+        '',
+
+      roadSequenceNo:
+        Number(
+          BARCO_photoRoadSequenceV378 || 0
+        )
 
     });
 
@@ -7096,6 +7405,10 @@ async function handlePhotoSelection(
   document.getElementById(
     'photoInput'
   ).value = '';
+
+
+  BARCO_photoRoadSequenceV378 =
+    0;
 
 
   renderSelectedPhotos();
@@ -7314,11 +7627,36 @@ function renderSelectedPhotos() {
             ${escapeHtml(photo.originalName)}
           </div>
 
+          <div class="photo-road-link-v378">
+
+            <label>
+              Related Road / Location
+            </label>
+
+            <select
+              onchange="BARCO_updateSelectedPhotoRoadV378(${index}, this.value)"
+            >
+              ${BARCO_buildRoadOptionsHtmlV378(photo.roadSequenceNo)}
+            </select>
+
+          </div>
+
+          <div
+            id="selected_photo_road_summary_${index}"
+            class="photo-road-summary-v378"
+          >
+            ${escapeHtml(
+              BARCO_getRoadSummaryV378(
+                photo.roadSequenceNo
+              )
+            )}
+          </div>
+
           <textarea
             class="photo-caption"
-            placeholder="Photo caption..."
+            placeholder="Optional manual caption. Generate AI caption after upload."
             oninput="selectedPhotos[${index}].caption=this.value"
-          ></textarea>
+          >${escapeHtml(photo.caption || '')}</textarea>
 
           <div class="photo-actions">
 
@@ -7481,6 +7819,12 @@ async function uploadSelectedPhotos() {
 
             caption:
               photo.caption || '',
+
+
+              roadSequenceNo:
+                Number(
+                  photo.roadSequenceNo || 0
+                ),
 
             fileName:
               photo.fileName,
@@ -7713,6 +8057,39 @@ function renderPhotoGroup(
           </div>
 
 
+          <div class="photo-road-link-v378">
+
+            <label>
+              Related Road / Location
+            </label>
+
+            <select
+              id="${imageId}_road"
+              onchange="BARCO_updateUploadedPhotoRoadV378('${escapeJsString(photo.photoId)}', this.value, '${imageId}_road_summary', '${imageId}_status')"
+            >
+              ${BARCO_buildRoadOptionsHtmlV378(photo.roadSequenceNo)}
+            </select>
+
+          </div>
+
+          <div
+            id="${imageId}_road_summary"
+            class="photo-road-summary-v378"
+          >
+            ${escapeHtml(
+              photo.roadName
+                ? [
+                    photo.roadName,
+                    photo.clearingDate || '',
+                    photo.actionTaken || ''
+                  ]
+                  .filter(Boolean)
+                  .join(' • ')
+                : 'No related road selected.'
+            )}
+          </div>
+
+
           <textarea
             id="${imageId}_caption"
             class="photo-caption"
@@ -7721,6 +8098,15 @@ function renderPhotoGroup(
 
 
           <div class="photo-actions">
+
+            <button
+              id="${imageId}_ai_caption"
+              type="button"
+              class="ai-caption-button-v378"
+              onclick="BARCO_generateAICaptionV378('${escapeJsString(photo.photoId)}', '${imageId}_caption', '${imageId}_ai_caption', '${imageId}_status')"
+            >
+              Generate AI Caption
+            </button>
 
             <button
               id="${imageId}_save_caption"
@@ -7766,6 +8152,210 @@ function renderPhotoGroup(
   );
 
 }
+
+
+async function BARCO_updateUploadedPhotoRoadV378(
+  photoId,
+  sequenceNo,
+  summaryId,
+  statusId
+) {
+
+  const summary =
+    document.getElementById(
+      summaryId
+    );
+
+
+  const status =
+    document.getElementById(
+      statusId
+    );
+
+
+  try {
+
+    if (summary) {
+
+      summary.textContent =
+        BARCO_getRoadSummaryV378(
+          sequenceNo
+        );
+
+    }
+
+
+    setPhotoLocalStatus(
+      status,
+      '',
+      'Saving related road...'
+    );
+
+
+    const result =
+      await barcoApi(
+        'updatePhotoRoadLink',
+        {
+          photoId:
+            photoId,
+
+          roadSequenceNo:
+            Number(
+              sequenceNo || 0
+            )
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to save related road.'
+      );
+
+    }
+
+
+    if (summary) {
+
+      summary.textContent =
+        result.roadName
+          ? [
+              result.roadName,
+              result.clearingDate || '',
+              result.actionTaken || ''
+            ]
+            .filter(Boolean)
+            .join(' • ')
+          : 'No related road selected.';
+
+    }
+
+
+    setPhotoLocalStatus(
+      status,
+      'success',
+      'Related road saved.'
+    );
+
+
+  } catch(error) {
+
+    setPhotoLocalStatus(
+      status,
+      'error',
+      'Road link error: ' +
+      error.message
+    );
+
+  }
+
+}
+
+
+async function BARCO_generateAICaptionV378(
+  photoId,
+  captionInputId,
+  buttonId,
+  statusId
+) {
+
+  const input =
+    document.getElementById(
+      captionInputId
+    );
+
+
+  const button =
+    document.getElementById(
+      buttonId
+    );
+
+
+  const status =
+    document.getElementById(
+      statusId
+    );
+
+
+  try {
+
+    setPhotoActionLoading(
+      button,
+      status,
+      'Generating...',
+      'AI is reviewing the photo and related road data...'
+    );
+
+
+    const result =
+      await barcoApi(
+        'generatePhotoCaption',
+        {
+          photoId:
+            photoId
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success ||
+      !result.caption
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to generate caption.'
+      );
+
+    }
+
+
+    if (input) {
+      input.value = result.caption;
+    }
+
+
+    setPhotoLocalStatus(
+      status,
+      'success',
+      'AI caption generated. You may edit it before the PDF is generated.'
+    );
+
+
+  } catch(error) {
+
+    setPhotoLocalStatus(
+      status,
+      'error',
+      'AI caption error: ' +
+      error.message
+    );
+
+
+  } finally {
+
+    setPhotoActionIdle(
+      button,
+      'Generate AI Caption'
+    );
+
+  }
+
+}
+
+
 
 /* =========================================================
    REPLACE UPLOADED PHOTO
