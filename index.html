@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.8 ROAD-LINKED PHOTO + AI CAPTION -->
+<!-- FRONTEND VERSION: V37.11 ACCOMPLISHMENT PRINT BUTTON -->
 
 <style>
 
@@ -2169,6 +2169,16 @@ button:hover:not(:disabled),
   white-space: nowrap;
 }
 
+
+/* =========================================================
+   V37.11 — ACCOMPLISHMENT GENERATED PDF PRINT BUTTON
+========================================================= */
+
+.accomp-doc-print-v3711 {
+  background: #1f4e78;
+  color: #ffffff;
+}
+
 </style>
 
 <!-- FRONTEND VERSION: V37.1 SILENT BACKEND CONNECTION -->
@@ -2933,10 +2943,11 @@ button:hover:not(:disabled),
           <strong>6 photos on Page 2</strong> and
           <strong>9 photos on Page 3</strong>.
           Maximum of <strong>15 photos per report</strong>.
-          Use the <strong>Photos</strong> button beside a road entry to
-          link photos to the correct road/location. After upload, use
-          <strong>Generate AI Caption</strong>. Selected photos are automatically
-          uploaded before <strong>Generate Final PDF</strong>.
+          You may use the <strong>Photos</strong> button beside a road entry
+          to link a photo to a specific road/location, but this is optional.
+          Photos without a location can still use <strong>Generate AI Caption</strong>.
+          Selected photos are automatically uploaded before
+          <strong>Generate Final PDF</strong>.
 
         </div>
 
@@ -3671,6 +3682,15 @@ button:hover:not(:disabled),
         >
           View Document
         </a>
+
+        <button
+          id="accompPrintDocumentV3711"
+          type="button"
+          class="accomp-doc-print-v3711"
+          onclick="ACCOMP_printGeneratedPdfV3711()"
+        >
+          Print PDF
+        </button>
 
         <button
           type="button"
@@ -6081,7 +6101,7 @@ function BARCO_buildRoadOptionsHtmlV378(
 
 
   let html =
-    '<option value="0">— Select related road / location —</option>';
+    '<option value="0">— Optional: select related road / location —</option>';
 
 
   roads.forEach(
@@ -6131,17 +6151,14 @@ function BARCO_getRoadSummaryV378(
 
 
   if (!road) {
-    return 'No related road selected.';
+    return 'No specific road/location selected.';
   }
 
 
-  return [
-    road.roadName,
-    road.clearingDate || '',
-    road.actionTaken || ''
-  ]
-  .filter(Boolean)
-  .join(' • ');
+  return (
+    road.roadName ||
+    'No specific road/location selected.'
+  );
 
 }
 
@@ -8077,15 +8094,8 @@ function renderPhotoGroup(
             class="photo-road-summary-v378"
           >
             ${escapeHtml(
-              photo.roadName
-                ? [
-                    photo.roadName,
-                    photo.clearingDate || '',
-                    photo.actionTaken || ''
-                  ]
-                  .filter(Boolean)
-                  .join(' • ')
-                : 'No related road selected.'
+              photo.roadName ||
+              'No specific road/location selected.'
             )}
           </div>
 
@@ -8226,14 +8236,8 @@ async function BARCO_updateUploadedPhotoRoadV378(
     if (summary) {
 
       summary.textContent =
-        result.roadName
-          ? [
-  result.roadName,
-  result.actionTaken || ''
-]
-.filter(Boolean)
-.join(' • ')
-          : 'No related road selected.';
+        result.roadName ||
+        'No specific road/location selected.';
 
     }
 
@@ -9646,7 +9650,8 @@ async function ACCOMP_generatePdfV33() {
 
     ACCOMP_showDocumentModalV35(
       result.pdfUrl || '',
-      result.filename || 'Accomplishment Report.pdf'
+      result.filename || 'Accomplishment Report.pdf',
+      result.pdfFileId || ''
     );
 
   } catch(error) {
@@ -10227,9 +10232,17 @@ function ACCOMP_hideBusyV34() {
    V35 — GENERATED DOCUMENT MODAL
 ========================================================= */
 
+let ACCOMP_lastGeneratedPdfV3711 = {
+  fileId: '',
+  pdfUrl: '',
+  filename: ''
+};
+
+
 function ACCOMP_showDocumentModalV35(
   pdfUrl,
-  filename
+  filename,
+  fileId
 ) {
 
   const modal =
@@ -10289,6 +10302,41 @@ function ACCOMP_showDocumentModalV35(
   }
 
 
+  ACCOMP_lastGeneratedPdfV3711 = {
+    fileId:
+      String(
+        fileId || ''
+      ),
+
+    pdfUrl:
+      String(
+        pdfUrl || ''
+      ),
+
+    filename:
+      String(
+        filename ||
+        'Accomplishment Report.pdf'
+      )
+  };
+
+
+  const printButton =
+    document.getElementById(
+      'accompPrintDocumentV3711'
+    );
+
+
+  if (printButton) {
+
+    printButton.style.display =
+      fileId
+        ? 'flex'
+        : 'none';
+
+  }
+
+
   modal.classList.add(
     'show'
   );
@@ -10296,6 +10344,258 @@ function ACCOMP_showDocumentModalV35(
 
   document.body.style.overflow =
     'hidden';
+
+}
+
+
+
+async function ACCOMP_printGeneratedPdfV3711() {
+
+  const data =
+    ACCOMP_lastGeneratedPdfV3711 ||
+    {};
+
+
+  if (!data.fileId) {
+
+    alert(
+      'Please generate the Accomplishment PDF first.'
+    );
+
+    return;
+
+  }
+
+
+  const button =
+    document.getElementById(
+      'accompPrintDocumentV3711'
+    );
+
+
+  if (button) {
+
+    button.disabled =
+      true;
+
+    button.textContent =
+      'Preparing Print...';
+
+  }
+
+
+  ACCOMP_showBusyV34(
+    'Preparing Print...',
+    'Loading the generated Accomplishment PDF for printing.'
+  );
+
+
+  try {
+
+    await ensureBarcoBridge();
+
+
+    const result =
+      await barcoApi(
+        'getPdfForPrint',
+        {
+          fileId:
+            data.fileId
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success ||
+      !result.base64
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to prepare the PDF for printing.'
+      );
+
+    }
+
+
+    const binary =
+      atob(
+        result.base64
+      );
+
+
+    const bytes =
+      new Uint8Array(
+        binary.length
+      );
+
+
+    for (
+      let i = 0;
+      i < binary.length;
+      i++
+    ) {
+
+      bytes[i] =
+        binary.charCodeAt(
+          i
+        );
+
+    }
+
+
+    const blob =
+      new Blob(
+        [bytes],
+        {
+          type:
+            result.mimeType ||
+            'application/pdf'
+        }
+      );
+
+
+    const blobUrl =
+      URL.createObjectURL(
+        blob
+      );
+
+
+    const frame =
+      document.createElement(
+        'iframe'
+      );
+
+
+    frame.style.position =
+      'fixed';
+
+    frame.style.right =
+      '0';
+
+    frame.style.bottom =
+      '0';
+
+    frame.style.width =
+      '1px';
+
+    frame.style.height =
+      '1px';
+
+    frame.style.opacity =
+      '0';
+
+    frame.style.border =
+      '0';
+
+
+    frame.onload =
+      function() {
+
+        ACCOMP_hideBusyV34();
+
+
+        setTimeout(
+          function() {
+
+            try {
+
+              frame
+                .contentWindow
+                .focus();
+
+
+              frame
+                .contentWindow
+                .print();
+
+            } catch(error) {
+
+              window.open(
+                data.pdfUrl ||
+                blobUrl,
+                '_blank'
+              );
+
+            }
+
+
+            setTimeout(
+              function() {
+
+                try {
+                  frame.remove();
+                } catch(e) {}
+
+
+                URL.revokeObjectURL(
+                  blobUrl
+                );
+
+              },
+              60000
+            );
+
+          },
+          500
+        );
+
+      };
+
+
+    document.body.appendChild(
+      frame
+    );
+
+
+    frame.src =
+      blobUrl;
+
+
+  } catch(error) {
+
+    ACCOMP_hideBusyV34();
+
+
+    if (data.pdfUrl) {
+
+      window.open(
+        data.pdfUrl,
+        '_blank'
+      );
+
+
+      alert(
+        'Direct print could not start automatically. ' +
+        'The PDF was opened so you can use its Print button.'
+      );
+
+    } else {
+
+      alert(
+        'Print error: ' +
+        error.message
+      );
+
+    }
+
+  } finally {
+
+    if (button) {
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        'Print PDF';
+
+    }
+
+  }
 
 }
 
@@ -11069,7 +11369,9 @@ async function ACCOMP_generateConsolidatedV37() {
       (
         reportName +
         '.pdf'
-      )
+      ),
+      result.pdfFileId ||
+      ''
     );
 
 
