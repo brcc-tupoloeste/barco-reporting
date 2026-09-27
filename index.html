@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.3 SIMPLE BARCO HEADER -->
+<!-- FRONTEND VERSION: V37.4 STRICT MODULE SEPARATION -->
 
 <style>
 
@@ -1994,6 +1994,22 @@ button:hover:not(:disabled),
   }
 }
 
+
+/* =========================================================
+   V37.4 — STRICT ONE-MODULE-AT-A-TIME DISPLAY
+========================================================= */
+
+#barcoModule.module-screen,
+#accomplishmentModule.module-screen {
+  display: none;
+}
+
+/* Inner accomplishment screens never escape their parent module. */
+#accompMonthlyScreenV33,
+#accompConsolidatedScreenV37 {
+  display: none;
+}
+
 </style>
 
 <!-- FRONTEND VERSION: V37.1 SILENT BACKEND CONNECTION -->
@@ -3009,9 +3025,6 @@ button:hover:not(:disabled),
 
 
     
-
-  </div>
-
 
   </div><!-- /accompLandingV33 -->
 
