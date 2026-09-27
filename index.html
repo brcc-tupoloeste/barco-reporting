@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.2 ENVIRONMENTAL GREEN THEME -->
+<!-- FRONTEND VERSION: V37.3 SIMPLE BARCO HEADER -->
 
 <style>
 
@@ -2217,29 +2217,21 @@ button:hover:not(:disabled),
     <div class="header">
 
       <div
-        id="barangay"
-        class="barangay"
-      ></div>
-
-      <div
-        id="reportTitle"
         class="title"
-      ></div>
+        style="font-size:24px; color:#245c3f; margin-bottom:10px;"
+      >
+        Barangay Road Clearing Operations (BaRCO)
+      </div>
 
-      <div
-        id="reportSubtitle"
-        class="subtitle"
-      ></div>
-
-      <div
-        id="dilgReference"
-        class="reference"
-      ></div>
-
-      <div
-        id="slogan"
-        class="slogan"
-      ></div>
+      <!--
+        Keep these legacy fields hidden so the existing backend/render
+        logic continues to work without showing the old multi-line header.
+      -->
+      <div id="barangay" style="display:none;"></div>
+      <div id="reportTitle" style="display:none;"></div>
+      <div id="reportSubtitle" style="display:none;"></div>
+      <div id="dilgReference" style="display:none;"></div>
+      <div id="slogan" style="display:none;"></div>
 
 
       <div class="report-period">
