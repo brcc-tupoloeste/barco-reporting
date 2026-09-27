@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.12 ANDROID NATIVE PDF PRINT -->
+<!-- FRONTEND VERSION: V37.13 PRINT PROFILES + MOBILE BACK BUTTON -->
 
 <style>
 
@@ -2177,6 +2177,39 @@ button:hover:not(:disabled),
 .accomp-doc-print-v3711 {
   background: #1f4e78;
   color: #ffffff;
+}
+
+
+/* =========================================================
+   V37.13 — MOBILE BACK BUTTON PLACEMENT
+========================================================= */
+
+.module-topbar {
+  padding: 12px 8px 0;
+}
+
+.module-back-button {
+  min-height: 44px;
+  padding: 11px 16px;
+  font-size: 12px;
+}
+
+@media(max-width:760px) {
+
+  .module-topbar {
+    width: 100%;
+    max-width: none;
+    padding: 14px 16px 0;
+    margin: 0 auto 12px;
+    justify-content: center;
+  }
+
+  .module-back-button {
+    width: 100%;
+    min-height: 50px;
+    border-radius: 10px;
+    font-size: 14px;
+  }
 }
 
 </style>
@@ -6965,7 +6998,8 @@ function BARCO_hasNativeAndroidPrintV3712() {
 
 function BARCO_sendPdfToNativePrintV3712(
   base64,
-  filename
+  filename,
+  printProfile
 ) {
 
   if (
@@ -6984,6 +7018,10 @@ function BARCO_sendPdfToNativePrintV3712(
     String(
       filename ||
       'Tupol-Oeste-Report.pdf'
+    ),
+    String(
+      printProfile ||
+      'DEFAULT'
     )
   );
 
@@ -7067,7 +7105,8 @@ async function BARCO_printGeneratedPdfV377() {
         result.base64,
         result.fileName ||
         data.fileName ||
-        'BaRCO-Report.pdf'
+        'BaRCO-Report.pdf',
+        'BARCO_LONG_BOND_LANDSCAPE'
       )
     ) {
 
@@ -10485,7 +10524,8 @@ async function ACCOMP_printGeneratedPdfV3711() {
         result.base64,
         result.fileName ||
         data.filename ||
-        'Accomplishment-Report.pdf'
+        'Accomplishment-Report.pdf',
+        'ACCOMPLISHMENT_A4_PORTRAIT'
       )
     ) {
 
