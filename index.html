@@ -8228,12 +8228,11 @@ async function BARCO_updateUploadedPhotoRoadV378(
       summary.textContent =
         result.roadName
           ? [
-              result.roadName,
-              result.clearingDate || '',
-              result.actionTaken || ''
-            ]
-            .filter(Boolean)
-            .join(' • ')
+  result.roadName,
+  result.actionTaken || ''
+]
+.filter(Boolean)
+.join(' • ')
           : 'No related road selected.';
 
     }
