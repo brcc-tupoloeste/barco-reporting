@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.14 NATIVE PDF VIEWER BACK + PRINT -->
+<!-- FRONTEND VERSION: V37.18 AUTO DRAFT FINAL STATUS -->
 
 <style>
 
@@ -2212,6 +2212,460 @@ button:hover:not(:disabled),
   }
 }
 
+
+/* =========================================================
+   V37.15 — ACCOMPLISHMENT PDF ACTIONS
+========================================================= */
+
+#accompFinalLinkV33 {
+  display: none;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+#accompFinalLinkV33 button {
+  flex: 1 1 180px;
+  min-height: 44px;
+}
+
+@media(max-width:760px) {
+
+  #accompFinalLinkV33 {
+    display: none;
+    grid-template-columns: 1fr;
+  }
+
+  #accompFinalLinkV33[style*="display: flex"] {
+    display: grid !important;
+  }
+
+  #accompFinalLinkV33 button {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   V37.16 — MAIN PORTAL LOGO + ENHANCED ENVIRONMENTAL HERO
+========================================================= */
+
+.portal-shell {
+  border: 1px solid #cfe3d4;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow:
+    0 18px 50px rgba(27, 67, 50, .14),
+    0 3px 10px rgba(27, 67, 50, .05);
+}
+
+.portal-header {
+  position: relative;
+  overflow: hidden;
+  padding: 34px 28px 32px;
+  text-align: center;
+  border-bottom: 0;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(216,243,220,.22) 0 70px, transparent 72px),
+    radial-gradient(circle at 88% 18%, rgba(183,228,199,.15) 0 95px, transparent 97px),
+    linear-gradient(135deg, #163c2c 0%, #236344 48%, #2d7a50 100%);
+}
+
+.portal-header::before {
+  content: "";
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  left: -65px;
+  bottom: -115px;
+  border-radius: 60% 40% 65% 35%;
+  border: 20px solid rgba(216,243,220,.07);
+  transform: rotate(26deg);
+  pointer-events: none;
+}
+
+.portal-header::after {
+  content: "";
+  position: absolute;
+  width: 230px;
+  height: 230px;
+  right: -120px;
+  top: -105px;
+  border-radius: 45% 55% 35% 65%;
+  border: 24px solid rgba(255,255,255,.05);
+  transform: rotate(-18deg);
+  pointer-events: none;
+}
+
+.portal-brand-wrap {
+  position: relative;
+  z-index: 2;
+}
+
+.portal-logo-wrap {
+  width: 98px;
+  height: 98px;
+  margin: 0 auto 14px;
+  padding: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.98);
+  box-shadow:
+    0 10px 24px rgba(9, 42, 27, .24),
+    0 0 0 5px rgba(255,255,255,.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portal-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.portal-kicker {
+  color: rgba(255,255,255,.78);
+  font-size: 11px;
+  line-height: 1.55;
+  letter-spacing: .15px;
+}
+
+.portal-barangay {
+  margin-top: 7px;
+  color: #f4fff6;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: .8px;
+  text-shadow: 0 1px 1px rgba(0,0,0,.08);
+}
+
+.portal-title {
+  max-width: 760px;
+  margin: 10px auto 0;
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1.18;
+  letter-spacing: -.25px;
+}
+
+.portal-subtitle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 14px;
+  padding: 8px 15px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 999px;
+  background: rgba(255,255,255,.10);
+  color: #e9f8ed;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .35px;
+  backdrop-filter: blur(5px);
+}
+
+.portal-subtitle::before {
+  content: "●";
+  margin-right: 7px;
+  color: #b7e4c7;
+  font-size: 8px;
+}
+
+.portal-cards {
+  position: relative;
+  gap: 18px;
+  padding: 26px;
+  background:
+    linear-gradient(180deg, #f9fdf9 0%, #f0f8f2 100%);
+}
+
+.portal-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #cee2d3;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fcf8 100%);
+  padding: 22px;
+  box-shadow: 0 4px 14px rgba(36, 91, 63, .05);
+}
+
+.portal-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 5px;
+  height: 100%;
+  background: linear-gradient(180deg, #2d7a50 0%, #78b98c 100%);
+}
+
+.portal-card:hover {
+  transform: translateY(-3px);
+  border-color: #87b99a;
+  box-shadow: 0 12px 28px rgba(36, 91, 63, .13);
+}
+
+.portal-card-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #e2f3e6 0%, #d4ebda 100%);
+  border: 1px solid #c8e2cf;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
+  font-size: 27px;
+}
+
+.portal-card-title {
+  color: #1c5036;
+  font-size: 18px;
+}
+
+.portal-card-text {
+  color: #5b7464;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.portal-card-action {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 16px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #e8f5eb;
+  color: #236344;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.portal-card-action::after {
+  content: "›";
+  margin-left: 7px;
+  font-size: 15px;
+  line-height: 1;
+}
+
+@media(max-width:760px) {
+
+  .portal-home {
+    padding: 0;
+  }
+
+  .portal-shell {
+    border-radius: 16px;
+  }
+
+  .portal-header {
+    padding: 28px 18px 26px;
+  }
+
+  .portal-logo-wrap {
+    width: 86px;
+    height: 86px;
+    margin-bottom: 12px;
+  }
+
+  .portal-kicker {
+    font-size: 10px;
+  }
+
+  .portal-barangay {
+    font-size: 17px;
+  }
+
+  .portal-title {
+    margin-top: 9px;
+    font-size: 23px;
+    line-height: 1.22;
+  }
+
+  .portal-subtitle {
+    margin-top: 13px;
+    padding: 7px 12px;
+    font-size: 10px;
+  }
+
+  .portal-cards {
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .portal-card {
+    padding: 19px 18px 18px 21px;
+  }
+
+  .portal-card-icon {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+
+/* =========================================================
+   V37.17 — BARCO SECTION FOCUS + OFFLINE CACHE / SYNC
+========================================================= */
+
+.barco-sync-bar-v3717 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 15px;
+  padding: 11px 13px;
+  border: 1px solid #d6e6da;
+  border-radius: 10px;
+  background: #f7fbf8;
+}
+
+.barco-sync-left-v3717 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.barco-sync-dot-v3717 {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #94a3b8;
+  box-shadow: 0 0 0 4px rgba(148,163,184,.12);
+}
+
+.barco-sync-bar-v3717.online .barco-sync-dot-v3717 {
+  background: #16a34a;
+  box-shadow: 0 0 0 4px rgba(22,163,74,.12);
+}
+
+.barco-sync-bar-v3717.offline .barco-sync-dot-v3717,
+.barco-sync-bar-v3717.pending .barco-sync-dot-v3717 {
+  background: #f59e0b;
+  box-shadow: 0 0 0 4px rgba(245,158,11,.14);
+}
+
+.barco-sync-bar-v3717.syncing .barco-sync-dot-v3717 {
+  background: #2563eb;
+  animation: barcoSyncPulseV3717 1s ease-in-out infinite;
+}
+
+@keyframes barcoSyncPulseV3717 {
+  0%,100% { opacity:.45; }
+  50% { opacity:1; }
+}
+
+.barco-sync-title-v3717 {
+  color: #244d36;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.barco-sync-text-v3717 {
+  margin-top: 2px;
+  color: #6b7f71;
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.barco-sync-button-v3717,
+.barco-section-back-v3717 {
+  border: 0;
+  border-radius: 8px;
+  background: #2d6a4f;
+  color: #fff;
+  padding: 9px 12px;
+  font-size: 10px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.barco-sync-button-v3717:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.barco-section-menu-v3717 {
+  margin: 14px 0 8px;
+  padding: 10px 12px;
+  border: 1px solid #d7e8db;
+  border-radius: 9px;
+  background: #f5faf6;
+  color: #456455;
+  font-size: 11px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.barco-section-focus-toolbar-v3717 {
+  display: none;
+  margin: 10px 0 14px;
+}
+
+#app.barco-section-focus-mode-v3717 .barco-section-focus-toolbar-v3717 {
+  display: flex;
+}
+
+#app.barco-section-focus-mode-v3717 .barco-section-menu-v3717 {
+  display: none;
+}
+
+#app.barco-section-focus-mode-v3717 .section {
+  display: none;
+}
+
+#app.barco-section-focus-mode-v3717 .section.barco-active-section-v3717 {
+  display: block;
+  margin-top: 0;
+}
+
+#app.barco-section-focus-mode-v3717 .section.barco-active-section-v3717 .section-body {
+  display: block !important;
+}
+
+#app.barco-section-focus-mode-v3717 .section.barco-active-section-v3717 .section-collapse-button {
+  display: none;
+}
+
+#app:not(.barco-section-focus-mode-v3717) .section .section-body {
+  display: none !important;
+}
+
+#app:not(.barco-section-focus-mode-v3717) .section {
+  margin-top: 12px;
+}
+
+#app:not(.barco-section-focus-mode-v3717) .section-title {
+  cursor: pointer;
+}
+
+.barco-global-actions-v3717 {
+  margin: 13px 0 16px;
+}
+
+.barco-global-actions-v3717 .save-area {
+  margin-top: 0;
+}
+
+@media(max-width:760px) {
+  .barco-sync-bar-v3717 {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .barco-sync-button-v3717,
+  .barco-section-back-v3717 {
+    width: 100%;
+    min-height: 44px;
+    font-size: 12px;
+  }
+
+  .barco-section-focus-toolbar-v3717 {
+    width: 100%;
+  }
+}
+
 </style>
 
 <!-- FRONTEND VERSION: V37.1 SILENT BACKEND CONNECTION -->
@@ -2291,21 +2745,34 @@ button:hover:not(:disabled),
 
     <div class="portal-header">
 
-      <div class="portal-kicker">
-        Republic of the Philippines<br>
-        Province of Iloilo · Municipality of Cabatuan
-      </div>
+      <div class="portal-brand-wrap">
 
-      <div class="portal-barangay">
-        BARANGAY TUPOL OESTE
-      </div>
+        <div class="portal-logo-wrap">
+          <img
+            class="portal-logo"
+            src="https://drive.google.com/thumbnail?id=16PcdOAzVEe9CIgW16g7outJG06u1zGAa&sz=w300"
+            alt="Barangay Tupol Oeste Logo"
+            loading="eager"
+          >
+        </div>
 
-      <div class="portal-title">
-        Committee on Agriculture and Environmental Protection
-      </div>
+        <div class="portal-kicker">
+          Republic of the Philippines<br>
+          Province of Iloilo · Municipality of Cabatuan
+        </div>
 
-      <div class="portal-subtitle">
-        Reporting and Documentation Portal
+        <div class="portal-barangay">
+          BARANGAY TUPOL OESTE
+        </div>
+
+        <div class="portal-title">
+          Committee on Agriculture and Environmental Protection
+        </div>
+
+        <div class="portal-subtitle">
+          Reporting and Documentation Portal
+        </div>
+
       </div>
 
     </div>
@@ -2333,7 +2800,7 @@ button:hover:not(:disabled),
         </div>
 
         <div class="portal-card-action">
-          Open BaRCO →
+          Open BaRCO
         </div>
 
       </div>
@@ -2359,7 +2826,7 @@ button:hover:not(:disabled),
         </div>
 
         <div class="portal-card-action">
-          Open Accomplishment →
+          Open Accomplishment
         </div>
 
       </div>
@@ -2452,6 +2919,44 @@ button:hover:not(:disabled),
         New Monthly Report
       </button>
 
+    </div>
+
+
+    <div
+      id="barcoSyncBarV3717"
+      class="barco-sync-bar-v3717"
+    >
+      <div class="barco-sync-left-v3717">
+        <span
+          id="barcoSyncDotV3717"
+          class="barco-sync-dot-v3717"
+        ></span>
+
+        <div>
+          <div
+            id="barcoSyncTitleV3717"
+            class="barco-sync-title-v3717"
+          >
+            Checking connection...
+          </div>
+
+          <div
+            id="barcoSyncTextV3717"
+            class="barco-sync-text-v3717"
+          >
+            Local draft cache is ready.
+          </div>
+        </div>
+      </div>
+
+      <button
+        id="barcoSyncNowV3717"
+        type="button"
+        class="barco-sync-button-v3717"
+        onclick="BARCO_syncOfflineDraftV3717(true)"
+      >
+        Sync Now
+      </button>
     </div>
 
 
@@ -2561,6 +3066,7 @@ button:hover:not(:disabled),
               id="reportStatus"
               value="DRAFT"
               readonly
+              title="Automatically changes to FINAL after successful Final PDF generation."
             >
 
           </div>
@@ -3093,12 +3599,12 @@ button:hover:not(:disabled),
     </div>
 
 
-    <!-- PAGE 4 SIGNATORIES -->
+    <!-- CERTIFICATION / SIGNATORIES -->
 
     <div class="section">
 
       <div class="section-title">
-        Page 4 — Certification / Signatories
+        Certification / Sign
       </div>
 
       <div class="section-body">
@@ -3442,9 +3948,25 @@ button:hover:not(:disabled),
 
 
     <div id="accompFinalLinkV33" class="accomp-final-link">
-      <a id="accompFinalPdfAnchorV33" href="#" target="_blank" rel="noopener">
-        Open Generated PDF
-      </a>
+
+      <button
+        id="accompOpenCurrentPdfV3715"
+        type="button"
+        class="accomp-btn-blue"
+        onclick="ACCOMP_openCurrentPdfV3715()"
+      >
+        Open PDF
+      </button>
+
+      <button
+        id="accompPrintCurrentPdfV3715"
+        type="button"
+        class="accomp-btn-green"
+        onclick="ACCOMP_printCurrentPdfV3715()"
+      >
+        Print PDF
+      </button>
+
     </div>
 
   </div><!-- /accompMonthlyScreenV33 -->
@@ -4386,6 +4908,16 @@ async function BARCO_openModuleV32() {
       );
 
 
+    try {
+      localStorage.setItem(
+        'barcoInitCacheV3717',
+        JSON.stringify(
+          data
+        )
+      );
+    } catch(e) {}
+
+
     setupSignatoryInputs();
 
 
@@ -4399,8 +4931,16 @@ async function BARCO_openModuleV32() {
     );
 
 
+    const offlineRestored =
+      await BARCO_restoreOfflineDraftV3717(
+        true
+      );
+
+
     const restored =
-      await restoreLastSavedDraft();
+      offlineRestored
+        ? true
+        : await restoreLastSavedDraft();
 
 
     if (!restored) {
@@ -4445,8 +4985,23 @@ async function BARCO_openModuleV32() {
       true;
 
 
+    BARCO_installOfflineAutoCacheV3717();
+
+
+    if (navigator.onLine) {
+      setTimeout(
+        function() {
+          BARCO_syncOfflineDraftV3717(
+            false
+          );
+        },
+        800
+      );
+    }
+
+
     /*
-     * Apply collapsible behavior now that the BaRCO module
+     * Apply section focus behavior now that the BaRCO module
      * has actually been opened.
      */
     setTimeout(
@@ -4462,19 +5017,79 @@ async function BARCO_openModuleV32() {
     BARCO_hideInitialLoaderV377();
 
 
-    if (statusBox) {
+    if (
+      BARCO_shouldUseOfflineV3717(
+        error
+      )
+    ) {
 
-      statusBox.style.display =
-        'block';
+      BARCO_renderOfflineBaseV3717();
+
+
+      const restoredOffline =
+        await BARCO_restoreOfflineDraftV3717(
+          false
+        );
+
+
+      if (!restoredOffline) {
+        addRoadRow();
+      }
+
+
+      const readyApp =
+        document.getElementById(
+          'app'
+        );
+
+
+      if (readyApp) {
+        readyApp.style.display =
+          'block';
+      }
+
+
+      BARCO_moduleInitializedV32 =
+        true;
+
+
+      BARCO_installOfflineAutoCacheV3717();
+
+
+      BARCO_updateSyncUiV3717(
+        'offline',
+        'No internet connection. You can continue creating this report; it will sync later.'
+      );
+
+
+      showStatus(
+        'success',
+        'Offline mode: report changes are being saved on this device.',
+        false
+      );
+
+
+      setTimeout(
+        BARCO_setupCollapsibleSectionsV31,
+        0
+      );
+
+
+    } else {
+
+      if (statusBox) {
+        statusBox.style.display =
+          'block';
+      }
+
+
+      showStatus(
+        'error',
+        'Connection error: ' +
+        error.message
+      );
 
     }
-
-
-    showStatus(
-      'error',
-      'Connection error: ' +
-      error.message
-    );
 
 
   } finally {
@@ -6364,6 +6979,1507 @@ function collectRoads() {
 
 
 /* =========================================================
+   V37.17 — OFFLINE DRAFT CACHE / AUTO SYNC
+========================================================= */
+
+const BARCO_OFFLINE_DB_V3717 =
+  'TupolOesteBaRCOOfflineV3717';
+
+
+const BARCO_OFFLINE_STORE_V3717 =
+  'drafts';
+
+
+const BARCO_OFFLINE_KEY_V3717 =
+  'current';
+
+
+let BARCO_offlineCacheTimerV3717 =
+  null;
+
+
+let BARCO_syncInProgressV3717 =
+  false;
+
+
+function BARCO_openOfflineDbV3717() {
+
+  return new Promise(
+    function(resolve, reject) {
+
+      if (!window.indexedDB) {
+        reject(
+          new Error(
+            'IndexedDB is not available.'
+          )
+        );
+        return;
+      }
+
+
+      const request =
+        indexedDB.open(
+          BARCO_OFFLINE_DB_V3717,
+          1
+        );
+
+
+      request.onupgradeneeded =
+        function() {
+
+          const db =
+            request.result;
+
+
+          if (
+            !db.objectStoreNames.contains(
+              BARCO_OFFLINE_STORE_V3717
+            )
+          ) {
+
+            db.createObjectStore(
+              BARCO_OFFLINE_STORE_V3717
+            );
+
+          }
+
+        };
+
+
+      request.onsuccess =
+        function() {
+          resolve(
+            request.result
+          );
+        };
+
+
+      request.onerror =
+        function() {
+          reject(
+            request.error ||
+            new Error(
+              'Unable to open offline cache.'
+            )
+          );
+        };
+
+    }
+  );
+
+}
+
+
+async function BARCO_offlinePutV3717(
+  value
+) {
+
+  const db =
+    await BARCO_openOfflineDbV3717();
+
+
+  return new Promise(
+    function(resolve, reject) {
+
+      const tx =
+        db.transaction(
+          BARCO_OFFLINE_STORE_V3717,
+          'readwrite'
+        );
+
+
+      tx.objectStore(
+        BARCO_OFFLINE_STORE_V3717
+      ).put(
+        value,
+        BARCO_OFFLINE_KEY_V3717
+      );
+
+
+      tx.oncomplete =
+        function() {
+          db.close();
+          resolve(true);
+        };
+
+
+      tx.onerror =
+        function() {
+          db.close();
+          reject(
+            tx.error ||
+            new Error(
+              'Unable to save offline draft.'
+            )
+          );
+        };
+
+    }
+  );
+
+}
+
+
+async function BARCO_offlineGetV3717() {
+
+  const db =
+    await BARCO_openOfflineDbV3717();
+
+
+  return new Promise(
+    function(resolve, reject) {
+
+      const tx =
+        db.transaction(
+          BARCO_OFFLINE_STORE_V3717,
+          'readonly'
+        );
+
+
+      const request =
+        tx.objectStore(
+          BARCO_OFFLINE_STORE_V3717
+        ).get(
+          BARCO_OFFLINE_KEY_V3717
+        );
+
+
+      request.onsuccess =
+        function() {
+          resolve(
+            request.result ||
+            null
+          );
+        };
+
+
+      request.onerror =
+        function() {
+          reject(
+            request.error ||
+            new Error(
+              'Unable to read offline draft.'
+            )
+          );
+        };
+
+
+      tx.oncomplete =
+        function() {
+          db.close();
+        };
+
+    }
+  );
+
+}
+
+
+async function BARCO_offlineDeleteV3717() {
+
+  const db =
+    await BARCO_openOfflineDbV3717();
+
+
+  return new Promise(
+    function(resolve, reject) {
+
+      const tx =
+        db.transaction(
+          BARCO_OFFLINE_STORE_V3717,
+          'readwrite'
+        );
+
+
+      tx.objectStore(
+        BARCO_OFFLINE_STORE_V3717
+      ).delete(
+        BARCO_OFFLINE_KEY_V3717
+      );
+
+
+      tx.oncomplete =
+        function() {
+          db.close();
+          resolve(true);
+        };
+
+
+      tx.onerror =
+        function() {
+          db.close();
+          reject(
+            tx.error ||
+            new Error(
+              'Unable to clear offline draft.'
+            )
+          );
+        };
+
+    }
+  );
+
+}
+
+
+function BARCO_collectOfflineDraftV3717(
+  pendingSync
+) {
+
+  let signatories = {};
+
+
+  try {
+    signatories =
+      collectReportSignatories();
+  } catch(e) {}
+
+
+  let participation = {};
+
+
+  try {
+    participation =
+      computeParticipation();
+  } catch(e) {}
+
+
+  return {
+    version:
+      1,
+
+    pendingSync:
+      !!pendingSync,
+
+    savedAt:
+      Date.now(),
+
+    reportId:
+      String(
+        document.getElementById(
+          'reportId'
+        )?.textContent ||
+        ''
+      ).trim(),
+
+    month:
+      document.getElementById(
+        'month'
+      )?.value ||
+      '',
+
+    year:
+      Number(
+        document.getElementById(
+          'year'
+        )?.value ||
+        new Date().getFullYear()
+      ),
+
+    dateOfBarco:
+      document.getElementById(
+        'dateOfBarco'
+      )?.value ||
+      '',
+
+    preparedBy:
+      document.getElementById(
+        'preparedBy'
+      )?.value ||
+      '',
+
+    punongBarangay:
+      document.getElementById(
+        'punongBarangay'
+      )?.value ||
+      '',
+
+    roads:
+      typeof collectRoads === 'function'
+        ? collectRoads()
+        : [],
+
+    participation:
+      participation,
+
+    signatories:
+      signatories,
+
+    selectedPhotos:
+      (selectedPhotos || [])
+        .map(
+          function(photo) {
+
+            return {
+              originalName:
+                photo.originalName ||
+                photo.fileName ||
+                '',
+
+              fileName:
+                photo.fileName ||
+                '',
+
+              mimeType:
+                photo.mimeType ||
+                'image/jpeg',
+
+              base64:
+                photo.base64 ||
+                '',
+
+              caption:
+                photo.caption ||
+                '',
+
+              roadSequenceNo:
+                Number(
+                  photo.roadSequenceNo ||
+                  0
+                )
+            };
+
+          }
+        )
+  };
+
+}
+
+
+async function BARCO_cacheCurrentDraftV3717(
+  pendingSync = false
+) {
+
+  try {
+
+    const current =
+      await BARCO_offlineGetV3717()
+        .catch(
+          function() {
+            return null;
+          }
+        );
+
+
+    const shouldRemainPending =
+      pendingSync ||
+      !navigator.onLine ||
+      !!(
+        current &&
+        current.pendingSync
+      );
+
+
+    const draft =
+      BARCO_collectOfflineDraftV3717(
+        shouldRemainPending
+      );
+
+
+    await BARCO_offlinePutV3717(
+      draft
+    );
+
+
+    BARCO_updateSyncUiV3717(
+      shouldRemainPending
+        ? (
+            navigator.onLine
+              ? 'pending'
+              : 'offline'
+          )
+        : 'online',
+      shouldRemainPending
+        ? 'Draft cached locally and waiting to sync.'
+        : 'Local recovery copy updated.'
+    );
+
+
+    return draft;
+
+  } catch(error) {
+
+    console.error(
+      'Offline cache error:',
+      error
+    );
+
+    return null;
+
+  }
+
+}
+
+
+function BARCO_scheduleOfflineCacheV3717() {
+
+  clearTimeout(
+    BARCO_offlineCacheTimerV3717
+  );
+
+
+  BARCO_offlineCacheTimerV3717 =
+    setTimeout(
+      function() {
+
+        BARCO_cacheCurrentDraftV3717(
+          !navigator.onLine
+        );
+
+      },
+      500
+    );
+
+}
+
+
+function BARCO_updateSyncUiV3717(
+  mode,
+  message
+) {
+
+  const bar =
+    document.getElementById(
+      'barcoSyncBarV3717'
+    );
+
+
+  const title =
+    document.getElementById(
+      'barcoSyncTitleV3717'
+    );
+
+
+  const text =
+    document.getElementById(
+      'barcoSyncTextV3717'
+    );
+
+
+  const button =
+    document.getElementById(
+      'barcoSyncNowV3717'
+    );
+
+
+  if (!bar) {
+    return;
+  }
+
+
+  bar.classList.remove(
+    'online',
+    'offline',
+    'pending',
+    'syncing'
+  );
+
+
+  bar.classList.add(
+    mode ||
+    'online'
+  );
+
+
+  const titles = {
+    online:
+      'Online • Ready',
+    offline:
+      'Offline Mode',
+    pending:
+      'Pending Sync',
+    syncing:
+      'Syncing...'
+  };
+
+
+  if (title) {
+    title.textContent =
+      titles[mode] ||
+      'BaRCO Sync';
+  }
+
+
+  if (text) {
+    text.textContent =
+      message ||
+      '';
+  }
+
+
+  if (button) {
+    button.disabled =
+      mode === 'syncing' ||
+      !navigator.onLine;
+  }
+
+}
+
+
+function BARCO_shouldUseOfflineV3717(
+  error
+) {
+
+  if (!navigator.onLine) {
+    return true;
+  }
+
+
+  const message =
+    String(
+      error &&
+      error.message ||
+      error ||
+      ''
+    ).toLowerCase();
+
+
+  return (
+    message.includes('network') ||
+    message.includes('connection') ||
+    message.includes('bridge') ||
+    message.includes('timeout') ||
+    message.includes('too long') ||
+    message.includes('failed to fetch') ||
+    message.includes('no response')
+  );
+
+}
+
+
+function BARCO_renderOfflineBaseV3717() {
+
+  let cachedInit =
+    null;
+
+
+  try {
+    cachedInit =
+      JSON.parse(
+        localStorage.getItem(
+          'barcoInitCacheV3717'
+        ) ||
+        'null'
+      );
+  } catch(e) {}
+
+
+  const fallback =
+    cachedInit ||
+    {
+      header: {
+        annexLabel:
+          'Annex “C-1”',
+        barangayName:
+          'Barangay Tupol Oeste',
+        municipality:
+          'Cabatuan',
+        province:
+          'Iloilo',
+        reportTitle:
+          'Monthly Monitoring Report',
+        reportSubtitle:
+          'On Barangay Road Clearing Operations (BaRCO)',
+        dilgReference:
+          '',
+        slogan:
+          ''
+      },
+      reportId:
+        '',
+      report: {
+        preparedBy:
+          'KGD. JONEL G. ROSANO',
+        punongBarangay:
+          'JOSELITO M. TORMON'
+      }
+    };
+
+
+  setupSignatoryInputs();
+
+
+  renderForm(
+    fallback
+  );
+
+}
+
+
+async function BARCO_restoreOfflineDraftV3717(
+  pendingOnly = false
+) {
+
+  const draft =
+    await BARCO_offlineGetV3717()
+      .catch(
+        function() {
+          return null;
+        }
+      );
+
+
+  if (!draft) {
+    return false;
+  }
+
+
+  if (
+    pendingOnly &&
+    !draft.pendingSync
+  ) {
+    return false;
+  }
+
+
+  const reportId =
+    document.getElementById(
+      'reportId'
+    );
+
+
+  if (reportId) {
+    reportId.textContent =
+      draft.reportId ||
+      '';
+  }
+
+
+  const simpleFields = {
+    month:
+      draft.month,
+    year:
+      draft.year,
+    dateOfBarco:
+      draft.dateOfBarco,
+    preparedBy:
+      draft.preparedBy,
+    punongBarangay:
+      draft.punongBarangay
+  };
+
+
+  Object.keys(
+    simpleFields
+  ).forEach(
+    function(id) {
+
+      const el =
+        document.getElementById(
+          id
+        );
+
+
+      if (
+        el &&
+        simpleFields[id] !==
+          undefined
+      ) {
+        el.value =
+          simpleFields[id];
+      }
+
+    }
+  );
+
+
+  const tbody =
+    document.getElementById(
+      'roadRows'
+    );
+
+
+  if (tbody) {
+    tbody.innerHTML = '';
+  }
+
+
+  const roads =
+    Array.isArray(
+      draft.roads
+    )
+      ? draft.roads
+      : [];
+
+
+  if (!roads.length) {
+    addRoadRow();
+  }
+
+
+  roads.forEach(
+    function(road) {
+
+      addRoadRow();
+
+
+      const rows =
+        document.querySelectorAll(
+          '#roadRows tr'
+        );
+
+
+      const row =
+        rows[
+          rows.length - 1
+        ];
+
+
+      if (!row) {
+        return;
+      }
+
+
+      row.querySelector(
+        '.conducted'
+      ).value =
+        road.conducted ||
+        'YES';
+
+
+      row.querySelector(
+        '.roadName'
+      ).value =
+        road.roadName ||
+        '';
+
+
+      row.querySelector(
+        '.roadLength'
+      ).value =
+        Number(
+          road.roadLength ||
+          0
+        );
+
+
+      row.querySelector(
+        '.clearingDate'
+      ).value =
+        road.clearingDate ||
+        draft.dateOfBarco ||
+        '';
+
+
+      row.querySelector(
+        '.actionTaken'
+      ).value =
+        road.actionTaken ||
+        '';
+
+
+      row.querySelector(
+        '.remarks'
+      ).value =
+        road.remarks ||
+        '';
+
+    }
+  );
+
+
+  computeTotal();
+
+
+  const p =
+    draft.participation ||
+    {};
+
+
+  const participationMap = {
+    expectedBarangayOfficials:
+      'expectedBarangayOfficials',
+    expectedSkOfficials:
+      'expectedSkOfficials',
+    expectedBarangayTanods:
+      'expectedBarangayTanods',
+    participatedBarangayOfficials:
+      'participatedBarangayOfficials',
+    participatedSkOfficials:
+      'participatedSkOfficials',
+    participatedBarangayTanods:
+      'participatedBarangayTanods'
+  };
+
+
+  Object.keys(
+    participationMap
+  ).forEach(
+    function(key) {
+
+      const el =
+        document.getElementById(
+          participationMap[key]
+        );
+
+
+      if (
+        el &&
+        p[key] !==
+          undefined
+      ) {
+        el.value =
+          Number(
+            p[key] ||
+            0
+          );
+      }
+
+    }
+  );
+
+
+  computeParticipation();
+
+
+  if (draft.signatories) {
+    renderReportSignatories(
+      draft.signatories
+    );
+  }
+
+
+  selectedPhotos =
+    Array.isArray(
+      draft.selectedPhotos
+    )
+      ? draft.selectedPhotos.map(
+          function(photo) {
+
+            return {
+              originalName:
+                photo.originalName ||
+                photo.fileName ||
+                '',
+              fileName:
+                photo.fileName ||
+                '',
+              mimeType:
+                photo.mimeType ||
+                'image/jpeg',
+              base64:
+                photo.base64 ||
+                '',
+              preview:
+                'data:' +
+                (
+                  photo.mimeType ||
+                  'image/jpeg'
+                ) +
+                ';base64,' +
+                (
+                  photo.base64 ||
+                  ''
+                ),
+              caption:
+                photo.caption ||
+                '',
+              roadSequenceNo:
+                Number(
+                  photo.roadSequenceNo ||
+                  0
+                )
+            };
+
+          }
+        )
+      : [];
+
+
+  renderSelectedPhotos();
+  updateReportPeriod();
+
+
+  BARCO_updateSyncUiV3717(
+    draft.pendingSync
+      ? (
+          navigator.onLine
+            ? 'pending'
+            : 'offline'
+        )
+      : (
+          navigator.onLine
+            ? 'online'
+            : 'offline'
+        ),
+    draft.pendingSync
+      ? 'Offline draft restored. It will sync when a connection is available.'
+      : 'Local recovery draft restored.'
+  );
+
+
+  return true;
+
+}
+
+
+async function BARCO_uploadOfflinePhotosV3717(
+  reportId,
+  photos
+) {
+
+  for (
+    let i = 0;
+    i < photos.length;
+    i++
+  ) {
+
+    const photo =
+      photos[i];
+
+
+    const result =
+      await barcoApi(
+        'uploadPhoto',
+        {
+          reportId:
+            reportId,
+          caption:
+            photo.caption ||
+            '',
+          roadSequenceNo:
+            Number(
+              photo.roadSequenceNo ||
+              0
+            ),
+          fileName:
+            photo.fileName,
+          mimeType:
+            photo.mimeType,
+          base64:
+            photo.base64
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to sync offline photo.'
+      );
+    }
+
+  }
+
+}
+
+
+async function BARCO_syncOfflineDraftV3717(
+  manual = false
+) {
+
+  if (
+    BARCO_syncInProgressV3717
+  ) {
+    return false;
+  }
+
+
+  if (!navigator.onLine) {
+
+    BARCO_updateSyncUiV3717(
+      'offline',
+      'No internet connection. Your report remains saved on this device.'
+    );
+
+
+    if (manual) {
+      alert(
+        'No internet connection yet. Your BaRCO draft is safely cached on this device.'
+      );
+    }
+
+
+    return false;
+  }
+
+
+  const draft =
+    await BARCO_offlineGetV3717()
+      .catch(
+        function() {
+          return null;
+        }
+      );
+
+
+  if (
+    !draft ||
+    !draft.pendingSync
+  ) {
+
+    BARCO_updateSyncUiV3717(
+      'online',
+      'No pending offline changes.'
+    );
+
+    return true;
+  }
+
+
+  BARCO_syncInProgressV3717 =
+    true;
+
+
+  BARCO_updateSyncUiV3717(
+    'syncing',
+    'Uploading cached report data to the BaRCO database...'
+  );
+
+
+  try {
+
+    await ensureBarcoBridge();
+
+
+    const result =
+      await barcoApi(
+        'saveDraft',
+        {
+          reportId:
+            draft.reportId ||
+            '',
+          month:
+            draft.month,
+          year:
+            Number(
+              draft.year
+            ),
+          dateOfBarco:
+            draft.dateOfBarco,
+          preparedBy:
+            draft.preparedBy,
+          punongBarangay:
+            draft.punongBarangay,
+          roads:
+            draft.roads ||
+            []
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Offline draft sync failed.'
+      );
+    }
+
+
+    const reportId =
+      result.reportId;
+
+
+    const p =
+      draft.participation ||
+      {};
+
+
+    await barcoApi(
+      'saveParticipation',
+      {
+        reportId:
+          reportId,
+        expectedBarangayOfficials:
+          Number(
+            p.expectedBarangayOfficials ||
+            0
+          ),
+        expectedSkOfficials:
+          Number(
+            p.expectedSkOfficials ||
+            0
+          ),
+        expectedBarangayTanods:
+          Number(
+            p.expectedBarangayTanods ||
+            0
+          ),
+        participatedBarangayOfficials:
+          Number(
+            p.participatedBarangayOfficials ||
+            0
+          ),
+        participatedSkOfficials:
+          Number(
+            p.participatedSkOfficials ||
+            0
+          ),
+        participatedBarangayTanods:
+          Number(
+            p.participatedBarangayTanods ||
+            0
+          )
+      }
+    );
+
+
+    const s =
+      draft.signatories ||
+      {};
+
+
+    await barcoApi(
+      'saveReportSignatories',
+      {
+        reportId:
+          reportId,
+        punongBarangay:
+          s.punongBarangay ||
+          '',
+        skChairperson:
+          s.skChairperson ||
+          '',
+        sbMembers:
+          s.sbMembers ||
+          [],
+        skMembers:
+          s.skMembers ||
+          [],
+        tanods:
+          s.tanods ||
+          []
+      }
+    );
+
+
+    const photos =
+      Array.isArray(
+        draft.selectedPhotos
+      )
+        ? draft.selectedPhotos
+        : [];
+
+
+    if (photos.length) {
+
+      BARCO_updateSyncUiV3717(
+        'syncing',
+        'Report saved. Syncing cached photos...'
+      );
+
+
+      await BARCO_uploadOfflinePhotosV3717(
+        reportId,
+        photos
+      );
+
+    }
+
+
+    document.getElementById(
+      'reportId'
+    ).textContent =
+      reportId;
+
+
+    localStorage.setItem(
+      'barcoLastReportId',
+      reportId
+    );
+
+
+    reportSaved =
+      true;
+
+
+    selectedPhotos =
+      [];
+
+
+    renderSelectedPhotos();
+
+
+    await BARCO_offlineDeleteV3717();
+
+
+    await loadUploadedPhotos();
+
+
+    BARCO_updateSyncUiV3717(
+      'online',
+      'Offline report synced successfully.'
+    );
+
+
+    showStatus(
+      'success',
+      'Offline BaRCO report synced successfully.',
+      false
+    );
+
+
+    return true;
+
+  } catch(error) {
+
+    BARCO_updateSyncUiV3717(
+      'pending',
+      'Sync failed. The report remains cached and will retry later.'
+    );
+
+
+    console.error(
+      'Offline sync error:',
+      error
+    );
+
+
+    if (manual) {
+      alert(
+        'Sync failed: ' +
+        error.message
+      );
+    }
+
+
+    return false;
+
+  } finally {
+
+    BARCO_syncInProgressV3717 =
+      false;
+
+  }
+
+}
+
+
+function BARCO_installOfflineAutoCacheV3717() {
+
+  if (
+    document.body.dataset
+      .barcoOfflineCacheInstalled ===
+      '1'
+  ) {
+    return;
+  }
+
+
+  document.body.dataset
+    .barcoOfflineCacheInstalled =
+    '1';
+
+
+  document.addEventListener(
+    'input',
+    function(event) {
+
+      if (
+        event.target &&
+        event.target.closest &&
+        event.target.closest(
+          '#barcoModule'
+        )
+      ) {
+        BARCO_scheduleOfflineCacheV3717();
+      }
+
+    }
+  );
+
+
+  document.addEventListener(
+    'change',
+    function(event) {
+
+      if (
+        event.target &&
+        event.target.closest &&
+        event.target.closest(
+          '#barcoModule'
+        )
+      ) {
+        BARCO_scheduleOfflineCacheV3717();
+      }
+
+    }
+  );
+
+
+  window.addEventListener(
+    'offline',
+    function() {
+
+      BARCO_updateSyncUiV3717(
+        'offline',
+        'Internet lost. Continue encoding; changes are being cached on this device.'
+      );
+
+
+      BARCO_cacheCurrentDraftV3717(
+        true
+      );
+
+    }
+  );
+
+
+  window.addEventListener(
+    'online',
+    function() {
+
+      BARCO_updateSyncUiV3717(
+        'pending',
+        'Internet restored. Checking for cached changes...'
+      );
+
+
+      setTimeout(
+        function() {
+          BARCO_syncOfflineDraftV3717(
+            false
+          );
+        },
+        600
+      );
+
+    }
+  );
+
+
+  BARCO_updateSyncUiV3717(
+    navigator.onLine
+      ? 'online'
+      : 'offline',
+    navigator.onLine
+      ? 'Local recovery cache is active.'
+      : 'Offline mode is active. Changes will sync later.'
+  );
+
+}
+
+
+
+/* =========================================================
+   V37.18 — AUTOMATIC REPORT STATUS
+========================================================= */
+
+function BARCO_setReportStatusV3718(
+  status
+) {
+
+  const input =
+    document.getElementById(
+      'reportStatus'
+    );
+
+
+  if (input) {
+
+    input.value =
+      String(
+        status || 'DRAFT'
+      ).toUpperCase();
+
+  }
+
+}
+
+
+async function BARCO_updateReportStatusV3718(
+  reportId,
+  status
+) {
+
+  reportId =
+    String(
+      reportId || ''
+    ).trim();
+
+
+  status =
+    String(
+      status || 'DRAFT'
+    )
+      .trim()
+      .toUpperCase();
+
+
+  if (!reportId) {
+
+    BARCO_setReportStatusV3718(
+      status
+    );
+
+    return {
+      success: true,
+      localOnly: true,
+      status: status
+    };
+
+  }
+
+
+  BARCO_setReportStatusV3718(
+    status
+  );
+
+
+  if (!navigator.onLine) {
+
+    return {
+      success: true,
+      localOnly: true,
+      status: status
+    };
+
+  }
+
+
+  const result =
+    await barcoApi(
+      'updateReportStatus',
+      {
+        reportId:
+          reportId,
+
+        status:
+          status
+      }
+    );
+
+
+  if (
+    !result ||
+    !result.success
+  ) {
+
+    throw new Error(
+      (
+        result &&
+        result.error
+      ) ||
+      'Unable to update report status.'
+    );
+
+  }
+
+
+  BARCO_setReportStatusV3718(
+    result.status ||
+    status
+  );
+
+
+  return result;
+
+}
+
+
+/* =========================================================
    SAVE
 ========================================================= */
 
@@ -6409,6 +8525,11 @@ async function saveDraft() {
 
   showActionOverlay(
     'Saving BaRCO draft...'
+  );
+
+
+  BARCO_setReportStatusV3718(
+    'DRAFT'
   );
 
 
@@ -6485,6 +8606,12 @@ async function saveDraft() {
     reportSaved = true;
 
 
+    await BARCO_updateReportStatusV3718(
+      result.reportId,
+      'DRAFT'
+    );
+
+
     await saveParticipationForReport(
       result.reportId
     );
@@ -6505,14 +8632,59 @@ async function saveDraft() {
     await loadUploadedPhotos();
 
 
+    await BARCO_offlineDeleteV3717()
+      .catch(function() {});
+
+
+    BARCO_updateSyncUiV3717(
+      'online',
+      'Draft synced to the BaRCO database.'
+    );
+
+
   } catch(error) {
 
-    showStatus(
-      'error',
-      'Save error: ' +
-      error.message,
-      false
-    );
+    if (
+      BARCO_shouldUseOfflineV3717(
+        error
+      )
+    ) {
+
+      BARCO_setReportStatusV3718(
+        'DRAFT'
+      );
+
+
+      await BARCO_cacheCurrentDraftV3717(
+        true
+      );
+
+
+      showStatus(
+        'success',
+        'Saved offline on this device. It will sync automatically when internet returns.',
+        false
+      );
+
+
+      BARCO_updateSyncUiV3717(
+        navigator.onLine
+          ? 'pending'
+          : 'offline',
+        'Draft is safely cached and waiting to sync.'
+      );
+
+
+    } else {
+
+      showStatus(
+        'error',
+        'Save error: ' +
+        error.message,
+        false
+      );
+
+    }
 
 
   } finally {
@@ -6545,6 +8717,45 @@ let BARCO_lastGeneratedPdfV377 = {
 
 
 async function generateFinalPdf() {
+
+  if (!navigator.onLine) {
+
+    await BARCO_cacheCurrentDraftV3717(
+      true
+    );
+
+
+    alert(
+      'Final PDF generation needs an internet connection. Your report is saved offline and will sync when internet returns.'
+    );
+
+
+    return;
+  }
+
+
+  const pendingOffline =
+    await BARCO_offlineGetV3717()
+      .catch(function() { return null; });
+
+
+  if (
+    pendingOffline &&
+    pendingOffline.pendingSync
+  ) {
+
+    const synced =
+      await BARCO_syncOfflineDraftV3717(
+        true
+      );
+
+
+    if (!synced) {
+      return;
+    }
+
+  }
+
 
   const button =
     document.getElementById(
@@ -6679,6 +8890,12 @@ async function generateFinalPdf() {
 
     reportSaved =
       true;
+
+
+    await BARCO_updateReportStatusV3718(
+      reportId,
+      'DRAFT'
+    );
 
 
     /*
@@ -6869,6 +9086,12 @@ async function generateFinalPdf() {
     }
 
 
+    await BARCO_updateReportStatusV3718(
+      reportId,
+      'FINAL'
+    );
+
+
     const box =
       document.getElementById(
         'pdfResult'
@@ -7006,6 +9229,23 @@ async function BARCO_openGeneratedPdfV3714(
   if (
     !BARCO_hasNativeAndroidPdfViewerV3714()
   ) {
+
+    if (
+      /TupolOesteReporting\//i.test(
+        navigator.userAgent || ''
+      )
+    ) {
+
+      if (event) {
+        event.preventDefault();
+      }
+
+      alert(
+        'Please update the Tupol Oeste Reporting APK to the latest version to open PDFs inside the app.'
+      );
+
+    }
+
     return;
   }
 
@@ -7102,6 +9342,23 @@ async function ACCOMP_openGeneratedPdfV3714(
   if (
     !BARCO_hasNativeAndroidPdfViewerV3714()
   ) {
+
+    if (
+      /TupolOesteReporting\//i.test(
+        navigator.userAgent || ''
+      )
+    ) {
+
+      if (event) {
+        event.preventDefault();
+      }
+
+      alert(
+        'Please update the Tupol Oeste Reporting APK to the latest version to open PDFs inside the app.'
+      );
+
+    }
+
     return;
   }
 
@@ -7733,6 +9990,9 @@ async function handlePhotoSelection(
 
 
   renderSelectedPhotos();
+
+
+  BARCO_scheduleOfflineCacheV3717();
 
 }
 
@@ -9270,10 +11530,21 @@ function escapeHtml(
 
 function BARCO_setupCollapsibleSectionsV31() {
 
+  const app =
+    document.getElementById(
+      'app'
+    );
+
+
+  if (!app) {
+    return;
+  }
+
+
   const sections =
     Array.from(
-      document.querySelectorAll(
-        '.section'
+      app.querySelectorAll(
+        ':scope > .section'
       )
     );
 
@@ -9284,111 +11555,162 @@ function BARCO_setupCollapsibleSectionsV31() {
 
 
   /*
-   * Optional quick controls above the first section.
+   * Move global Save / Generate / PDF result controls above
+   * the section menu so they remain available without making
+   * the form unnecessarily long.
    */
   if (
     !document.getElementById(
-      'barcoSectionCollapseToolbar'
+      'barcoGlobalActionsV3717'
     )
   ) {
 
-    const toolbar =
+    const globalActions =
       document.createElement(
         'div'
       );
 
 
-    toolbar.id =
-      'barcoSectionCollapseToolbar';
+    globalActions.id =
+      'barcoGlobalActionsV3717';
 
 
-    toolbar.className =
-      'section-collapse-toolbar';
+    globalActions.className =
+      'barco-global-actions-v3717';
 
 
-    toolbar.innerHTML = `
+    const saveArea =
+      app.querySelector(
+        '.save-area'
+      );
+
+
+    const pdfResult =
+      document.getElementById(
+        'pdfResult'
+      );
+
+
+    if (saveArea) {
+      globalActions.appendChild(
+        saveArea
+      );
+    }
+
+
+    if (pdfResult) {
+      globalActions.appendChild(
+        pdfResult
+      );
+    }
+
+
+    app.insertBefore(
+      globalActions,
+      sections[0]
+    );
+
+  }
+
+
+  const oldToolbar =
+    document.getElementById(
+      'barcoSectionCollapseToolbar'
+    );
+
+
+  if (oldToolbar) {
+    oldToolbar.remove();
+  }
+
+
+  let menuHint =
+    document.getElementById(
+      'barcoSectionMenuV3717'
+    );
+
+
+  if (!menuHint) {
+
+    menuHint =
+      document.createElement(
+        'div'
+      );
+
+
+    menuHint.id =
+      'barcoSectionMenuV3717';
+
+
+    menuHint.className =
+      'barco-section-menu-v3717';
+
+
+    menuHint.textContent =
+      'Select a BaRCO section to open. Only the selected section will be shown.';
+
+
+    app.insertBefore(
+      menuHint,
+      sections[0]
+    );
+
+  }
+
+
+  let focusToolbar =
+    document.getElementById(
+      'barcoSectionFocusToolbarV3717'
+    );
+
+
+  if (!focusToolbar) {
+
+    focusToolbar =
+      document.createElement(
+        'div'
+      );
+
+
+    focusToolbar.id =
+      'barcoSectionFocusToolbarV3717';
+
+
+    focusToolbar.className =
+      'barco-section-focus-toolbar-v3717';
+
+
+    focusToolbar.innerHTML = `
       <button
         type="button"
-        id="barcoViewAllSections"
+        class="barco-section-back-v3717"
+        onclick="BARCO_backToSectionMenuV3717()"
       >
-        View All
-      </button>
-
-      <button
-        type="button"
-        id="barcoHideAllSections"
-      >
-        Hide All
+        ← Back to BaRCO Menu
       </button>
     `;
 
 
-    sections[0]
-      .parentNode
-      .insertBefore(
-        toolbar,
-        sections[0]
-      );
-
-
-    document
-      .getElementById(
-        'barcoViewAllSections'
-      )
-      .addEventListener(
-        'click',
-        function() {
-
-          sections.forEach(
-            function(section) {
-
-              section.classList.remove(
-                'collapsed'
-              );
-
-
-              BARCO_updateSectionToggleV31_(
-                section
-              );
-
-            }
-          );
-
-        }
-      );
-
-
-    document
-      .getElementById(
-        'barcoHideAllSections'
-      )
-      .addEventListener(
-        'click',
-        function() {
-
-          sections.forEach(
-            function(section) {
-
-              section.classList.add(
-                'collapsed'
-              );
-
-
-              BARCO_updateSectionToggleV31_(
-                section
-              );
-
-            }
-          );
-
-        }
-      );
+    app.insertBefore(
+      focusToolbar,
+      sections[0]
+    );
 
   }
 
 
   sections.forEach(
-    function(section, index) {
+    function(section) {
+
+      section.classList.remove(
+        'barco-active-section-v3717'
+      );
+
+
+      section.classList.add(
+        'collapsed'
+      );
+
 
       const title =
         section.querySelector(
@@ -9410,100 +11732,70 @@ function BARCO_setupCollapsibleSectionsV31() {
       }
 
 
-      if (
+      let button =
         title.querySelector(
           '.section-collapse-button'
-        )
-      ) {
-        return;
-      }
-
-
-      const button =
-        document.createElement(
-          'button'
         );
 
 
-      button.type =
-        'button';
+      if (!button) {
+
+        button =
+          document.createElement(
+            'button'
+          );
 
 
-      button.className =
-        'section-collapse-button';
+        button.type =
+          'button';
+
+
+        button.className =
+          'section-collapse-button';
+
+
+        title.appendChild(
+          button
+        );
+
+      }
 
 
       button.setAttribute(
         'aria-expanded',
-        index === 0
-          ? 'true'
-          : 'false'
+        'false'
       );
 
 
       button.innerHTML =
-        '<span>Toggle</span>';
+        '<span>Open</span>';
 
 
-      title.appendChild(
-        button
-      );
-
-
-      /*
-       * Keep Report Information open on load.
-       * Collapse the remaining sections to reduce scrolling.
-       */
-      if (
-        index === 0
-      ) {
-
-        section.classList.remove(
-          'collapsed'
-        );
-
-
-      } else {
-
-        section.classList.add(
-          'collapsed'
-        );
-
-      }
-
-
-      button.addEventListener(
-        'click',
+      const openSection =
         function(event) {
 
-          event.preventDefault();
-
-          event.stopPropagation();
-
-
-          section.classList.toggle(
-            'collapsed'
-          );
+          if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
 
 
-          BARCO_updateSectionToggleV31_(
+          BARCO_openOnlySectionV3717(
             section
           );
 
-        }
-      );
+        };
 
 
-      /*
-       * Also allow clicking the title itself.
-       */
-      title.addEventListener(
-        'click',
+      button.onclick =
+        openSection;
+
+
+      title.onclick =
         function(event) {
 
           if (
-            event.target ===
-            button ||
+            event.target === button ||
             button.contains(
               event.target
             )
@@ -9512,25 +11804,147 @@ function BARCO_setupCollapsibleSectionsV31() {
           }
 
 
-          section.classList.toggle(
-            'collapsed'
+          openSection(
+            event
           );
 
+        };
 
-          BARCO_updateSectionToggleV31_(
-            section
-          );
+    }
+  );
 
-        }
+
+  BARCO_backToSectionMenuV3717(
+    false
+  );
+
+}
+
+
+function BARCO_openOnlySectionV3717(
+  selectedSection
+) {
+
+  const app =
+    document.getElementById(
+      'app'
+    );
+
+
+  if (
+    !app ||
+    !selectedSection
+  ) {
+    return;
+  }
+
+
+  app.classList.add(
+    'barco-section-focus-mode-v3717'
+  );
+
+
+  Array.from(
+    app.querySelectorAll(
+      ':scope > .section'
+    )
+  ).forEach(
+    function(section) {
+
+      const active =
+        section ===
+        selectedSection;
+
+
+      section.classList.toggle(
+        'barco-active-section-v3717',
+        active
       );
 
 
-      BARCO_updateSectionToggleV31_(
-        section
+      section.classList.toggle(
+        'collapsed',
+        !active
       );
 
     }
   );
+
+
+  const focusToolbar =
+    document.getElementById(
+      'barcoSectionFocusToolbarV3717'
+    );
+
+
+  if (focusToolbar) {
+
+    focusToolbar.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+
+  }
+
+}
+
+
+function BARCO_backToSectionMenuV3717(
+  shouldScroll = true
+) {
+
+  const app =
+    document.getElementById(
+      'app'
+    );
+
+
+  if (!app) {
+    return;
+  }
+
+
+  app.classList.remove(
+    'barco-section-focus-mode-v3717'
+  );
+
+
+  Array.from(
+    app.querySelectorAll(
+      ':scope > .section'
+    )
+  ).forEach(
+    function(section) {
+
+      section.classList.remove(
+        'barco-active-section-v3717'
+      );
+
+
+      section.classList.add(
+        'collapsed'
+      );
+
+    }
+  );
+
+
+  if (shouldScroll) {
+
+    const menu =
+      document.getElementById(
+        'barcoSectionMenuV3717'
+      );
+
+
+    if (menu) {
+      menu.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+
+  }
 
 }
 
@@ -9540,6 +11954,7 @@ function BARCO_updateSectionToggleV31_(
 ) {
 
   const button =
+    section &&
     section.querySelector(
       '.section-collapse-button'
     );
@@ -9550,18 +11965,24 @@ function BARCO_updateSectionToggleV31_(
   }
 
 
-  const isCollapsed =
+  const active =
     section.classList.contains(
-      'collapsed'
+      'barco-active-section-v3717'
     );
 
 
   button.setAttribute(
     'aria-expanded',
-    isCollapsed
-      ? 'false'
-      : 'true'
+    active
+      ? 'true'
+      : 'false'
   );
+
+
+  button.innerHTML =
+    active
+      ? '<span>Open</span>'
+      : '<span>Open</span>';
 
 }
 
@@ -9606,6 +12027,12 @@ let ACCOMP_initializedV33 = false;
 let ACCOMP_currentReportIdV33 = '';
 let ACCOMP_currentStatusV33 = 'DRAFT';
 let ACCOMP_entryCounterV33 = 0;
+
+let ACCOMP_currentPdfV3715 = {
+  fileId: '',
+  pdfUrl: '',
+  filename: ''
+};
 
 
 async function ACCOMP_openMonthlyV33() {
@@ -9688,6 +12115,13 @@ function ACCOMP_applyDefaultsV33(defaults) {
 
   ACCOMP_currentReportIdV33 = '';
   ACCOMP_currentStatusV33 = 'DRAFT';
+
+  ACCOMP_currentPdfV3715 = {
+    fileId: '',
+    pdfUrl: '',
+    filename: ''
+  };
+
   ACCOMP_updateHeaderV33();
 
   document.getElementById('accompEntriesV33').innerHTML = '';
@@ -9916,28 +12350,36 @@ async function ACCOMP_generatePdfV33() {
     ACCOMP_updateHeaderV33();
 
     if (result.pdfUrl) {
+
+      ACCOMP_currentPdfV3715 = {
+        fileId:
+          String(
+            result.pdfFileId || ''
+          ),
+
+        pdfUrl:
+          String(
+            result.pdfUrl || ''
+          ),
+
+        filename:
+          String(
+            result.filename ||
+            'Accomplishment Report.pdf'
+          )
+      };
+
+
       const box =
         document.getElementById(
           'accompFinalLinkV33'
         );
 
-      const anchor =
-        document.getElementById(
-          'accompFinalPdfAnchorV33'
-        );
 
-      anchor.href =
-        result.pdfUrl;
+      if (box) {
+        box.style.display = 'flex';
+      }
 
-      anchor.textContent =
-        'Open ' +
-        (
-          result.filename ||
-          'Generated PDF'
-        );
-
-      box.style.display =
-        'block';
     }
 
     ACCOMP_setStatusV33(
@@ -10109,14 +12551,53 @@ async function ACCOMP_openSavedReportV33(reportId) {
     ACCOMP_updateHeaderV33();
 
     if (report.pdfUrl) {
-      const box = document.getElementById('accompFinalLinkV33');
-      const anchor = document.getElementById('accompFinalPdfAnchorV33');
 
-      anchor.href = report.pdfUrl;
-      anchor.textContent = 'Open Generated PDF';
-      box.style.display = 'block';
+      ACCOMP_currentPdfV3715 = {
+        fileId:
+          String(
+            report.pdfFileId || ''
+          ),
+
+        pdfUrl:
+          String(
+            report.pdfUrl || ''
+          ),
+
+        filename:
+          String(
+            report.filename ||
+            (
+              'Accomplishment-' +
+              (report.month || 'Report') +
+              '-' +
+              (report.year || '') +
+              '.pdf'
+            )
+          )
+      };
+
+
+      const box =
+        document.getElementById(
+          'accompFinalLinkV33'
+        );
+
+
+      if (box) {
+        box.style.display = 'flex';
+      }
+
     } else {
+
+      ACCOMP_currentPdfV3715 = {
+        fileId: '',
+        pdfUrl: '',
+        filename: ''
+      };
+
+
       ACCOMP_hidePdfLinkV33();
+
     }
 
     ACCOMP_setStatusV33('success','Saved Monthly Accomplishment Report opened.');
@@ -10155,9 +12636,93 @@ function ACCOMP_hideStatusV33() {
 }
 
 
+
+function ACCOMP_syncCurrentPdfToModalStateV3715() {
+
+  ACCOMP_lastGeneratedPdfV3711 = {
+    fileId:
+      String(
+        ACCOMP_currentPdfV3715.fileId || ''
+      ),
+
+    pdfUrl:
+      String(
+        ACCOMP_currentPdfV3715.pdfUrl || ''
+      ),
+
+    filename:
+      String(
+        ACCOMP_currentPdfV3715.filename ||
+        'Accomplishment-Report.pdf'
+      )
+  };
+
+}
+
+
+async function ACCOMP_openCurrentPdfV3715() {
+
+  if (
+    !ACCOMP_currentPdfV3715.fileId
+  ) {
+
+    alert(
+      'No generated Accomplishment PDF is available yet.'
+    );
+
+    return;
+
+  }
+
+
+  ACCOMP_syncCurrentPdfToModalStateV3715();
+
+
+  await ACCOMP_openGeneratedPdfV3714(
+    {
+      preventDefault:
+        function() {}
+    }
+  );
+
+}
+
+
+async function ACCOMP_printCurrentPdfV3715() {
+
+  if (
+    !ACCOMP_currentPdfV3715.fileId
+  ) {
+
+    alert(
+      'No generated Accomplishment PDF is available yet.'
+    );
+
+    return;
+
+  }
+
+
+  ACCOMP_syncCurrentPdfToModalStateV3715();
+
+
+  await ACCOMP_printGeneratedPdfV3711();
+
+}
+
+
 function ACCOMP_hidePdfLinkV33() {
-  const box = document.getElementById('accompFinalLinkV33');
-  if (box) box.style.display = 'none';
+
+  const box =
+    document.getElementById(
+      'accompFinalLinkV33'
+    );
+
+
+  if (box) {
+    box.style.display = 'none';
+  }
+
 }
 
 
@@ -11780,6 +14345,32 @@ function ACCOMP_hideConsolidatedStatusV37() {
 
 </script>
 
+
+
+<script>
+(function() {
+  if (
+    'serviceWorker' in navigator &&
+    /^https?:$/i.test(
+      location.protocol
+    )
+  ) {
+    window.addEventListener(
+      'load',
+      function() {
+        navigator.serviceWorker
+          .register('./sw.js')
+          .catch(function(error) {
+            console.warn(
+              'Offline service worker registration failed:',
+              error
+            );
+          });
+      }
+    );
+  }
+})();
+</script>
 
 </body>
 
