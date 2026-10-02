@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.32 GLOBAL SPINNER + CENTERED LIVESTOCK HEADERS -->
+<!-- FRONTEND VERSION: V37.34 QUICK OWNER-ANIMAL-NUMBER ENTRY -->
 
 <style>
 
@@ -3682,6 +3682,492 @@ button:hover:not(:disabled),
   text-align: center !important;
 }
 
+
+/* =========================================================
+   V37.33 — MOBILE HOUSE-TO-HOUSE LIVESTOCK ENTRY
+========================================================= */
+
+.lsp-mobile-entry-v3733 {
+  display: none;
+}
+
+.lsp-mobile-owner-card-v3733 {
+  border: 1px solid #cfe3d4;
+  border-radius: 14px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.lsp-mobile-owner-head-v3733 {
+  padding: 14px 14px 10px;
+  background: #eef8f1;
+  border-bottom: 1px solid #d8e8dc;
+}
+
+.lsp-mobile-owner-head-v3733 strong {
+  display: block;
+  color: #1f6543;
+  font-size: 15px;
+}
+
+.lsp-mobile-owner-head-v3733 span {
+  display: block;
+  margin-top: 4px;
+  color: #68796e;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.lsp-mobile-owner-name-v3733 {
+  padding: 14px;
+  border-bottom: 1px solid #e0ebe3;
+}
+
+.lsp-mobile-owner-name-v3733 label {
+  display: block;
+  margin-bottom: 6px;
+  color: #315f43;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.lsp-mobile-owner-name-v3733 input {
+  width: 100%;
+  min-height: 48px;
+  padding: 11px 12px;
+  border: 2px solid #bfd8c6;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #1f2937;
+  font: inherit;
+  font-size: 15px;
+}
+
+.lsp-mobile-owner-name-v3733 input:focus {
+  outline: none;
+  border-color: #2d7653;
+  box-shadow: 0 0 0 3px rgba(45,118,83,.10);
+}
+
+.lsp-mobile-section-title-v3733 {
+  padding: 11px 14px 7px;
+  color: #315f43;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.lsp-mobile-animal-list-v3733 {
+  padding: 0 10px 10px;
+}
+
+.lsp-mobile-animal-row-v3733 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  min-height: 54px;
+  padding: 8px 4px;
+  border-bottom: 1px solid #e4ece6;
+}
+
+.lsp-mobile-animal-row-v3733:last-child {
+  border-bottom: 0;
+}
+
+.lsp-mobile-animal-name-v3733 {
+  color: #253b2e;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.lsp-mobile-stepper-v3733 {
+  display: grid;
+  grid-template-columns: 38px 58px 38px;
+  align-items: center;
+  gap: 5px;
+}
+
+.lsp-mobile-stepper-v3733 button {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: 9px;
+  background: #e7f3ea;
+  color: #1f6543;
+  font-size: 21px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.lsp-mobile-stepper-v3733 input {
+  width: 58px;
+  height: 38px;
+  padding: 4px;
+  border: 1px solid #bad3c0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #1f2937;
+  text-align: center;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.lsp-mobile-more-v3733 {
+  margin: 2px 10px 12px;
+  width: calc(100% - 20px);
+  min-height: 42px;
+  border: 1px solid #bcd5c3;
+  border-radius: 10px;
+  background: #f5faf6;
+  color: #286544;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.lsp-mobile-other-v3733 {
+  display: none;
+}
+
+.lsp-mobile-other-v3733.show {
+  display: block;
+}
+
+.lsp-mobile-current-total-v3733 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-top: 1px solid #d8e8dc;
+  background: #f3faf5;
+  color: #315f43;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.lsp-mobile-current-total-v3733 strong {
+  color: #1f6543;
+  font-size: 22px;
+}
+
+.lsp-mobile-savebar-v3733 {
+  position: sticky;
+  bottom: 8px;
+  z-index: 8;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 9px;
+  border: 1px solid #c8ded0;
+  border-radius: 13px;
+  background: rgba(255,255,255,.96);
+  box-shadow: 0 8px 24px rgba(31,101,67,.15);
+  backdrop-filter: blur(8px);
+}
+
+.lsp-mobile-save-v3733,
+.lsp-mobile-clear-v3733 {
+  min-height: 48px;
+  border: 0;
+  border-radius: 10px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.lsp-mobile-save-v3733 {
+  background: #2d7653;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.lsp-mobile-clear-v3733 {
+  width: 82px;
+  background: #6e8175;
+  color: #ffffff;
+}
+
+.lsp-mobile-saved-title-v3733 {
+  margin: 18px 0 8px;
+  color: #1f6543;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.lsp-mobile-owner-list-v3733 {
+  display: grid;
+  gap: 8px;
+}
+
+.lsp-mobile-saved-owner-v3733 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  padding: 11px 12px;
+  border: 1px solid #d2e3d6;
+  border-radius: 11px;
+  background: #ffffff;
+}
+
+.lsp-mobile-saved-owner-v3733 .name {
+  color: #243a2d;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.lsp-mobile-saved-owner-v3733 .meta {
+  margin-top: 3px;
+  color: #68796e;
+  font-size: 10px;
+}
+
+.lsp-mobile-saved-owner-actions-v3733 {
+  display: flex;
+  gap: 5px;
+}
+
+.lsp-mobile-saved-owner-actions-v3733 button {
+  min-height: 34px;
+  padding: 6px 9px;
+  border: 0;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.lsp-mobile-edit-v3733 {
+  background: #e7f3ea;
+  color: #1f6543;
+}
+
+.lsp-mobile-delete-v3733 {
+  background: #fff0f0;
+  color: #a33d3d;
+}
+
+.lsp-mobile-empty-v3733 {
+  padding: 14px;
+  border: 1px dashed #cbded0;
+  border-radius: 10px;
+  background: #f9fcfa;
+  color: #728177;
+  text-align: center;
+  font-size: 11px;
+}
+
+@media(max-width:760px) {
+
+  #lspMatrixWrapV3726,
+  .lsp-matrix-actions-v3726 {
+    display: none !important;
+  }
+
+  .lsp-mobile-entry-v3733 {
+    display: block;
+  }
+
+  .lsp-card-v3724:has(#lspMatrixWrapV3726) .lsp-help-v3724 {
+    display: none;
+  }
+
+}
+
+
+/* =========================================================
+   V37.34 — QUICK LIVESTOCK ENTRY
+========================================================= */
+
+.lsp-quick-trigger-v3734 {
+  width: 100%;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 12px;
+  background: #eaf6ed;
+  color: #1f6543;
+  font-size: 16px;
+  font-weight: 900;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lsp-quick-trigger-v3734::after {
+  content: '▼';
+  float: right;
+  font-size: 12px;
+  transition: transform .2s ease;
+}
+
+.lsp-quick-trigger-v3734.open::after {
+  transform: rotate(180deg);
+}
+
+.lsp-quick-panel-v3734 {
+  display: none;
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid #cfe3d4;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.lsp-quick-panel-v3734.show {
+  display: block;
+}
+
+.lsp-quick-grid-v3734 {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr .7fr;
+  gap: 10px;
+}
+
+.lsp-quick-field-v3734 label {
+  display: block;
+  margin-bottom: 5px;
+  color: #315f43;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.lsp-quick-field-v3734 input,
+.lsp-quick-field-v3734 select {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 11px;
+  border: 1px solid #bfd8c6;
+  border-radius: 9px;
+  background: #fff;
+  color: #1f2937;
+  font: inherit;
+  font-size: 14px;
+}
+
+.lsp-quick-actions-v3734 {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.lsp-quick-actions-v3734 button {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 9px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.lsp-quick-add-v3734 {
+  background: #2d7653;
+  color: #fff;
+}
+
+.lsp-quick-next-v3734 {
+  background: #275a86;
+  color: #fff;
+}
+
+.lsp-quick-clear-v3734 {
+  background: #6f8176;
+  color: #fff;
+}
+
+.lsp-current-owner-v3734 {
+  margin-top: 12px;
+  border: 1px solid #d5e5d8;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.lsp-current-owner-head-v3734 {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #f2f9f4;
+  color: #315f43;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.lsp-current-owner-body-v3734 {
+  padding: 8px 12px;
+}
+
+.lsp-current-item-v3734 {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid #e5ede7;
+  font-size: 11px;
+}
+
+.lsp-current-item-v3734:last-child {
+  border-bottom: 0;
+}
+
+.lsp-current-item-v3734 button {
+  border: 0;
+  border-radius: 7px;
+  padding: 5px 8px;
+  background: #fff0f0;
+  color: #a33d3d;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.lsp-review-toggle-v3734 {
+  margin-top: 12px;
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid #bdd4c3;
+  border-radius: 9px;
+  background: #f8fcf9;
+  color: #2b6545;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.lsp-matrix-review-v3734 {
+  display: none;
+  margin-top: 10px;
+}
+
+.lsp-matrix-review-v3734.show {
+  display: block;
+}
+
+@media(max-width:760px) {
+  .lsp-quick-grid-v3734 {
+    grid-template-columns: 1fr;
+  }
+
+  .lsp-quick-actions-v3734 button {
+    width: 100%;
+  }
+
+  #lspMobileEntryV3733 {
+    display: none !important;
+  }
+
+  #lspMatrixWrapV3726,
+  .lsp-matrix-actions-v3726 {
+    display: none !important;
+  }
+
+  .lsp-matrix-review-v3734 #lspMatrixWrapV3726 {
+    display: block !important;
+  }
+}
+
 </style>
 
 <!-- FRONTEND VERSION: V37.1 SILENT BACKEND CONNECTION -->
@@ -4017,13 +4503,115 @@ button:hover:not(:disabled),
 
         <div class="lsp-card-v3724">
 
-          <h3>Livestock Population Table</h3>
+          <button
+            id="lspQuickTriggerV3734"
+            type="button"
+            class="lsp-quick-trigger-v3734"
+            onclick="LSP_toggleQuickEntryV3734()"
+          >
+            Livestock Population Table
+          </button>
 
-          <div class="lsp-help-v3724">
-            One row per owner. Enter the quantity under each livestock type.
-            The Total column is computed automatically for every owner, while
-            the bottom row shows the barangay total for each livestock type.
-          </div>
+          <div
+            id="lspQuickPanelV3734"
+            class="lsp-quick-panel-v3734"
+          >
+
+            <div class="lsp-quick-grid-v3734">
+
+              <div class="lsp-quick-field-v3734">
+                <label>Owner Name</label>
+                <input
+                  id="lspQuickOwnerV3734"
+                  type="text"
+                  placeholder="Enter owner name"
+                  autocomplete="off"
+                  oninput="LSP_quickOwnerChangedV3734(this.value)"
+                >
+              </div>
+
+              <div class="lsp-quick-field-v3734">
+                <label>Animal</label>
+                <select id="lspQuickAnimalV3734">
+                  <option value="">Select animal</option>
+                </select>
+              </div>
+
+              <div class="lsp-quick-field-v3734">
+                <label>Number</label>
+                <input
+                  id="lspQuickQtyV3734"
+                  type="number"
+                  min="1"
+                  step="1"
+                  inputmode="numeric"
+                  placeholder="0"
+                >
+              </div>
+
+            </div>
+
+            <div class="lsp-quick-actions-v3734">
+
+              <button
+                type="button"
+                class="lsp-quick-add-v3734"
+                onclick="LSP_addQuickAnimalV3734()"
+              >
+                + Add Animal
+              </button>
+
+              <button
+                type="button"
+                class="lsp-quick-next-v3734"
+                onclick="LSP_finishQuickOwnerV3734()"
+              >
+                Save Owner & Next
+              </button>
+
+              <button
+                type="button"
+                class="lsp-quick-clear-v3734"
+                onclick="LSP_clearQuickOwnerV3734(true)"
+              >
+                Clear
+              </button>
+
+            </div>
+
+            <div class="lsp-current-owner-v3734">
+
+              <div class="lsp-current-owner-head-v3734">
+                <span id="lspQuickOwnerLabelV3734">Current Owner</span>
+                <span>
+                  Total:
+                  <strong id="lspQuickOwnerTotalV3734">0</strong>
+                </span>
+              </div>
+
+              <div
+                id="lspQuickOwnerItemsV3734"
+                class="lsp-current-owner-body-v3734"
+              >
+                <div class="lsp-mobile-empty-v3733">
+                  No animal added yet.
+                </div>
+              </div>
+
+            </div>
+
+            <button
+              type="button"
+              class="lsp-review-toggle-v3734"
+              onclick="LSP_toggleMatrixReviewV3734()"
+            >
+              Review Full Table
+            </button>
+
+            <div
+              id="lspMatrixReviewV3734"
+              class="lsp-matrix-review-v3734"
+            >
 
           <div
             id="lspMatrixWrapV3726"
@@ -4047,6 +4635,107 @@ button:hover:not(:disabled),
             >
               + Add 5 Blank Rows
             </button>
+
+          </div>
+
+            </div>
+          </div>
+
+
+          <div
+            id="lspMobileEntryV3733"
+            class="lsp-mobile-entry-v3733"
+          >
+
+            <div class="lsp-mobile-owner-card-v3733">
+
+              <div class="lsp-mobile-owner-head-v3733">
+                <strong>House-to-House Entry</strong>
+                <span>
+                  Isang owner lang muna. I-enter ang bilang ng kanyang mga livestock,
+                  tapos tap Save Owner & Next.
+                </span>
+              </div>
+
+              <div class="lsp-mobile-owner-name-v3733">
+                <label>Owner Name</label>
+                <input
+                  id="lspMobileOwnerNameV3733"
+                  type="text"
+                  placeholder="Type owner name"
+                  autocomplete="off"
+                  oninput="LSP_mobileOwnerNameChangedV3733(this.value)"
+                >
+              </div>
+
+              <div class="lsp-mobile-section-title-v3733">
+                Common Livestock
+              </div>
+
+              <div
+                id="lspMobileCommonV3733"
+                class="lsp-mobile-animal-list-v3733"
+              ></div>
+
+              <button
+                id="lspMobileMoreBtnV3733"
+                type="button"
+                class="lsp-mobile-more-v3733"
+                onclick="LSP_toggleOtherLivestockV3733()"
+              >
+                + Show Other Livestock
+              </button>
+
+              <div
+                id="lspMobileOtherV3733"
+                class="lsp-mobile-other-v3733"
+              >
+                <div class="lsp-mobile-section-title-v3733">
+                  Other Livestock
+                </div>
+
+                <div
+                  id="lspMobileOtherListV3733"
+                  class="lsp-mobile-animal-list-v3733"
+                ></div>
+              </div>
+
+              <div class="lsp-mobile-current-total-v3733">
+                <span>Current Owner Total</span>
+                <strong id="lspMobileCurrentTotalV3733">0</strong>
+              </div>
+
+            </div>
+
+            <div class="lsp-mobile-savebar-v3733">
+
+              <button
+                type="button"
+                class="lsp-mobile-save-v3733"
+                onclick="LSP_saveMobileOwnerV3733()"
+              >
+                Save Owner & Next
+              </button>
+
+              <button
+                type="button"
+                class="lsp-mobile-clear-v3733"
+                onclick="LSP_clearMobileEditorV3733(true)"
+              >
+                Clear
+              </button>
+
+            </div>
+
+            <div class="lsp-mobile-saved-title-v3733">
+              Encoded Owners
+              <span id="lspMobileOwnerCountV3733"></span>
+            </div>
+
+            <div
+              id="lspMobileOwnerListV3733"
+              class="lsp-mobile-owner-list-v3733"
+            ></div>
 
           </div>
 
@@ -9272,6 +9961,1555 @@ function LSP_stackHeaderHtmlV3729(
 }
 
 
+
+/* =========================================================
+   V37.33 — MOBILE HOUSE-TO-HOUSE EDITOR
+========================================================= */
+
+const LSP_MOBILE_EDITOR_KEY_V3733 =
+  'LIVESTOCK_MOBILE_EDITOR_V3733';
+
+const LSP_MOBILE_COMMON_COUNT_V3733 =
+  7;
+
+let LSP_mobileDraftV3733 =
+  {
+    ownerName: '',
+    counts: {},
+    editingIndex: -1
+  };
+
+let LSP_mobileOtherOpenV3733 =
+  false;
+
+
+function LSP_mobileEmptyCountsV3733() {
+
+  const counts =
+    {};
+
+
+  LSP_LIVESTOCK_TYPES_V3726.forEach(
+    function(type) {
+      counts[type] = 0;
+    }
+  );
+
+
+  return counts;
+
+}
+
+
+function LSP_mobileNormalizeDraftV3733(
+  data
+) {
+
+  data =
+    data || {};
+
+
+  const counts =
+    LSP_mobileEmptyCountsV3733();
+
+
+  LSP_LIVESTOCK_TYPES_V3726.forEach(
+    function(type) {
+
+      counts[type] =
+        Math.max(
+          0,
+          Math.floor(
+            Number(
+              (
+                data.counts &&
+                data.counts[type]
+              ) ||
+              0
+            )
+          )
+        );
+
+    }
+  );
+
+
+  return {
+    ownerName:
+      LSP_normalizeOwnerV3724(
+        data.ownerName || ''
+      ),
+    counts:
+      counts,
+    editingIndex:
+      Number.isInteger(
+        Number(
+          data.editingIndex
+        )
+      )
+        ? Number(
+            data.editingIndex
+          )
+        : -1
+  };
+
+}
+
+
+function LSP_restoreMobileEditorV3733() {
+
+  try {
+
+    const raw =
+      localStorage.getItem(
+        LSP_MOBILE_EDITOR_KEY_V3733
+      );
+
+
+    if (!raw) {
+
+      LSP_mobileDraftV3733 =
+        LSP_mobileNormalizeDraftV3733(
+          {}
+        );
+
+      return;
+
+    }
+
+
+    LSP_mobileDraftV3733 =
+      LSP_mobileNormalizeDraftV3733(
+        JSON.parse(
+          raw
+        )
+      );
+
+  } catch(error) {
+
+    LSP_mobileDraftV3733 =
+      LSP_mobileNormalizeDraftV3733(
+        {}
+      );
+
+  }
+
+}
+
+
+function LSP_saveMobileEditorLocalV3733() {
+
+  try {
+
+    localStorage.setItem(
+      LSP_MOBILE_EDITOR_KEY_V3733,
+      JSON.stringify(
+        LSP_mobileDraftV3733
+      )
+    );
+
+  } catch(error) {}
+
+}
+
+
+function LSP_mobileOwnerNameChangedV3733(
+  value
+) {
+
+  LSP_mobileDraftV3733.ownerName =
+    String(
+      value || ''
+    );
+
+  LSP_saveMobileEditorLocalV3733();
+
+}
+
+
+function LSP_mobileQtyChangedV3733(
+  typeIndex,
+  value
+) {
+
+  const type =
+    LSP_LIVESTOCK_TYPES_V3726[
+      Number(typeIndex)
+    ];
+
+
+  if (!type) {
+    return;
+  }
+
+
+  let qty =
+    Math.floor(
+      Number(
+        value || 0
+      )
+    );
+
+
+  if (
+    !Number.isFinite(qty) ||
+    qty < 0
+  ) {
+    qty = 0;
+  }
+
+
+  LSP_mobileDraftV3733.counts[type] =
+    qty;
+
+
+  const input =
+    document.getElementById(
+      'lspMobileQtyV3733_' +
+      typeIndex
+    );
+
+
+  if (
+    input &&
+    String(input.value) !==
+    String(
+      qty > 0
+        ? qty
+        : ''
+    )
+  ) {
+
+    input.value =
+      qty > 0
+        ? qty
+        : '';
+
+  }
+
+
+  LSP_updateMobileCurrentTotalV3733();
+  LSP_saveMobileEditorLocalV3733();
+
+}
+
+
+function LSP_mobileStepV3733(
+  typeIndex,
+  delta
+) {
+
+  const type =
+    LSP_LIVESTOCK_TYPES_V3726[
+      Number(typeIndex)
+    ];
+
+
+  if (!type) {
+    return;
+  }
+
+
+  const current =
+    Number(
+      LSP_mobileDraftV3733.counts[type] ||
+      0
+    );
+
+
+  const next =
+    Math.max(
+      0,
+      current +
+      Number(delta || 0)
+    );
+
+
+  LSP_mobileQtyChangedV3733(
+    typeIndex,
+    next
+  );
+
+}
+
+
+function LSP_mobileCurrentTotalV3733() {
+
+  return LSP_LIVESTOCK_TYPES_V3726.reduce(
+    function(total,type) {
+
+      return (
+        total +
+        Number(
+          LSP_mobileDraftV3733.counts[type] ||
+          0
+        )
+      );
+
+    },
+    0
+  );
+
+}
+
+
+function LSP_updateMobileCurrentTotalV3733() {
+
+  const el =
+    document.getElementById(
+      'lspMobileCurrentTotalV3733'
+    );
+
+
+  if (el) {
+
+    el.textContent =
+      LSP_mobileCurrentTotalV3733();
+
+  }
+
+}
+
+
+function LSP_mobileAnimalRowHtmlV3733(
+  type,
+  index
+) {
+
+  const qty =
+    Number(
+      LSP_mobileDraftV3733.counts[type] ||
+      0
+    );
+
+
+  return (
+    '<div class="lsp-mobile-animal-row-v3733">' +
+      '<div class="lsp-mobile-animal-name-v3733">' +
+        LSP_escapeV3724(
+          type
+        ) +
+      '</div>' +
+      '<div class="lsp-mobile-stepper-v3733">' +
+        '<button type="button" aria-label="Minus ' +
+          LSP_escapeV3724(type) +
+          '" onclick="LSP_mobileStepV3733(' +
+          index +
+          ',-1)">−</button>' +
+        '<input ' +
+          'id="lspMobileQtyV3733_' +
+          index +
+          '" ' +
+          'type="number" min="0" step="1" inputmode="numeric" ' +
+          'value="' +
+          (
+            qty > 0
+              ? qty
+              : ''
+          ) +
+          '" ' +
+          'placeholder="0" ' +
+          'oninput="LSP_mobileQtyChangedV3733(' +
+          index +
+          ',this.value)"' +
+        '>' +
+        '<button type="button" aria-label="Add ' +
+          LSP_escapeV3724(type) +
+          '" onclick="LSP_mobileStepV3733(' +
+          index +
+          ',1)">+</button>' +
+      '</div>' +
+    '</div>'
+  );
+
+}
+
+
+function LSP_renderMobileEditorV3733() {
+
+  const common =
+    document.getElementById(
+      'lspMobileCommonV3733'
+    );
+
+  const other =
+    document.getElementById(
+      'lspMobileOtherListV3733'
+    );
+
+  const ownerInput =
+    document.getElementById(
+      'lspMobileOwnerNameV3733'
+    );
+
+
+  if (
+    !common ||
+    !other
+  ) {
+    return;
+  }
+
+
+  if (ownerInput) {
+
+    ownerInput.value =
+      LSP_mobileDraftV3733.ownerName ||
+      '';
+
+  }
+
+
+  common.innerHTML =
+    LSP_LIVESTOCK_TYPES_V3726
+      .slice(
+        0,
+        LSP_MOBILE_COMMON_COUNT_V3733
+      )
+      .map(
+        function(type,index) {
+
+          return LSP_mobileAnimalRowHtmlV3733(
+            type,
+            index
+          );
+
+        }
+      )
+      .join('');
+
+
+  other.innerHTML =
+    LSP_LIVESTOCK_TYPES_V3726
+      .slice(
+        LSP_MOBILE_COMMON_COUNT_V3733
+      )
+      .map(
+        function(type,offset) {
+
+          const index =
+            offset +
+            LSP_MOBILE_COMMON_COUNT_V3733;
+
+
+          return LSP_mobileAnimalRowHtmlV3733(
+            type,
+            index
+          );
+
+        }
+      )
+      .join('');
+
+
+  LSP_updateMobileCurrentTotalV3733();
+  LSP_renderMobileOwnerListV3733();
+
+}
+
+
+function LSP_toggleOtherLivestockV3733() {
+
+  LSP_mobileOtherOpenV3733 =
+    !LSP_mobileOtherOpenV3733;
+
+
+  const box =
+    document.getElementById(
+      'lspMobileOtherV3733'
+    );
+
+  const button =
+    document.getElementById(
+      'lspMobileMoreBtnV3733'
+    );
+
+
+  if (box) {
+
+    box.classList.toggle(
+      'show',
+      LSP_mobileOtherOpenV3733
+    );
+
+  }
+
+
+  if (button) {
+
+    button.textContent =
+      LSP_mobileOtherOpenV3733
+        ? '− Hide Other Livestock'
+        : '+ Show Other Livestock';
+
+  }
+
+}
+
+
+function LSP_clearMobileEditorV3733(
+  ask
+) {
+
+  if (
+    ask &&
+    (
+      LSP_mobileDraftV3733.ownerName ||
+      LSP_mobileCurrentTotalV3733() >
+      0
+    )
+  ) {
+
+    const ok =
+      window.confirm(
+        'Clear the current owner entry?'
+      );
+
+
+    if (!ok) {
+      return;
+    }
+
+  }
+
+
+  LSP_mobileDraftV3733 =
+    LSP_mobileNormalizeDraftV3733(
+      {}
+    );
+
+
+  LSP_saveMobileEditorLocalV3733();
+  LSP_renderMobileEditorV3733();
+
+
+  const ownerInput =
+    document.getElementById(
+      'lspMobileOwnerNameV3733'
+    );
+
+
+  if (ownerInput) {
+
+    ownerInput.focus();
+
+  }
+
+}
+
+
+function LSP_saveMobileOwnerV3733() {
+
+  const owner =
+    LSP_normalizeOwnerV3724(
+      LSP_mobileDraftV3733.ownerName
+    );
+
+
+  const total =
+    LSP_mobileCurrentTotalV3733();
+
+
+  if (!owner) {
+
+    alert(
+      'Enter the Owner Name first.'
+    );
+
+    const input =
+      document.getElementById(
+        'lspMobileOwnerNameV3733'
+      );
+
+
+    if (input) {
+      input.focus();
+    }
+
+
+    return;
+
+  }
+
+
+  if (total < 1) {
+
+    alert(
+      'Enter at least one livestock quantity.'
+    );
+
+    return;
+
+  }
+
+
+  const row =
+    LSP_newOwnerRowV3726();
+
+
+  row.ownerName =
+    owner;
+
+
+  LSP_LIVESTOCK_TYPES_V3726.forEach(
+    function(type) {
+
+      row.counts[type] =
+        Number(
+          LSP_mobileDraftV3733.counts[type] ||
+          0
+        );
+
+    }
+  );
+
+
+  const editingIndex =
+    Number(
+      LSP_mobileDraftV3733.editingIndex
+    );
+
+
+  if (
+    Number.isInteger(editingIndex) &&
+    editingIndex >= 0 &&
+    editingIndex <
+      LSP_ownerRowsV3726.length
+  ) {
+
+    LSP_ownerRowsV3726[
+      editingIndex
+    ] =
+      row;
+
+  } else {
+
+    /*
+     * If owner already exists, update that owner's row
+     * instead of creating an accidental duplicate.
+     */
+    const existingIndex =
+      LSP_ownerRowsV3726.findIndex(
+        function(item) {
+
+          return (
+            LSP_normalizeOwnerV3724(
+              item.ownerName
+            ).toLowerCase() ===
+            owner.toLowerCase()
+          );
+
+        }
+      );
+
+
+    if (existingIndex >= 0) {
+
+      LSP_ownerRowsV3726[
+        existingIndex
+      ] =
+        row;
+
+    } else {
+
+      /*
+       * Remove unused blank rows before adding the completed owner.
+       */
+      LSP_ownerRowsV3726 =
+        LSP_ownerRowsV3726.filter(
+          function(item) {
+
+            return (
+              LSP_normalizeOwnerV3724(
+                item.ownerName
+              ) ||
+              LSP_ownerRowTotalV3726(
+                item
+              ) >
+              0
+            );
+
+          }
+        );
+
+
+      LSP_ownerRowsV3726.push(
+        row
+      );
+
+    }
+
+  }
+
+
+  LSP_matrixToRecordsV3726();
+  LSP_renderMatrixV3726();
+  LSP_renderAllV3724();
+  LSP_autoCacheV3727();
+
+
+  LSP_mobileDraftV3733 =
+    LSP_mobileNormalizeDraftV3733(
+      {}
+    );
+
+
+  LSP_saveMobileEditorLocalV3733();
+  LSP_renderMobileEditorV3733();
+
+
+  LSP_setStatusV3724(
+    'success',
+    'Owner saved on this device. Ready for the next household.'
+  );
+
+
+  window.scrollTo({
+    top:
+      document.getElementById(
+        'lspMobileEntryV3733'
+      )?.getBoundingClientRect().top +
+      window.scrollY -
+      80,
+    behavior:
+      'smooth'
+  });
+
+
+  setTimeout(
+    function() {
+
+      const input =
+        document.getElementById(
+          'lspMobileOwnerNameV3733'
+        );
+
+
+      if (input) {
+        input.focus();
+      }
+
+    },
+    350
+  );
+
+}
+
+
+function LSP_editMobileOwnerV3733(
+  index
+) {
+
+  index =
+    Number(index);
+
+
+  const row =
+    LSP_ownerRowsV3726[index];
+
+
+  if (!row) {
+    return;
+  }
+
+
+  LSP_mobileDraftV3733 =
+    LSP_mobileNormalizeDraftV3733({
+      ownerName:
+        row.ownerName,
+      counts:
+        row.counts,
+      editingIndex:
+        index
+    });
+
+
+  LSP_saveMobileEditorLocalV3733();
+  LSP_renderMobileEditorV3733();
+
+
+  window.scrollTo({
+    top:
+      document.getElementById(
+        'lspMobileEntryV3733'
+      )?.getBoundingClientRect().top +
+      window.scrollY -
+      80,
+    behavior:
+      'smooth'
+  });
+
+}
+
+
+function LSP_deleteMobileOwnerV3733(
+  index
+) {
+
+  index =
+    Number(index);
+
+
+  const row =
+    LSP_ownerRowsV3726[index];
+
+
+  if (!row) {
+    return;
+  }
+
+
+  const ok =
+    window.confirm(
+      'Delete ' +
+      (
+        row.ownerName ||
+        'this owner'
+      ) +
+      '?'
+    );
+
+
+  if (!ok) {
+    return;
+  }
+
+
+  LSP_ownerRowsV3726.splice(
+    index,
+    1
+  );
+
+
+  LSP_matrixToRecordsV3726();
+  LSP_renderMatrixV3726();
+  LSP_renderAllV3724();
+  LSP_autoCacheV3727();
+  LSP_renderMobileOwnerListV3733();
+
+}
+
+
+function LSP_renderMobileOwnerListV3733() {
+
+  const host =
+    document.getElementById(
+      'lspMobileOwnerListV3733'
+    );
+
+  const count =
+    document.getElementById(
+      'lspMobileOwnerCountV3733'
+    );
+
+
+  if (!host) {
+    return;
+  }
+
+
+  const rows =
+    LSP_ownerRowsV3726.filter(
+      function(row) {
+
+        return !!LSP_normalizeOwnerV3724(
+          row.ownerName
+        );
+
+      }
+    );
+
+
+  if (count) {
+
+    count.textContent =
+      '(' +
+      rows.length +
+      ')';
+
+  }
+
+
+  if (!rows.length) {
+
+    host.innerHTML =
+      '<div class="lsp-mobile-empty-v3733">No owners encoded yet.</div>';
+
+    return;
+  }
+
+
+  /*
+   * We render using original indices so Edit/Delete stays accurate.
+   */
+  host.innerHTML =
+    LSP_ownerRowsV3726
+      .map(
+        function(row,index) {
+
+          const owner =
+            LSP_normalizeOwnerV3724(
+              row.ownerName
+            );
+
+
+          if (!owner) {
+            return '';
+          }
+
+
+          const total =
+            LSP_ownerRowTotalV3726(
+              row
+            );
+
+
+          const species =
+            LSP_LIVESTOCK_TYPES_V3726.filter(
+              function(type) {
+
+                return (
+                  Number(
+                    row.counts[type] || 0
+                  ) >
+                  0
+                );
+
+              }
+            ).length;
+
+
+          return (
+            '<div class="lsp-mobile-saved-owner-v3733">' +
+              '<div>' +
+                '<div class="name">' +
+                  LSP_escapeV3724(
+                    owner
+                  ) +
+                '</div>' +
+                '<div class="meta">' +
+                  total +
+                  ' livestock • ' +
+                  species +
+                  ' type' +
+                  (
+                    species === 1
+                      ? ''
+                      : 's'
+                  ) +
+                '</div>' +
+              '</div>' +
+              '<div class="lsp-mobile-saved-owner-actions-v3733">' +
+                '<button type="button" class="lsp-mobile-edit-v3733" onclick="LSP_editMobileOwnerV3733(' +
+                  index +
+                ')">Edit</button>' +
+                '<button type="button" class="lsp-mobile-delete-v3733" onclick="LSP_deleteMobileOwnerV3733(' +
+                  index +
+                ')">Delete</button>' +
+              '</div>' +
+            '</div>'
+          );
+
+        }
+      )
+      .join('');
+
+}
+
+
+
+/* =========================================================
+   V37.34 — QUICK ENTRY: OWNER + ANIMAL DROPDOWN + NUMBER
+========================================================= */
+
+const LSP_QUICK_KEY_V3734 =
+  'LIVESTOCK_QUICK_ENTRY_V3734';
+
+let LSP_quickStateV3734 = {
+  ownerName: '',
+  counts: {}
+};
+
+let LSP_quickOpenV3734 =
+  false;
+
+let LSP_matrixReviewOpenV3734 =
+  false;
+
+
+function LSP_quickEmptyCountsV3734() {
+
+  const counts = {};
+
+  LSP_LIVESTOCK_TYPES_V3726.forEach(
+    function(type) {
+      counts[type] = 0;
+    }
+  );
+
+  return counts;
+
+}
+
+
+function LSP_restoreQuickStateV3734() {
+
+  try {
+
+    const raw =
+      localStorage.getItem(
+        LSP_QUICK_KEY_V3734
+      );
+
+    if (!raw) {
+
+      LSP_quickStateV3734 = {
+        ownerName: '',
+        counts: LSP_quickEmptyCountsV3734()
+      };
+
+      return;
+
+    }
+
+    const data =
+      JSON.parse(raw) || {};
+
+    const counts =
+      LSP_quickEmptyCountsV3734();
+
+    LSP_LIVESTOCK_TYPES_V3726.forEach(
+      function(type) {
+        counts[type] =
+          Math.max(
+            0,
+            Math.floor(
+              Number(
+                (data.counts && data.counts[type]) || 0
+              )
+            )
+          );
+      }
+    );
+
+    LSP_quickStateV3734 = {
+      ownerName:
+        LSP_normalizeOwnerV3724(
+          data.ownerName || ''
+        ),
+      counts:
+        counts
+    };
+
+  } catch(error) {
+
+    LSP_quickStateV3734 = {
+      ownerName: '',
+      counts: LSP_quickEmptyCountsV3734()
+    };
+
+  }
+
+}
+
+
+function LSP_saveQuickStateLocalV3734() {
+
+  try {
+
+    localStorage.setItem(
+      LSP_QUICK_KEY_V3734,
+      JSON.stringify(
+        LSP_quickStateV3734
+      )
+    );
+
+  } catch(error) {}
+
+}
+
+
+function LSP_toggleQuickEntryV3734() {
+
+  LSP_quickOpenV3734 =
+    !LSP_quickOpenV3734;
+
+  const panel =
+    document.getElementById(
+      'lspQuickPanelV3734'
+    );
+
+  const trigger =
+    document.getElementById(
+      'lspQuickTriggerV3734'
+    );
+
+  if (panel) {
+    panel.classList.toggle(
+      'show',
+      LSP_quickOpenV3734
+    );
+  }
+
+  if (trigger) {
+    trigger.classList.toggle(
+      'open',
+      LSP_quickOpenV3734
+    );
+  }
+
+  if (LSP_quickOpenV3734) {
+
+    LSP_renderQuickEntryV3734();
+
+    setTimeout(
+      function() {
+        const input =
+          document.getElementById(
+            'lspQuickOwnerV3734'
+          );
+        if (input) input.focus();
+      },
+      120
+    );
+
+  }
+
+}
+
+
+function LSP_quickOwnerChangedV3734(
+  value
+) {
+
+  LSP_quickStateV3734.ownerName =
+    String(value || '');
+
+  LSP_saveQuickStateLocalV3734();
+  LSP_renderQuickOwnerSummaryV3734();
+
+}
+
+
+function LSP_addQuickAnimalV3734() {
+
+  const owner =
+    LSP_normalizeOwnerV3724(
+      LSP_quickStateV3734.ownerName
+    );
+
+  const animalEl =
+    document.getElementById(
+      'lspQuickAnimalV3734'
+    );
+
+  const qtyEl =
+    document.getElementById(
+      'lspQuickQtyV3734'
+    );
+
+  const animal =
+    animalEl
+      ? String(animalEl.value || '').trim()
+      : '';
+
+  const qty =
+    Math.floor(
+      Number(
+        qtyEl
+          ? qtyEl.value
+          : 0
+      )
+    );
+
+
+  if (!owner) {
+    alert('Enter Owner Name first.');
+    return;
+  }
+
+  if (!animal) {
+    alert('Select an animal.');
+    return;
+  }
+
+  if (
+    !Number.isFinite(qty) ||
+    qty < 1
+  ) {
+    alert('Enter a valid number.');
+    return;
+  }
+
+
+  LSP_quickStateV3734.counts[animal] =
+    Number(
+      LSP_quickStateV3734.counts[animal] ||
+      0
+    ) +
+    qty;
+
+
+  LSP_saveQuickStateLocalV3734();
+  LSP_renderQuickOwnerSummaryV3734();
+
+
+  if (animalEl) {
+    animalEl.value = '';
+  }
+
+  if (qtyEl) {
+    qtyEl.value = '';
+  }
+
+
+  if (animalEl) {
+    animalEl.focus();
+  }
+
+}
+
+
+function LSP_quickRemoveAnimalV3734(
+  typeIndex
+) {
+
+  const type =
+    LSP_LIVESTOCK_TYPES_V3726[
+      Number(typeIndex)
+    ];
+
+  if (!type) return;
+
+  LSP_quickStateV3734.counts[type] = 0;
+
+  LSP_saveQuickStateLocalV3734();
+  LSP_renderQuickOwnerSummaryV3734();
+
+}
+
+
+function LSP_quickOwnerTotalV3734() {
+
+  return LSP_LIVESTOCK_TYPES_V3726.reduce(
+    function(total,type) {
+      return total +
+        Number(
+          LSP_quickStateV3734.counts[type] ||
+          0
+        );
+    },
+    0
+  );
+
+}
+
+
+function LSP_renderQuickOwnerSummaryV3734() {
+
+  const label =
+    document.getElementById(
+      'lspQuickOwnerLabelV3734'
+    );
+
+  const total =
+    document.getElementById(
+      'lspQuickOwnerTotalV3734'
+    );
+
+  const items =
+    document.getElementById(
+      'lspQuickOwnerItemsV3734'
+    );
+
+  if (label) {
+
+    const name =
+      LSP_normalizeOwnerV3724(
+        LSP_quickStateV3734.ownerName
+      );
+
+    label.textContent =
+      name || 'Current Owner';
+
+  }
+
+  if (total) {
+    total.textContent =
+      LSP_quickOwnerTotalV3734();
+  }
+
+  if (!items) return;
+
+
+  const active =
+    LSP_LIVESTOCK_TYPES_V3726
+      .map(
+        function(type,index) {
+          return {
+            type: type,
+            index: index,
+            qty:
+              Number(
+                LSP_quickStateV3734.counts[type] ||
+                0
+              )
+          };
+        }
+      )
+      .filter(
+        function(item) {
+          return item.qty > 0;
+        }
+      );
+
+
+  if (!active.length) {
+
+    items.innerHTML =
+      '<div class="lsp-mobile-empty-v3733">No animal added yet.</div>';
+
+    return;
+
+  }
+
+
+  items.innerHTML =
+    active.map(
+      function(item) {
+        return (
+          '<div class="lsp-current-item-v3734">' +
+            '<span>' +
+              LSP_escapeV3724(
+                item.type
+              ) +
+            '</span>' +
+            '<strong>' +
+              item.qty +
+            '</strong>' +
+            '<button type="button" onclick="LSP_quickRemoveAnimalV3734(' +
+              item.index +
+            ')">Remove</button>' +
+          '</div>'
+        );
+      }
+    ).join('');
+
+}
+
+
+function LSP_finishQuickOwnerV3734() {
+
+  const owner =
+    LSP_normalizeOwnerV3724(
+      LSP_quickStateV3734.ownerName
+    );
+
+  const total =
+    LSP_quickOwnerTotalV3734();
+
+
+  if (!owner) {
+    alert('Enter Owner Name first.');
+    return;
+  }
+
+  if (total < 1) {
+    alert('Add at least one animal.');
+    return;
+  }
+
+
+  const row =
+    LSP_newOwnerRowV3726();
+
+  row.ownerName =
+    owner;
+
+
+  LSP_LIVESTOCK_TYPES_V3726.forEach(
+    function(type) {
+      row.counts[type] =
+        Number(
+          LSP_quickStateV3734.counts[type] ||
+          0
+        );
+    }
+  );
+
+
+  const existingIndex =
+    LSP_ownerRowsV3726.findIndex(
+      function(item) {
+        return (
+          LSP_normalizeOwnerV3724(
+            item.ownerName
+          ).toLowerCase() ===
+          owner.toLowerCase()
+        );
+      }
+    );
+
+
+  if (existingIndex >= 0) {
+    LSP_ownerRowsV3726[existingIndex] = row;
+  } else {
+
+    LSP_ownerRowsV3726 =
+      LSP_ownerRowsV3726.filter(
+        function(item) {
+          return (
+            LSP_normalizeOwnerV3724(
+              item.ownerName
+            ) ||
+            LSP_ownerRowTotalV3726(item) > 0
+          );
+        }
+      );
+
+    LSP_ownerRowsV3726.push(row);
+
+  }
+
+
+  LSP_matrixToRecordsV3726();
+  LSP_renderMatrixV3726();
+  LSP_renderAllV3724();
+  LSP_autoCacheV3727();
+
+
+  LSP_quickStateV3734 = {
+    ownerName: '',
+    counts: LSP_quickEmptyCountsV3734()
+  };
+
+  LSP_saveQuickStateLocalV3734();
+  LSP_renderQuickEntryV3734();
+
+
+  LSP_setStatusV3724(
+    'success',
+    'Owner saved. Ready for the next household.'
+  );
+
+
+  setTimeout(
+    function() {
+      const input =
+        document.getElementById(
+          'lspQuickOwnerV3734'
+        );
+      if (input) input.focus();
+    },
+    180
+  );
+
+}
+
+
+function LSP_clearQuickOwnerV3734(
+  ask
+) {
+
+  if (
+    ask &&
+    (
+      LSP_quickStateV3734.ownerName ||
+      LSP_quickOwnerTotalV3734() > 0
+    )
+  ) {
+
+    const ok =
+      window.confirm(
+        'Clear the current owner entry?'
+      );
+
+    if (!ok) return;
+
+  }
+
+
+  LSP_quickStateV3734 = {
+    ownerName: '',
+    counts: LSP_quickEmptyCountsV3734()
+  };
+
+  LSP_saveQuickStateLocalV3734();
+  LSP_renderQuickEntryV3734();
+
+}
+
+
+function LSP_renderQuickEntryV3734() {
+
+  const owner =
+    document.getElementById(
+      'lspQuickOwnerV3734'
+    );
+
+  const animal =
+    document.getElementById(
+      'lspQuickAnimalV3734'
+    );
+
+
+  if (owner) {
+    owner.value =
+      LSP_quickStateV3734.ownerName || '';
+  }
+
+
+  if (
+    animal &&
+    animal.options.length <= 1
+  ) {
+
+    animal.innerHTML =
+      '<option value="">Select animal</option>' +
+      LSP_LIVESTOCK_TYPES_V3726.map(
+        function(type) {
+          return (
+            '<option value="' +
+              LSP_escapeV3724(type) +
+            '">' +
+              LSP_escapeV3724(type) +
+            '</option>'
+          );
+        }
+      ).join('');
+
+  }
+
+
+  LSP_renderQuickOwnerSummaryV3734();
+
+}
+
+
+function LSP_toggleMatrixReviewV3734() {
+
+  LSP_matrixReviewOpenV3734 =
+    !LSP_matrixReviewOpenV3734;
+
+  const box =
+    document.getElementById(
+      'lspMatrixReviewV3734'
+    );
+
+  if (box) {
+    box.classList.toggle(
+      'show',
+      LSP_matrixReviewOpenV3734
+    );
+  }
+
+  if (LSP_matrixReviewOpenV3734) {
+    LSP_renderMatrixV3726();
+  }
+
+}
+
+
 function LSP_renderMatrixV3726() {
 
   const host =
@@ -9432,6 +11670,16 @@ function LSP_renderMatrixV3726() {
         '</tr>' +
       '</tbody>' +
     '</table>';
+
+
+  if (
+    typeof LSP_renderMobileOwnerListV3733 ===
+    'function'
+  ) {
+
+    LSP_renderMobileOwnerListV3733();
+
+  }
 
 }
 
@@ -9636,8 +11884,12 @@ function LSP_initializeV3724() {
 
   LSP_restoreLocalV3724();
   LSP_recordsToMatrixV3726();
+  LSP_restoreMobileEditorV3733();
+  LSP_restoreQuickStateV3734();
   LSP_renderMatrixV3726();
   LSP_renderAllV3724();
+  LSP_renderMobileEditorV3733();
+  LSP_renderQuickEntryV3734();
 
 
   LSP_refreshConnectionStateV3727();
@@ -10919,6 +13171,28 @@ function LSP_newReportV3724() {
   );
 
 
+  localStorage.removeItem(
+    LSP_MOBILE_EDITOR_KEY_V3733
+  );
+
+
+  localStorage.removeItem(
+    LSP_QUICK_KEY_V3734
+  );
+
+
+  LSP_quickStateV3734 = {
+    ownerName: '',
+    counts: LSP_quickEmptyCountsV3734()
+  };
+
+
+  LSP_mobileDraftV3733 =
+    LSP_mobileNormalizeDraftV3733(
+      {}
+    );
+
+
   const date =
     document.getElementById(
       'lspReportDateV3724'
@@ -10944,6 +13218,8 @@ function LSP_newReportV3724() {
 
   LSP_renderMatrixV3726();
   LSP_renderAllV3724();
+  LSP_renderMobileEditorV3733();
+  LSP_renderQuickEntryV3734();
 
 
   LSP_setStatusV3724(
