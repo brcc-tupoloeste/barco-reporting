@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.27 HOUSE-TO-HOUSE OFFLINE AUTOSAVE -->
+<!-- FRONTEND VERSION: V37.30 LIVESTOCK PORTRAIT + LARGE LOGO -->
 
 <style>
 
@@ -3545,7 +3545,7 @@ button:hover:not(:disabled),
   top: 0;
   z-index: 2;
   white-space: normal;
-  min-width: 86px;
+  min-width: 62px;
 }
 
 .lsp-matrix-v3726 th:first-child,
@@ -8978,6 +8978,51 @@ function LSP_recordsToMatrixV3726() {
 }
 
 
+
+function LSP_stackHeaderHtmlV3729(
+  type
+) {
+
+  const parts = {
+    'Cattle/Baka': ['Cattle','Baka'],
+    'Carabao': ['Carabao'],
+    'Swine/Baboy': ['Swine','Baboy'],
+    'Cat': ['Cat'],
+    'Goat': ['Goat'],
+    'Dog': ['Dog'],
+    'Horse': ['Horse'],
+    'Sheep': ['Sheep'],
+    'Native Chicken': ['Native','Chicken'],
+    'Broilers/45 days': ['Broilers','45 days'],
+    'Gamefowl/Sulog': ['Gamefowl','Sulog'],
+    'Layered Egg/Bebe': ['Layered Egg','Bebe'],
+    'Pato': ['Pato'],
+    'Pugo': ['Pugo'],
+    'Guinea Fowl': ['Guinea','Fowl'],
+    'Geese/Gansa': ['Geese','Gansa'],
+    'Rabbit': ['Rabbit'],
+    'Pabo': ['Pabo']
+  };
+
+
+  const list =
+    parts[type] ||
+    [type];
+
+
+  return list
+    .map(
+      function(part) {
+        return LSP_escapeV3724(
+          part
+        );
+      }
+    )
+    .join('<br>');
+
+}
+
+
 function LSP_renderMatrixV3726() {
 
   const host =
@@ -9006,7 +9051,9 @@ function LSP_renderMatrixV3726() {
 
         return (
           '<th>' +
-          LSP_escapeV3724(type) +
+          LSP_stackHeaderHtmlV3729(
+            type
+          ) +
           '</th>'
         );
 
@@ -10560,7 +10607,7 @@ async function LSP_printPdfV3724() {
           data.filename ||
           'Livestock-Population-Report.pdf'
         ),
-        'ACCOMPLISHMENT_A4_PORTRAIT'
+        'LIVESTOCK_LONG_BOND_PORTRAIT'
       );
 
 
