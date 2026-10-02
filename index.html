@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.31 PRIORITY LIVESTOCK ORDER -->
+<!-- FRONTEND VERSION: V37.32 GLOBAL SPINNER + CENTERED LIVESTOCK HEADERS -->
 
 <style>
 
@@ -3667,6 +3667,21 @@ button:hover:not(:disabled),
   color: #23643d;
 }
 
+
+/* =========================================================
+   V37.32 — GLOBAL PROCESSING SPINNER + CENTERED HEADERS
+========================================================= */
+
+.lsp-matrix-v3726 th {
+  text-align: center !important;
+  vertical-align: middle !important;
+  line-height: 1.08;
+}
+
+.lsp-matrix-v3726 th:first-child {
+  text-align: center !important;
+}
+
 </style>
 
 <!-- FRONTEND VERSION: V37.1 SILENT BACKEND CONNECTION -->
@@ -6311,7 +6326,7 @@ function ensureBarcoBridge() {
    API CALL
 ========================================================= */
 
-function barcoApi(
+function BARCO_apiCoreV3732(
   action,
   payload
 ) {
@@ -6383,6 +6398,240 @@ function barcoApi(
 
           }
         );
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   V37.32 — GLOBAL API SPINNER
+   Covers backend Save / Generate / Load / Upload / Sync /
+   Update / Delete / Print preparation across all modules.
+========================================================= */
+
+let BARCO_apiBusyCountV3732 =
+  0;
+
+let BARCO_apiSpinnerTimerV3732 =
+  null;
+
+let BARCO_apiSpinnerOwnsOverlayV3732 =
+  false;
+
+
+function BARCO_apiMessageV3732(
+  action
+) {
+
+  const a =
+    String(
+      action || ''
+    ).toLowerCase();
+
+
+  if (
+    a.includes('generate') &&
+    a.includes('pdf')
+  ) {
+
+    if (a.includes('livestock')) {
+      return 'Generating Livestock Population PDF...';
+    }
+
+    if (a.includes('dana')) {
+      return 'Generating DANA PDF...';
+    }
+
+    if (a.includes('accomp')) {
+      return 'Generating Accomplishment Report PDF...';
+    }
+
+    return 'Generating PDF...';
+
+  }
+
+
+  if (a.includes('save')) {
+    return 'Saving data...';
+  }
+
+
+  if (a.includes('upload')) {
+    return 'Uploading...';
+  }
+
+
+  if (a.includes('sync')) {
+    return 'Synchronizing data...';
+  }
+
+
+  if (
+    a.includes('delete') ||
+    a.includes('remove')
+  ) {
+    return 'Removing data...';
+  }
+
+
+  if (
+    a.includes('approve') ||
+    a.includes('reject') ||
+    a.includes('update')
+  ) {
+    return 'Updating data...';
+  }
+
+
+  if (a.includes('print')) {
+    return 'Preparing document for printing...';
+  }
+
+
+  if (
+    a.includes('get') ||
+    a.includes('load') ||
+    a.includes('list')
+  ) {
+    return 'Loading data...';
+  }
+
+
+  return 'Processing...';
+
+}
+
+
+function BARCO_beginApiBusyV3732(
+  action
+) {
+
+  BARCO_apiBusyCountV3732++;
+
+
+  if (BARCO_apiSpinnerTimerV3732) {
+
+    clearTimeout(
+      BARCO_apiSpinnerTimerV3732
+    );
+
+  }
+
+
+  BARCO_apiSpinnerTimerV3732 =
+    setTimeout(
+      function() {
+
+        if (
+          BARCO_apiBusyCountV3732 <
+          1
+        ) {
+          return;
+        }
+
+
+        const overlay =
+          document.getElementById(
+            'actionOverlay'
+          );
+
+
+        const alreadyShowing =
+          !!(
+            overlay &&
+            overlay.classList.contains(
+              'show'
+            )
+          );
+
+
+        if (!alreadyShowing) {
+
+          BARCO_apiSpinnerOwnsOverlayV3732 =
+            true;
+
+
+          showActionOverlay(
+            BARCO_apiMessageV3732(
+              action
+            )
+          );
+
+        }
+
+      },
+      180
+    );
+
+}
+
+
+function BARCO_endApiBusyV3732() {
+
+  BARCO_apiBusyCountV3732 =
+    Math.max(
+      0,
+      BARCO_apiBusyCountV3732 -
+      1
+    );
+
+
+  if (
+    BARCO_apiBusyCountV3732 >
+    0
+  ) {
+    return;
+  }
+
+
+  if (BARCO_apiSpinnerTimerV3732) {
+
+    clearTimeout(
+      BARCO_apiSpinnerTimerV3732
+    );
+
+
+    BARCO_apiSpinnerTimerV3732 =
+      null;
+
+  }
+
+
+  if (
+    BARCO_apiSpinnerOwnsOverlayV3732
+  ) {
+
+    BARCO_apiSpinnerOwnsOverlayV3732 =
+      false;
+
+
+    hideActionOverlay();
+
+  }
+
+}
+
+
+function barcoApi(
+  action,
+  payload
+) {
+
+  BARCO_beginApiBusyV3732(
+    action
+  );
+
+
+  return BARCO_apiCoreV3732(
+    action,
+    payload
+  )
+    .finally(
+      function() {
+
+        BARCO_endApiBusyV3732();
 
       }
     );
