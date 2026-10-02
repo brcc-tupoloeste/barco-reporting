@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.18 AUTO DRAFT FINAL STATUS -->
+<!-- FRONTEND VERSION: V37.20 FLEXIBLE DANA FORM + PDF -->
 
 <style>
 
@@ -2666,6 +2666,443 @@ button:hover:not(:disabled),
   }
 }
 
+
+/* =========================================================
+   V37.19 — DANA REPORTS CARD / MODULE
+========================================================= */
+
+@media(min-width:1000px) {
+  .portal-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media(min-width:761px) and (max-width:999px) {
+  .portal-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.dana-page-v3719 {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 18px 28px;
+}
+
+.dana-shell-v3719 {
+  border: 1px solid #cfe3d4;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 14px 34px rgba(27, 67, 50, .10);
+}
+
+.dana-header-v3719 {
+  padding: 28px 22px;
+  text-align: center;
+  background:
+    radial-gradient(circle at 88% 10%, rgba(255,255,255,.10) 0 95px, transparent 97px),
+    linear-gradient(135deg, #163c2c 0%, #236344 55%, #2d7a50 100%);
+  color: #ffffff;
+}
+
+.dana-icon-v3719 {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 12px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.20);
+  font-size: 34px;
+}
+
+.dana-title-v3719 {
+  font-size: 27px;
+  line-height: 1.2;
+  font-weight: 900;
+}
+
+.dana-subtitle-v3719 {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #e5f5e9;
+}
+
+.dana-body-v3719 {
+  padding: 26px;
+  background: linear-gradient(180deg, #fbfefb 0%, #f1f8f3 100%);
+}
+
+.dana-coming-v3719 {
+  padding: 24px;
+  border: 1px solid #cfe3d4;
+  border-radius: 14px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.dana-coming-v3719 strong {
+  display: block;
+  color: #1f6543;
+  font-size: 18px;
+  margin-bottom: 7px;
+}
+
+.dana-coming-v3719 span {
+  color: #63766a;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+@media(max-width:760px) {
+  .dana-page-v3719 {
+    padding: 0 12px 22px;
+  }
+
+  .dana-header-v3719 {
+    padding: 24px 16px;
+  }
+
+  .dana-title-v3719 {
+    font-size: 23px;
+  }
+
+  .dana-body-v3719 {
+    padding: 16px;
+  }
+}
+
+
+/* =========================================================
+   V37.20 — FLEXIBLE DANA REPORT FORM + PDF GENERATOR
+========================================================= */
+
+.dana-official-header-v3720 {
+  padding: 22px 18px;
+  margin-bottom: 16px;
+  border: 1px solid #cfe3d4;
+  border-radius: 14px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.dana-logo-v3720 {
+  width: 78px;
+  height: 78px;
+  object-fit: contain;
+  margin: 0 auto 8px;
+}
+
+.dana-republic-v3720 {
+  color: #344b3e;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.dana-barangay-v3720 {
+  margin-top: 3px;
+  color: #174f34;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.dana-form-card-v3720 {
+  margin-bottom: 16px;
+  padding: 18px;
+  border: 1px solid #cfe3d4;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.dana-form-card-v3720 h3 {
+  margin: 0 0 14px;
+  color: #1f6543;
+  font-size: 16px;
+}
+
+.dana-help-v3720 {
+  margin: -6px 0 14px;
+  color: #6b7d71;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.dana-grid-v3720 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.dana-grid-v3720.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.dana-field-v3720 label {
+  display: block;
+  margin-bottom: 5px;
+  color: #587061;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.dana-field-v3720 input,
+.dana-field-v3720 select,
+.dana-field-v3720 textarea {
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 11px;
+  border: 1px solid #bfd8c6;
+  border-radius: 9px;
+  background: #fbfefb;
+  color: #1f2937;
+  font: inherit;
+}
+
+.dana-field-v3720 textarea {
+  min-height: 76px;
+  resize: vertical;
+}
+
+.dana-field-v3720 input:focus,
+.dana-field-v3720 select:focus,
+.dana-field-v3720 textarea:focus {
+  outline: 2px solid rgba(45,122,80,.16);
+  border-color: #5e9d73;
+}
+
+.dana-field-builder-v3720 {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(140px, .8fr) auto;
+  gap: 10px;
+  align-items: end;
+  margin-top: 13px;
+}
+
+.dana-active-fields-v3720 {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.dana-field-chip-v3720 {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 9px;
+  border: 1px solid #c7dfcd;
+  border-radius: 999px;
+  background: #edf7ef;
+  color: #225f40;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.dana-field-chip-v3720 button {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #b44343;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.dana-entry-form-v3720 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.dana-actions-v3720 {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.dana-btn-v3720 {
+  min-height: 42px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 9px;
+  background: #2d7653;
+  color: #ffffff;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.dana-btn-v3720.secondary {
+  background: #657a6d;
+}
+
+.dana-btn-v3720.blue {
+  background: #275a86;
+}
+
+.dana-btn-v3720.danger {
+  background: #a33d3d;
+}
+
+.dana-table-wrap-v3720 {
+  overflow-x: auto;
+  border: 1px solid #cfdfd3;
+  border-radius: 12px;
+}
+
+.dana-table-v3720 {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  background: #ffffff;
+}
+
+.dana-table-v3720 th,
+.dana-table-v3720 td {
+  padding: 9px 8px;
+  border-bottom: 1px solid #e2ebe4;
+  border-right: 1px solid #e2ebe4;
+  font-size: 10px;
+  vertical-align: top;
+}
+
+.dana-table-v3720 th {
+  background: #e8f4eb;
+  color: #1d5b3c;
+  font-weight: 900;
+  text-align: left;
+}
+
+.dana-table-v3720 td:last-child,
+.dana-table-v3720 th:last-child {
+  border-right: 0;
+}
+
+.dana-empty-v3720 {
+  padding: 20px;
+  text-align: center;
+  color: #6d7f73;
+  font-size: 12px;
+}
+
+.dana-remove-v3720 {
+  border: 0;
+  border-radius: 7px;
+  background: #a33d3d;
+  color: #fff;
+  padding: 6px 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.dana-status-v3720 {
+  display: none;
+  margin-top: 14px;
+  padding: 11px 13px;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.dana-status-v3720.success {
+  display: block;
+  background: #e9f7ed;
+  color: #1d693d;
+  border: 1px solid #bce2c7;
+}
+
+.dana-status-v3720.error {
+  display: block;
+  background: #fff0f0;
+  color: #9a2f2f;
+  border: 1px solid #efc2c2;
+}
+
+.dana-generated-v3720 {
+  display: none;
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid #9fd2af;
+  border-radius: 12px;
+  background: #f1fbf4;
+}
+
+.dana-generated-v3720.show {
+  display: block;
+}
+
+.dana-generated-v3720 strong {
+  color: #1f6543;
+}
+
+.dana-generated-actions-v3720 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  margin-top: 12px;
+}
+
+.dana-generated-actions-v3720 a,
+.dana-generated-actions-v3720 button {
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 9px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.dana-generated-actions-v3720 a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2d7653;
+  color: #fff;
+}
+
+.dana-generated-actions-v3720 button {
+  background: #275a86;
+  color: #fff;
+}
+
+.dana-count-v3720 {
+  margin-bottom: 10px;
+  color: #5b7062;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+@media(max-width:760px) {
+
+  .dana-grid-v3720,
+  .dana-grid-v3720.three,
+  .dana-entry-form-v3720,
+  .dana-field-builder-v3720 {
+    grid-template-columns: 1fr;
+  }
+
+  .dana-form-card-v3720 {
+    padding: 15px;
+  }
+
+  .dana-generated-actions-v3720 {
+    grid-template-columns: 1fr;
+  }
+
+  .dana-actions-v3720 .dana-btn-v3720 {
+    width: 100%;
+  }
+}
+
 </style>
 
 <!-- FRONTEND VERSION: V37.1 SILENT BACKEND CONNECTION -->
@@ -2827,6 +3264,359 @@ button:hover:not(:disabled),
 
         <div class="portal-card-action">
           Open Accomplishment
+        </div>
+
+      </div>
+
+
+      <div
+        class="portal-card"
+        role="button"
+        tabindex="0"
+        onclick="BARCO_openDanaV3719()"
+        onkeydown="if(event.key==='Enter'){BARCO_openDanaV3719();}"
+      >
+
+        <div class="portal-card-icon">📊</div>
+
+        <div class="portal-card-title">
+          DANA Reports
+        </div>
+
+        <div class="portal-card-text">
+          Flexible Damage Assessment and Needs Analysis forms and document generation.
+        </div>
+
+        <div class="portal-card-action">
+          Open DANA Reports
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =======================================================
+     DANA REPORTS MODULE
+======================================================== -->
+
+<div
+  id="danaModuleV3719"
+  class="module-screen"
+>
+
+  <div class="module-topbar">
+    <button
+      type="button"
+      class="module-back-button"
+      onclick="BARCO_backToPortalV32()"
+    >
+      ← Back to Committee Portal
+    </button>
+  </div>
+
+
+  <div class="dana-page-v3719">
+
+    <div class="dana-shell-v3719">
+
+      <div class="dana-header-v3719">
+
+        <div class="dana-icon-v3719">
+          📊
+        </div>
+
+        <div class="dana-title-v3719">
+          Damage Assessment and Needs Analysis (DANA)
+        </div>
+
+        <div class="dana-subtitle-v3719">
+          Flexible Reporting and Document Generator
+        </div>
+
+      </div>
+
+
+      <div class="dana-body-v3719">
+
+        <div class="dana-official-header-v3720">
+
+          <img
+            class="dana-logo-v3720"
+            src="https://drive.google.com/thumbnail?id=16PcdOAzVEe9CIgW16g7outJG06u1zGAa&sz=w300"
+            alt="Barangay Tupol Oeste Logo"
+          >
+
+          <div class="dana-republic-v3720">
+            Republic of the Philippines<br>
+            Province of Iloilo<br>
+            Municipality of Cabatuan
+          </div>
+
+          <div class="dana-barangay-v3720">
+            Barangay Tupol Oeste
+          </div>
+
+        </div>
+
+
+        <div class="dana-form-card-v3720">
+
+          <h3>Report Information</h3>
+
+          <div class="dana-grid-v3720">
+
+            <div class="dana-field-v3720">
+              <label>Report Title</label>
+              <input
+                id="danaTitleV3720"
+                type="text"
+                placeholder="Enter report title manually"
+                oninput="DANA_cacheLocalV3720()"
+              >
+            </div>
+
+            <div class="dana-field-v3720">
+              <label>Document Date</label>
+              <input
+                id="danaDocumentDateV3720"
+                type="date"
+                oninput="DANA_cacheLocalV3720()"
+              >
+            </div>
+
+            <div class="dana-field-v3720">
+              <label>Prepared By</label>
+              <input
+                id="danaPreparedByV3720"
+                type="text"
+                value="Kgd. Jonel G. Rosano"
+                oninput="DANA_cacheLocalV3720()"
+              >
+            </div>
+
+            <div class="dana-field-v3720">
+              <label>Designation / Position</label>
+              <input
+                id="danaPreparedDesignationV3720"
+                type="text"
+                value="Chairman, Committee on Agriculture"
+                oninput="DANA_cacheLocalV3720()"
+              >
+            </div>
+
+            <div class="dana-field-v3720">
+              <label>Document Layout</label>
+              <select
+                id="danaLayoutV3720"
+                onchange="DANA_cacheLocalV3720()"
+              >
+                <option value="AUTO">Auto</option>
+                <option value="PORTRAIT">Portrait</option>
+                <option value="LANDSCAPE">Landscape</option>
+              </select>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="dana-form-card-v3720">
+
+          <h3>Form Template / Fields</h3>
+
+          <div class="dana-help-v3720">
+            Select a ready template or build your own. Fields can be removed,
+            and custom fields can be added anytime.
+          </div>
+
+          <div class="dana-grid-v3720">
+
+            <div class="dana-field-v3720">
+              <label>Template</label>
+              <select
+                id="danaTemplateV3720"
+                onchange="DANA_applyTemplateV3720(this.value)"
+              >
+                <option value="DAMAGE">Crop / Livestock Damage</option>
+                <option value="FARM_HISTORY">Farm Area / Planting / Previous Harvest</option>
+                <option value="CUSTOM">Custom / Blank Form</option>
+              </select>
+            </div>
+
+          </div>
+
+
+          <div
+            id="danaActiveFieldsV3720"
+            class="dana-active-fields-v3720"
+          ></div>
+
+
+          <div class="dana-field-builder-v3720">
+
+            <div class="dana-field-v3720">
+              <label>Custom Field Name</label>
+              <input
+                id="danaCustomFieldLabelV3720"
+                type="text"
+                placeholder="Example: Variety / Commodity / Remarks"
+              >
+            </div>
+
+            <div class="dana-field-v3720">
+              <label>Field Type</label>
+              <select id="danaCustomFieldTypeV3720">
+                <option value="text">Text</option>
+                <option value="number">Number</option>
+                <option value="date">Date</option>
+                <option value="tel">Mobile Number</option>
+                <option value="status">Damage Status</option>
+              </select>
+            </div>
+
+            <button
+              type="button"
+              class="dana-btn-v3720"
+              onclick="DANA_addCustomFieldV3720()"
+            >
+              + Add Field
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="dana-form-card-v3720">
+
+          <h3>Add Record</h3>
+
+          <div
+            id="danaEntryFormV3720"
+            class="dana-entry-form-v3720"
+          ></div>
+
+          <div class="dana-actions-v3720">
+
+            <button
+              type="button"
+              class="dana-btn-v3720"
+              onclick="DANA_addRecordV3720()"
+            >
+              + Add Record
+            </button>
+
+            <button
+              type="button"
+              class="dana-btn-v3720 secondary"
+              onclick="DANA_clearEntryFormV3720()"
+            >
+              Clear Fields
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="dana-form-card-v3720">
+
+          <h3>Report Records</h3>
+
+          <div
+            id="danaRecordCountV3720"
+            class="dana-count-v3720"
+          >
+            0 record(s)
+          </div>
+
+          <div
+            id="danaTableWrapV3720"
+            class="dana-table-wrap-v3720"
+          ></div>
+
+        </div>
+
+
+        <div class="dana-form-card-v3720">
+
+          <h3>Save / Generate Document</h3>
+
+          <div class="dana-help-v3720">
+            Save Draft can also keep your work locally when offline.
+            Final PDF generation requires an internet connection.
+          </div>
+
+          <div class="dana-actions-v3720">
+
+            <button
+              type="button"
+              class="dana-btn-v3720 secondary"
+              onclick="DANA_saveDraftV3720()"
+            >
+              Save Draft
+            </button>
+
+            <button
+              type="button"
+              class="dana-btn-v3720"
+              onclick="DANA_generatePdfV3720()"
+            >
+              Generate PDF
+            </button>
+
+            <button
+              type="button"
+              class="dana-btn-v3720 danger"
+              onclick="DANA_newReportV3720()"
+            >
+              New / Clear Report
+            </button>
+
+          </div>
+
+          <div
+            id="danaStatusV3720"
+            class="dana-status-v3720"
+          ></div>
+
+          <div
+            id="danaGeneratedV3720"
+            class="dana-generated-v3720"
+          >
+
+            <strong>PDF generated successfully.</strong>
+
+            <div id="danaGeneratedFilenameV3720"></div>
+
+            <div class="dana-generated-actions-v3720">
+
+              <a
+                id="danaOpenPdfV3720"
+                href="#"
+                target="_blank"
+                rel="noopener"
+              >
+                Open PDF
+              </a>
+
+              <button
+                type="button"
+                onclick="DANA_printPdfV3720()"
+              >
+                Print PDF
+              </button>
+
+            </div>
+
+          </div>
+
         </div>
 
       </div>
@@ -5098,6 +5888,1758 @@ async function BARCO_openModuleV32() {
       false;
 
   }
+
+}
+
+
+
+
+/* =========================================================
+   V37.20 — FLEXIBLE DANA REPORTS
+========================================================= */
+
+let DANA_initializedV3720 =
+  false;
+
+let DANA_fieldsV3720 =
+  [];
+
+let DANA_rowsV3720 =
+  [];
+
+let DANA_currentReportIdV3720 =
+  '';
+
+let DANA_generatedPdfV3720 = {
+  fileId: '',
+  pdfUrl: '',
+  filename: ''
+};
+
+const DANA_LOCAL_KEY_V3720 =
+  'DANA_DRAFT_V3720';
+
+
+function DANA_makeFieldV3720(
+  key,
+  label,
+  type
+) {
+
+  return {
+    key:
+      String(key || '').trim(),
+
+    label:
+      String(label || '').trim(),
+
+    type:
+      String(type || 'text').trim()
+  };
+
+}
+
+
+function DANA_defaultDamageFieldsV3720() {
+
+  return [
+    DANA_makeFieldV3720('farmerName','Name of Farmer','text'),
+    DANA_makeFieldV3720('mobileNumber','Mobile Number','tel'),
+    DANA_makeFieldV3720('dateOfReport','Date of Report','date'),
+    DANA_makeFieldV3720('croppingStage','Cropping Stage','text'),
+    DANA_makeFieldV3720('totalArea','Total Area','number'),
+    DANA_makeFieldV3720('areaDamage','Area Damage','text'),
+    DANA_makeFieldV3720('status','Status','status'),
+    DANA_makeFieldV3720('livestock','Livestock','text')
+  ];
+
+}
+
+
+function DANA_defaultFarmHistoryFieldsV3720() {
+
+  return [
+    DANA_makeFieldV3720('farmerName','Name of Farmer','text'),
+    DANA_makeFieldV3720('farmArea','Farm Area','text'),
+    DANA_makeFieldV3720('dateOfPlanting','Date of Planting','date'),
+    DANA_makeFieldV3720('previousHarvest','Previous Harvest','text')
+  ];
+
+}
+
+
+function DANA_slugV3720(
+  value
+) {
+
+  const base =
+    String(value || '')
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g,'_')
+      .replace(/^_+|_+$/g,'');
+
+
+  return (
+    base ||
+    (
+      'field_' +
+      Date.now()
+    )
+  );
+
+}
+
+
+function DANA_escapeHtmlV3720(
+  value
+) {
+
+  return String(value == null ? '' : value)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+
+}
+
+
+function DANA_todayV3720() {
+
+  const now =
+    new Date();
+
+  const y =
+    now.getFullYear();
+
+  const m =
+    String(
+      now.getMonth() + 1
+    ).padStart(2,'0');
+
+  const d =
+    String(
+      now.getDate()
+    ).padStart(2,'0');
+
+
+  return (
+    y +
+    '-' +
+    m +
+    '-' +
+    d
+  );
+
+}
+
+
+function DANA_initializeV3720() {
+
+  if (
+    DANA_initializedV3720
+  ) {
+
+    return;
+
+  }
+
+
+  DANA_initializedV3720 =
+    true;
+
+
+  const dateInput =
+    document.getElementById(
+      'danaDocumentDateV3720'
+    );
+
+
+  if (
+    dateInput &&
+    !dateInput.value
+  ) {
+
+    dateInput.value =
+      DANA_todayV3720();
+
+  }
+
+
+  const restored =
+    DANA_restoreLocalV3720();
+
+
+  if (!restored) {
+
+    DANA_applyTemplateV3720(
+      'DAMAGE',
+      true
+    );
+
+  }
+
+
+  window.addEventListener(
+    'online',
+    function() {
+
+      DANA_syncPendingLocalV3720();
+
+    }
+  );
+
+}
+
+
+function DANA_applyTemplateV3720(
+  template,
+  skipConfirm
+) {
+
+  template =
+    String(
+      template || 'DAMAGE'
+    ).toUpperCase();
+
+
+  if (
+    !skipConfirm &&
+    DANA_rowsV3720.length
+  ) {
+
+    const ok =
+      window.confirm(
+        'Changing the template will clear the current DANA records. Continue?'
+      );
+
+
+    if (!ok) {
+
+      const select =
+        document.getElementById(
+          'danaTemplateV3720'
+        );
+
+
+      if (select) {
+
+        select.value =
+          'CUSTOM';
+
+      }
+
+
+      return;
+
+    }
+
+  }
+
+
+  DANA_rowsV3720 =
+    [];
+
+
+  if (
+    template ===
+    'FARM_HISTORY'
+  ) {
+
+    DANA_fieldsV3720 =
+      DANA_defaultFarmHistoryFieldsV3720();
+
+  } else if (
+    template ===
+    'CUSTOM'
+  ) {
+
+    DANA_fieldsV3720 =
+      [];
+
+  } else {
+
+    DANA_fieldsV3720 =
+      DANA_defaultDamageFieldsV3720();
+
+  }
+
+
+  const select =
+    document.getElementById(
+      'danaTemplateV3720'
+    );
+
+
+  if (select) {
+
+    select.value =
+      template;
+
+  }
+
+
+  DANA_renderFieldsV3720();
+  DANA_renderEntryFormV3720();
+  DANA_renderTableV3720();
+  DANA_cacheLocalV3720();
+
+}
+
+
+function DANA_addCustomFieldV3720() {
+
+  const labelInput =
+    document.getElementById(
+      'danaCustomFieldLabelV3720'
+    );
+
+  const typeInput =
+    document.getElementById(
+      'danaCustomFieldTypeV3720'
+    );
+
+
+  const label =
+    String(
+      labelInput &&
+      labelInput.value ||
+      ''
+    ).trim();
+
+
+  if (!label) {
+
+    alert(
+      'Enter a custom field name.'
+    );
+
+    return;
+
+  }
+
+
+  let key =
+    DANA_slugV3720(
+      label
+    );
+
+
+  const existing =
+    new Set(
+      DANA_fieldsV3720.map(
+        function(field) {
+          return field.key;
+        }
+      )
+    );
+
+
+  if (
+    existing.has(
+      key
+    )
+  ) {
+
+    key +=
+      '_' +
+      (
+        DANA_fieldsV3720.length +
+        1
+      );
+
+  }
+
+
+  DANA_fieldsV3720.push(
+    DANA_makeFieldV3720(
+      key,
+      label,
+      (
+        typeInput &&
+        typeInput.value
+      ) ||
+      'text'
+    )
+  );
+
+
+  if (labelInput) {
+    labelInput.value = '';
+  }
+
+
+  DANA_renderFieldsV3720();
+  DANA_renderEntryFormV3720();
+  DANA_renderTableV3720();
+  DANA_cacheLocalV3720();
+
+}
+
+
+function DANA_removeFieldV3720(
+  index
+) {
+
+  index =
+    Number(index);
+
+
+  if (
+    !Number.isInteger(index) ||
+    index < 0 ||
+    index >= DANA_fieldsV3720.length
+  ) {
+
+    return;
+
+  }
+
+
+  const field =
+    DANA_fieldsV3720[index];
+
+
+  const ok =
+    window.confirm(
+      'Remove "' +
+      field.label +
+      '" from this form? Existing values for this field will also be removed.'
+    );
+
+
+  if (!ok) {
+    return;
+  }
+
+
+  DANA_fieldsV3720.splice(
+    index,
+    1
+  );
+
+
+  DANA_rowsV3720 =
+    DANA_rowsV3720.map(
+      function(row) {
+
+        const copy =
+          Object.assign(
+            {},
+            row
+          );
+
+
+        delete copy[
+          field.key
+        ];
+
+
+        return copy;
+
+      }
+    );
+
+
+  const select =
+    document.getElementById(
+      'danaTemplateV3720'
+    );
+
+
+  if (select) {
+    select.value = 'CUSTOM';
+  }
+
+
+  DANA_renderFieldsV3720();
+  DANA_renderEntryFormV3720();
+  DANA_renderTableV3720();
+  DANA_cacheLocalV3720();
+
+}
+
+
+function DANA_renderFieldsV3720() {
+
+  const host =
+    document.getElementById(
+      'danaActiveFieldsV3720'
+    );
+
+
+  if (!host) {
+    return;
+  }
+
+
+  if (
+    !DANA_fieldsV3720.length
+  ) {
+
+    host.innerHTML =
+      '<div class="dana-help-v3720">No fields yet. Add a custom field below.</div>';
+
+    return;
+
+  }
+
+
+  host.innerHTML =
+    DANA_fieldsV3720.map(
+      function(field,index) {
+
+        return (
+          '<div class="dana-field-chip-v3720">' +
+            DANA_escapeHtmlV3720(
+              field.label
+            ) +
+            '<button type="button" onclick="DANA_removeFieldV3720(' +
+              index +
+            ')" title="Remove field">×</button>' +
+          '</div>'
+        );
+
+      }
+    ).join('');
+
+}
+
+
+function DANA_renderEntryFormV3720() {
+
+  const host =
+    document.getElementById(
+      'danaEntryFormV3720'
+    );
+
+
+  if (!host) {
+    return;
+  }
+
+
+  if (
+    !DANA_fieldsV3720.length
+  ) {
+
+    host.innerHTML =
+      '<div class="dana-empty-v3720">Add at least one field before entering a record.</div>';
+
+    return;
+
+  }
+
+
+  host.innerHTML =
+    DANA_fieldsV3720.map(
+      function(field,index) {
+
+        const id =
+          'danaEntryFieldV3720_' +
+          index;
+
+
+        let control =
+          '';
+
+
+        if (
+          field.type ===
+          'status'
+        ) {
+
+          control =
+            '<select id="' +
+              id +
+            '">' +
+              '<option value="">— Select Status —</option>' +
+              '<option value="Partial Damage">Partial Damage</option>' +
+              '<option value="Totally Damaged">Totally Damaged</option>' +
+            '</select>';
+
+        } else {
+
+          let inputType =
+            field.type;
+
+
+          if (
+            ![
+              'text',
+              'number',
+              'date',
+              'tel'
+            ].includes(
+              inputType
+            )
+          ) {
+
+            inputType =
+              'text';
+
+          }
+
+
+          control =
+            '<input id="' +
+              id +
+            '" type="' +
+              inputType +
+            '" ' +
+            (
+              inputType ===
+              'number'
+                ? 'step="any"'
+                : ''
+            ) +
+            '>';
+
+        }
+
+
+        return (
+          '<div class="dana-field-v3720">' +
+            '<label>' +
+              DANA_escapeHtmlV3720(
+                field.label
+              ) +
+            '</label>' +
+            control +
+          '</div>'
+        );
+
+      }
+    ).join('');
+
+}
+
+
+function DANA_clearEntryFormV3720() {
+
+  DANA_fieldsV3720.forEach(
+    function(field,index) {
+
+      const input =
+        document.getElementById(
+          'danaEntryFieldV3720_' +
+          index
+        );
+
+
+      if (input) {
+        input.value = '';
+      }
+
+    }
+  );
+
+}
+
+
+function DANA_addRecordV3720() {
+
+  if (
+    !DANA_fieldsV3720.length
+  ) {
+
+    alert(
+      'Add at least one form field first.'
+    );
+
+    return;
+
+  }
+
+
+  const row =
+    {};
+
+
+  let hasValue =
+    false;
+
+
+  DANA_fieldsV3720.forEach(
+    function(field,index) {
+
+      const input =
+        document.getElementById(
+          'danaEntryFieldV3720_' +
+          index
+        );
+
+
+      const value =
+        String(
+          input &&
+          input.value ||
+          ''
+        ).trim();
+
+
+      row[
+        field.key
+      ] =
+        value;
+
+
+      if (value) {
+        hasValue = true;
+      }
+
+    }
+  );
+
+
+  if (!hasValue) {
+
+    alert(
+      'Enter at least one value before adding the record.'
+    );
+
+    return;
+
+  }
+
+
+  DANA_rowsV3720.push(
+    row
+  );
+
+
+  DANA_clearEntryFormV3720();
+  DANA_renderTableV3720();
+  DANA_cacheLocalV3720();
+
+}
+
+
+function DANA_removeRecordV3720(
+  index
+) {
+
+  index =
+    Number(index);
+
+
+  if (
+    !Number.isInteger(index) ||
+    index < 0 ||
+    index >= DANA_rowsV3720.length
+  ) {
+
+    return;
+
+  }
+
+
+  DANA_rowsV3720.splice(
+    index,
+    1
+  );
+
+
+  DANA_renderTableV3720();
+  DANA_cacheLocalV3720();
+
+}
+
+
+function DANA_renderTableV3720() {
+
+  const host =
+    document.getElementById(
+      'danaTableWrapV3720'
+    );
+
+
+  const count =
+    document.getElementById(
+      'danaRecordCountV3720'
+    );
+
+
+  if (count) {
+
+    count.textContent =
+      DANA_rowsV3720.length +
+      ' record(s)';
+
+  }
+
+
+  if (!host) {
+    return;
+  }
+
+
+  if (
+    !DANA_fieldsV3720.length
+  ) {
+
+    host.innerHTML =
+      '<div class="dana-empty-v3720">No fields configured.</div>';
+
+    return;
+
+  }
+
+
+  if (
+    !DANA_rowsV3720.length
+  ) {
+
+    host.innerHTML =
+      '<div class="dana-empty-v3720">No records added yet.</div>';
+
+    return;
+
+  }
+
+
+  const header =
+    DANA_fieldsV3720.map(
+      function(field) {
+
+        return (
+          '<th>' +
+          DANA_escapeHtmlV3720(
+            field.label
+          ) +
+          '</th>'
+        );
+
+      }
+    ).join('');
+
+
+  const rows =
+    DANA_rowsV3720.map(
+      function(row,index) {
+
+        const cells =
+          DANA_fieldsV3720.map(
+            function(field) {
+
+              return (
+                '<td>' +
+                DANA_escapeHtmlV3720(
+                  row[
+                    field.key
+                  ] ||
+                  ''
+                ) +
+                '</td>'
+              );
+
+            }
+          ).join('');
+
+
+        return (
+          '<tr>' +
+          cells +
+          '<td>' +
+            '<button type="button" class="dana-remove-v3720" onclick="DANA_removeRecordV3720(' +
+              index +
+            ')">Remove</button>' +
+          '</td>' +
+          '</tr>'
+        );
+
+      }
+    ).join('');
+
+
+  host.innerHTML =
+    '<table class="dana-table-v3720">' +
+      '<thead><tr>' +
+        header +
+        '<th>Action</th>' +
+      '</tr></thead>' +
+      '<tbody>' +
+        rows +
+      '</tbody>' +
+    '</table>';
+
+}
+
+
+function DANA_getPayloadV3720() {
+
+  const title =
+    String(
+      (
+        document.getElementById(
+          'danaTitleV3720'
+        ) ||
+        {}
+      ).value ||
+      ''
+    ).trim();
+
+
+  const documentDate =
+    String(
+      (
+        document.getElementById(
+          'danaDocumentDateV3720'
+        ) ||
+        {}
+      ).value ||
+      ''
+    ).trim();
+
+
+  const preparedBy =
+    String(
+      (
+        document.getElementById(
+          'danaPreparedByV3720'
+        ) ||
+        {}
+      ).value ||
+      ''
+    ).trim();
+
+
+  const preparedDesignation =
+    String(
+      (
+        document.getElementById(
+          'danaPreparedDesignationV3720'
+        ) ||
+        {}
+      ).value ||
+      ''
+    ).trim();
+
+
+  const layout =
+    String(
+      (
+        document.getElementById(
+          'danaLayoutV3720'
+        ) ||
+        {}
+      ).value ||
+      'AUTO'
+    ).trim();
+
+
+  const template =
+    String(
+      (
+        document.getElementById(
+          'danaTemplateV3720'
+        ) ||
+        {}
+      ).value ||
+      'CUSTOM'
+    ).trim();
+
+
+  return {
+    reportId:
+      DANA_currentReportIdV3720,
+
+    title:
+      title,
+
+    documentDate:
+      documentDate,
+
+    preparedBy:
+      preparedBy,
+
+    preparedDesignation:
+      preparedDesignation,
+
+    layout:
+      layout,
+
+    template:
+      template,
+
+    fields:
+      DANA_fieldsV3720.map(
+        function(field) {
+          return Object.assign({},field);
+        }
+      ),
+
+    rows:
+      DANA_rowsV3720.map(
+        function(row) {
+          return Object.assign({},row);
+        }
+      )
+
+  };
+
+}
+
+
+function DANA_setStatusV3720(
+  type,
+  message
+) {
+
+  const box =
+    document.getElementById(
+      'danaStatusV3720'
+    );
+
+
+  if (!box) {
+    return;
+  }
+
+
+  box.className =
+    'dana-status-v3720 ' +
+    (
+      type ===
+      'error'
+        ? 'error'
+        : 'success'
+    );
+
+
+  box.textContent =
+    String(
+      message || ''
+    );
+
+}
+
+
+function DANA_cacheLocalV3720(
+  pendingSync
+) {
+
+  try {
+
+    const payload =
+      DANA_getPayloadV3720();
+
+
+    payload.pendingSync =
+      !!pendingSync;
+
+
+    localStorage.setItem(
+      DANA_LOCAL_KEY_V3720,
+      JSON.stringify(
+        payload
+      )
+    );
+
+  } catch(error) {}
+
+}
+
+
+function DANA_restoreLocalV3720() {
+
+  try {
+
+    const raw =
+      localStorage.getItem(
+        DANA_LOCAL_KEY_V3720
+      );
+
+
+    if (!raw) {
+      return false;
+    }
+
+
+    const data =
+      JSON.parse(
+        raw
+      );
+
+
+    if (
+      !data ||
+      typeof data !==
+      'object'
+    ) {
+
+      return false;
+
+    }
+
+
+    DANA_currentReportIdV3720 =
+      String(
+        data.reportId || ''
+      );
+
+
+    DANA_fieldsV3720 =
+      Array.isArray(
+        data.fields
+      )
+        ? data.fields
+        : [];
+
+
+    DANA_rowsV3720 =
+      Array.isArray(
+        data.rows
+      )
+        ? data.rows
+        : [];
+
+
+    const setValue =
+      function(id,value) {
+
+        const el =
+          document.getElementById(
+            id
+          );
+
+
+        if (el) {
+          el.value = value || '';
+        }
+
+      };
+
+
+    setValue(
+      'danaTitleV3720',
+      data.title
+    );
+
+    setValue(
+      'danaDocumentDateV3720',
+      data.documentDate ||
+      DANA_todayV3720()
+    );
+
+    setValue(
+      'danaPreparedByV3720',
+      data.preparedBy ||
+      'Kgd. Jonel G. Rosano'
+    );
+
+    setValue(
+      'danaPreparedDesignationV3720',
+      data.preparedDesignation ||
+      'Chairman, Committee on Agriculture'
+    );
+
+    setValue(
+      'danaLayoutV3720',
+      data.layout ||
+      'AUTO'
+    );
+
+    setValue(
+      'danaTemplateV3720',
+      data.template ||
+      'CUSTOM'
+    );
+
+
+    DANA_renderFieldsV3720();
+    DANA_renderEntryFormV3720();
+    DANA_renderTableV3720();
+
+
+    if (
+      data.pendingSync
+    ) {
+
+      DANA_setStatusV3720(
+        'success',
+        'Offline draft restored. It will sync when a connection is available.'
+      );
+
+    }
+
+
+    return true;
+
+  } catch(error) {
+
+    return false;
+
+  }
+
+}
+
+
+async function DANA_saveDraftV3720() {
+
+  const payload =
+    DANA_getPayloadV3720();
+
+
+  if (!payload.title) {
+
+    DANA_setStatusV3720(
+      'error',
+      'Enter the Report Title first.'
+    );
+
+    return;
+
+  }
+
+
+  if (
+    !payload.fields.length
+  ) {
+
+    DANA_setStatusV3720(
+      'error',
+      'Add at least one report field.'
+    );
+
+    return;
+
+  }
+
+
+  if (
+    !navigator.onLine
+  ) {
+
+    DANA_cacheLocalV3720(
+      true
+    );
+
+
+    DANA_setStatusV3720(
+      'success',
+      'Saved locally while offline. The draft will sync when internet is available.'
+    );
+
+
+    return;
+
+  }
+
+
+  try {
+
+    DANA_setStatusV3720(
+      'success',
+      'Saving DANA draft...'
+    );
+
+
+    const result =
+      await barcoApi(
+        'danaSaveReport',
+        payload
+      );
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to save DANA draft.'
+      );
+
+    }
+
+
+    DANA_currentReportIdV3720 =
+      String(
+        result.reportId ||
+        DANA_currentReportIdV3720
+      );
+
+
+    DANA_cacheLocalV3720(
+      false
+    );
+
+
+    DANA_setStatusV3720(
+      'success',
+      'DANA draft saved successfully. Report ID: ' +
+      DANA_currentReportIdV3720
+    );
+
+  } catch(error) {
+
+    DANA_cacheLocalV3720(
+      true
+    );
+
+
+    DANA_setStatusV3720(
+      'error',
+      'Save error: ' +
+      error.message +
+      '. A local copy was kept on this device.'
+    );
+
+  }
+
+}
+
+
+async function DANA_syncPendingLocalV3720() {
+
+  if (
+    !navigator.onLine
+  ) {
+    return;
+  }
+
+
+  try {
+
+    const raw =
+      localStorage.getItem(
+        DANA_LOCAL_KEY_V3720
+      );
+
+
+    if (!raw) {
+      return;
+    }
+
+
+    const data =
+      JSON.parse(
+        raw
+      );
+
+
+    if (
+      !data ||
+      !data.pendingSync
+    ) {
+      return;
+    }
+
+
+    const result =
+      await barcoApi(
+        'danaSaveReport',
+        DANA_getPayloadV3720()
+      );
+
+
+    if (
+      result &&
+      result.success
+    ) {
+
+      DANA_currentReportIdV3720 =
+        String(
+          result.reportId || ''
+        );
+
+
+      DANA_cacheLocalV3720(
+        false
+      );
+
+
+      DANA_setStatusV3720(
+        'success',
+        'Internet connection restored. Offline DANA draft synchronized.'
+      );
+
+    }
+
+  } catch(error) {
+
+    // Keep pending draft for the next reconnect.
+
+  }
+
+}
+
+
+async function DANA_generatePdfV3720() {
+
+  const payload =
+    DANA_getPayloadV3720();
+
+
+  if (!payload.title) {
+
+    DANA_setStatusV3720(
+      'error',
+      'Enter the Report Title first.'
+    );
+
+    return;
+
+  }
+
+
+  if (
+    !payload.fields.length
+  ) {
+
+    DANA_setStatusV3720(
+      'error',
+      'Add at least one report field.'
+    );
+
+    return;
+
+  }
+
+
+  if (
+    !payload.rows.length
+  ) {
+
+    DANA_setStatusV3720(
+      'error',
+      'Add at least one record before generating the PDF.'
+    );
+
+    return;
+
+  }
+
+
+  if (
+    !navigator.onLine
+  ) {
+
+    DANA_cacheLocalV3720(
+      true
+    );
+
+
+    DANA_setStatusV3720(
+      'error',
+      'PDF generation requires internet. Your report is saved locally.'
+    );
+
+
+    return;
+
+  }
+
+
+  try {
+
+    DANA_setStatusV3720(
+      'success',
+      'Generating DANA PDF...'
+    );
+
+
+    const result =
+      await barcoApi(
+        'danaGeneratePdf',
+        payload
+      );
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to generate DANA PDF.'
+      );
+
+    }
+
+
+    DANA_currentReportIdV3720 =
+      String(
+        result.reportId ||
+        DANA_currentReportIdV3720
+      );
+
+
+    DANA_generatedPdfV3720 = {
+      fileId:
+        String(
+          result.pdfFileId || ''
+        ),
+
+      pdfUrl:
+        String(
+          result.pdfUrl || ''
+        ),
+
+      filename:
+        String(
+          result.filename ||
+          'DANA-Report.pdf'
+        )
+    };
+
+
+    const box =
+      document.getElementById(
+        'danaGeneratedV3720'
+      );
+
+
+    const filename =
+      document.getElementById(
+        'danaGeneratedFilenameV3720'
+      );
+
+
+    const open =
+      document.getElementById(
+        'danaOpenPdfV3720'
+      );
+
+
+    if (filename) {
+
+      filename.textContent =
+        DANA_generatedPdfV3720.filename;
+
+    }
+
+
+    if (open) {
+
+      open.href =
+        DANA_generatedPdfV3720.pdfUrl ||
+        '#';
+
+    }
+
+
+    if (box) {
+
+      box.classList.add(
+        'show'
+      );
+
+    }
+
+
+    DANA_cacheLocalV3720(
+      false
+    );
+
+
+    DANA_setStatusV3720(
+      'success',
+      'DANA PDF generated successfully.'
+    );
+
+  } catch(error) {
+
+    DANA_setStatusV3720(
+      'error',
+      'Generate PDF error: ' +
+      error.message
+    );
+
+  }
+
+}
+
+
+async function DANA_printPdfV3720() {
+
+  const data =
+    DANA_generatedPdfV3720 ||
+    {};
+
+
+  if (
+    !data.fileId
+  ) {
+
+    alert(
+      'Generate the DANA PDF first.'
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    const result =
+      await barcoApi(
+        'getPdfForPrint',
+        {
+          fileId:
+            data.fileId
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success ||
+      !result.base64
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to prepare DANA PDF for printing.'
+      );
+
+    }
+
+
+    if (
+      window.AndroidPrint &&
+      typeof window.AndroidPrint.printBase64Pdf ===
+        'function'
+    ) {
+
+      window.AndroidPrint.printBase64Pdf(
+        String(
+          result.base64
+        ),
+        String(
+          data.filename ||
+          'DANA-Report.pdf'
+        ),
+        (
+          DANA_fieldsV3720.length > 5
+            ? 'BARCO_LONG_BOND_LANDSCAPE'
+            : 'ACCOMPLISHMENT_A4_PORTRAIT'
+        )
+      );
+
+
+      return;
+
+    }
+
+
+    if (data.pdfUrl) {
+
+      window.open(
+        data.pdfUrl,
+        '_blank'
+      );
+
+    }
+
+  } catch(error) {
+
+    alert(
+      'Print error: ' +
+      error.message
+    );
+
+  }
+
+}
+
+
+function DANA_newReportV3720() {
+
+  const ok =
+    window.confirm(
+      'Clear the current DANA report and start a new one?'
+    );
+
+
+  if (!ok) {
+    return;
+  }
+
+
+  DANA_currentReportIdV3720 =
+    '';
+
+  DANA_rowsV3720 =
+    [];
+
+  DANA_generatedPdfV3720 = {
+    fileId: '',
+    pdfUrl: '',
+    filename: ''
+  };
+
+
+  localStorage.removeItem(
+    DANA_LOCAL_KEY_V3720
+  );
+
+
+  const title =
+    document.getElementById(
+      'danaTitleV3720'
+    );
+
+  const date =
+    document.getElementById(
+      'danaDocumentDateV3720'
+    );
+
+  const generated =
+    document.getElementById(
+      'danaGeneratedV3720'
+    );
+
+
+  if (title) {
+    title.value = '';
+  }
+
+  if (date) {
+    date.value = DANA_todayV3720();
+  }
+
+  if (generated) {
+    generated.classList.remove('show');
+  }
+
+
+  DANA_applyTemplateV3720(
+    'DAMAGE',
+    true
+  );
+
+
+  DANA_setStatusV3720(
+    'success',
+    'New DANA report ready.'
+  );
+
+}
+
+
+function BARCO_openDanaV3719() {
+
+  BARCO_showOnlyV32(
+    'danaModuleV3719'
+  );
+
+
+  DANA_initializeV3720();
 
 }
 
