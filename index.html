@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.34 QUICK OWNER-ANIMAL-NUMBER ENTRY -->
+<!-- FRONTEND VERSION: V37.35 DANA FARMER MASTERLIST AUTOFILL -->
 
 <style>
 
@@ -4168,6 +4168,46 @@ button:hover:not(:disabled),
   }
 }
 
+
+/* =========================================================
+   V37.35 — DANA FARMER MASTERLIST DROPDOWN
+========================================================= */
+
+.dana-masterlist-status-v3735 {
+  margin: 0 0 12px;
+  padding: 9px 11px;
+  border: 1px solid #cfe1d3;
+  border-radius: 9px;
+  background: #f3faf5;
+  color: #315f43;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.dana-masterlist-status-v3735.offline {
+  border-color: #e4cf94;
+  background: #fff8e5;
+  color: #7a5b08;
+}
+
+.dana-masterlist-status-v3735.error {
+  border-color: #edc0c0;
+  background: #fff1f1;
+  color: #9b3131;
+}
+
+.dana-farmer-select-v3735 {
+  font-weight: 700;
+}
+
+.dana-autofill-note-v3735 {
+  margin-top: 4px;
+  color: #708077;
+  font-size: 9px;
+  line-height: 1.35;
+}
+
 </style>
 
 <!-- FRONTEND VERSION: V37.1 SILENT BACKEND CONNECTION -->
@@ -5091,6 +5131,13 @@ button:hover:not(:disabled),
         <div class="dana-form-card-v3720">
 
           <h3>Add Record</h3>
+
+          <div
+            id="danaFarmerMasterlistStatusV3735"
+            class="dana-masterlist-status-v3735"
+          >
+            Farmer masterlist: loading...
+          </div>
 
           <div
             id="danaEntryFormV3720"
@@ -7751,6 +7798,16 @@ const DANA_LOCAL_KEY_V3720 =
   'DANA_DRAFT_V3720';
 
 
+const DANA_FARMER_CACHE_KEY_V3735 =
+  'DANA_FARMER_MASTERLIST_CACHE_V3735';
+
+let DANA_farmerMasterlistV3735 =
+  [];
+
+let DANA_farmerMasterlistLoadedV3735 =
+  false;
+
+
 function DANA_makeFieldV3720(
   key,
   label,
@@ -7868,6 +7925,384 @@ function DANA_todayV3720() {
 }
 
 
+
+function DANA_captureEntryValuesV3735() {
+
+  const values =
+    {};
+
+
+  DANA_fieldsV3720.forEach(
+    function(field,index) {
+
+      const el =
+        document.getElementById(
+          'danaEntryFieldV3720_' +
+          index
+        );
+
+
+      if (el) {
+
+        values[field.key] =
+          String(
+            el.value || ''
+          );
+
+      }
+
+    }
+  );
+
+
+  return values;
+
+}
+
+
+function DANA_setFarmerMasterlistStatusV3735(
+  type,
+  message
+) {
+
+  const el =
+    document.getElementById(
+      'danaFarmerMasterlistStatusV3735'
+    );
+
+
+  if (!el) {
+    return;
+  }
+
+
+  el.className =
+    'dana-masterlist-status-v3735' +
+    (
+      type
+        ? ' ' + type
+        : ''
+    );
+
+
+  el.textContent =
+    String(
+      message || ''
+    );
+
+}
+
+
+function DANA_restoreFarmerMasterlistCacheV3735() {
+
+  try {
+
+    const raw =
+      localStorage.getItem(
+        DANA_FARMER_CACHE_KEY_V3735
+      );
+
+
+    if (!raw) {
+      return false;
+    }
+
+
+    const data =
+      JSON.parse(
+        raw
+      );
+
+
+    if (
+      !Array.isArray(data) ||
+      !data.length
+    ) {
+
+      return false;
+
+    }
+
+
+    DANA_farmerMasterlistV3735 =
+      data;
+
+
+    DANA_farmerMasterlistLoadedV3735 =
+      true;
+
+
+    return true;
+
+  } catch(error) {
+
+    return false;
+
+  }
+
+}
+
+
+function DANA_cacheFarmerMasterlistV3735() {
+
+  try {
+
+    localStorage.setItem(
+      DANA_FARMER_CACHE_KEY_V3735,
+      JSON.stringify(
+        DANA_farmerMasterlistV3735
+      )
+    );
+
+  } catch(error) {}
+
+}
+
+
+async function DANA_loadFarmerMasterlistV3735() {
+
+  const preserved =
+    DANA_captureEntryValuesV3735();
+
+
+  const hadCache =
+    DANA_restoreFarmerMasterlistCacheV3735();
+
+
+  if (hadCache) {
+
+    DANA_renderEntryFormV3720(
+      preserved
+    );
+
+
+    DANA_setFarmerMasterlistStatusV3735(
+      navigator.onLine
+        ? ''
+        : 'offline',
+      'Farmer masterlist: ' +
+      DANA_farmerMasterlistV3735.length +
+      ' farmer(s) loaded from offline cache.'
+    );
+
+  }
+
+
+  if (!navigator.onLine) {
+
+    if (!hadCache) {
+
+      DANA_setFarmerMasterlistStatusV3735(
+        'offline',
+        'Offline: no Farmer Masterlist cache yet. Open DANA once while online to download the list.'
+      );
+
+    }
+
+
+    return;
+
+  }
+
+
+  try {
+
+    DANA_setFarmerMasterlistStatusV3735(
+      '',
+      'Farmer masterlist: loading...'
+    );
+
+
+    const result =
+      await barcoApi(
+        'danaGetFarmerMasterlist',
+        {}
+      );
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to load Farmer Masterlist.'
+      );
+
+    }
+
+
+    DANA_farmerMasterlistV3735 =
+      Array.isArray(
+        result.farmers
+      )
+        ? result.farmers
+        : [];
+
+
+    DANA_farmerMasterlistLoadedV3735 =
+      true;
+
+
+    DANA_cacheFarmerMasterlistV3735();
+
+
+    const currentValues =
+      DANA_captureEntryValuesV3735();
+
+
+    DANA_renderEntryFormV3720(
+      currentValues
+    );
+
+
+    DANA_setFarmerMasterlistStatusV3735(
+      '',
+      'Farmer masterlist: ' +
+      DANA_farmerMasterlistV3735.length +
+      ' active farmer(s) loaded. Farmer Name is now a dropdown.'
+    );
+
+  } catch(error) {
+
+    if (hadCache) {
+
+      DANA_setFarmerMasterlistStatusV3735(
+        'offline',
+        'Using cached Farmer Masterlist. Online refresh failed.'
+      );
+
+    } else {
+
+      DANA_setFarmerMasterlistStatusV3735(
+        'error',
+        'Farmer Masterlist error: ' +
+        error.message
+      );
+
+    }
+
+  }
+
+}
+
+
+function DANA_findFieldInputByKeyV3735(
+  keys
+) {
+
+  keys =
+    Array.isArray(keys)
+      ? keys
+      : [keys];
+
+
+  for (
+    let i = 0;
+    i < DANA_fieldsV3720.length;
+    i++
+  ) {
+
+    const field =
+      DANA_fieldsV3720[i];
+
+
+    if (
+      keys.includes(
+        field.key
+      )
+    ) {
+
+      return document.getElementById(
+        'danaEntryFieldV3720_' +
+        i
+      );
+
+    }
+
+  }
+
+
+  return null;
+
+}
+
+
+function DANA_onFarmerSelectedV3735(
+  farmerName
+) {
+
+  farmerName =
+    String(
+      farmerName || ''
+    ).trim();
+
+
+  if (!farmerName) {
+    return;
+  }
+
+
+  const farmer =
+    DANA_farmerMasterlistV3735.find(
+      function(item) {
+
+        return (
+          String(
+            item.farmerName || ''
+          )
+            .trim()
+            .toLowerCase() ===
+          farmerName.toLowerCase()
+        );
+
+      }
+    );
+
+
+  if (!farmer) {
+    return;
+  }
+
+
+  const areaInput =
+    DANA_findFieldInputByKeyV3735(
+      [
+        'farmArea',
+        'totalArea'
+      ]
+    );
+
+
+  if (areaInput) {
+
+    areaInput.value =
+      farmer.farmArea || '';
+
+  }
+
+
+  const mobileInput =
+    DANA_findFieldInputByKeyV3735(
+      'mobileNumber'
+    );
+
+
+  if (
+    mobileInput &&
+    farmer.mobileNumber
+  ) {
+
+    mobileInput.value =
+      farmer.mobileNumber;
+
+  }
+
+}
 function DANA_initializeV3720() {
 
   if (
@@ -7914,11 +8349,15 @@ function DANA_initializeV3720() {
   }
 
 
+  DANA_loadFarmerMasterlistV3735();
+
+
   window.addEventListener(
     'online',
     function() {
 
       DANA_syncPendingLocalV3720();
+      DANA_loadFarmerMasterlistV3735();
 
     }
   );
@@ -8240,7 +8679,9 @@ function DANA_renderFieldsV3720() {
 }
 
 
-function DANA_renderEntryFormV3720() {
+function DANA_renderEntryFormV3720(
+  preservedValues
+) {
 
   const host =
     document.getElementById(
@@ -8265,6 +8706,11 @@ function DANA_renderEntryFormV3720() {
   }
 
 
+  preservedValues =
+    preservedValues ||
+    {};
+
+
   host.innerHTML =
     DANA_fieldsV3720.map(
       function(field,index) {
@@ -8278,7 +8724,72 @@ function DANA_renderEntryFormV3720() {
           '';
 
 
+        const isFarmerName =
+          field.key ===
+          'farmerName' ||
+          String(
+            field.label || ''
+          ).trim().toLowerCase() ===
+          'name of farmer';
+
+
+        const isFarmArea =
+          field.key ===
+          'farmArea' ||
+          field.key ===
+          'totalArea';
+
+
         if (
+          isFarmerName &&
+          DANA_farmerMasterlistV3735.length
+        ) {
+
+          const options =
+            DANA_farmerMasterlistV3735.map(
+              function(farmer) {
+
+                const suffix =
+                  farmer.farmArea
+                    ? (
+                        ' — ' +
+                        DANA_escapeHtmlV3720(
+                          farmer.farmArea
+                        )
+                      )
+                    : '';
+
+
+                return (
+                  '<option value="' +
+                    DANA_escapeHtmlV3720(
+                      farmer.farmerName
+                    ) +
+                  '">' +
+                    DANA_escapeHtmlV3720(
+                      farmer.farmerName
+                    ) +
+                    suffix +
+                  '</option>'
+                );
+
+              }
+            ).join('');
+
+
+          control =
+            '<select ' +
+              'id="' +
+              id +
+              '" ' +
+              'class="dana-farmer-select-v3735" ' +
+              'onchange="DANA_onFarmerSelectedV3735(this.value)"' +
+            '>' +
+              '<option value="">— Select Farmer —</option>' +
+              options +
+            '</select>';
+
+        } else if (
           field.type ===
           'status'
         ) {
@@ -8350,11 +8861,46 @@ function DANA_renderEntryFormV3720() {
               ) +
             '</label>' +
             control +
+            (
+              isFarmArea &&
+              DANA_farmerMasterlistV3735.length
+                ? '<div class="dana-autofill-note-v3735">Auto-filled from Farmer Masterlist after selecting a farmer.</div>'
+                : ''
+            ) +
           '</div>'
         );
 
       }
     ).join('');
+
+
+  DANA_fieldsV3720.forEach(
+    function(field,index) {
+
+      const el =
+        document.getElementById(
+          'danaEntryFieldV3720_' +
+          index
+        );
+
+
+      if (
+        el &&
+        Object.prototype.hasOwnProperty.call(
+          preservedValues,
+          field.key
+        )
+      ) {
+
+        el.value =
+          preservedValues[
+            field.key
+          ] || '';
+
+      }
+
+    }
+  );
 
 }
 
