@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.22 DANA OPTIONAL ADDITIONAL DETAILS -->
+<!-- FRONTEND VERSION: V37.26 LIVESTOCK MATRIX TABLE -->
 
 <style>
 
@@ -3122,6 +3122,517 @@ button:hover:not(:disabled),
   }
 }
 
+
+/* =========================================================
+   V37.23 — LIVESTOCK POPULATION CARD / MODULE
+========================================================= */
+
+@media(min-width:1200px) {
+  .portal-cards {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media(min-width:761px) and (max-width:1199px) {
+  .portal-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.livestock-page-v3723 {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 18px 28px;
+}
+
+.livestock-shell-v3723 {
+  border: 1px solid #cfe3d4;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 14px 34px rgba(27, 67, 50, .10);
+}
+
+.livestock-header-v3723 {
+  padding: 28px 22px;
+  text-align: center;
+  background:
+    radial-gradient(circle at 88% 10%, rgba(255,255,255,.10) 0 95px, transparent 97px),
+    linear-gradient(135deg, #163c2c 0%, #236344 55%, #2d7a50 100%);
+  color: #ffffff;
+}
+
+.livestock-icon-v3723 {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 12px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.20);
+  font-size: 34px;
+}
+
+.livestock-title-v3723 {
+  font-size: 27px;
+  line-height: 1.2;
+  font-weight: 900;
+}
+
+.livestock-subtitle-v3723 {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #e5f5e9;
+}
+
+.livestock-body-v3723 {
+  padding: 26px;
+  background: linear-gradient(180deg, #fbfefb 0%, #f1f8f3 100%);
+}
+
+.livestock-ready-v3723 {
+  padding: 24px;
+  border: 1px solid #cfe3d4;
+  border-radius: 14px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.livestock-ready-v3723 strong {
+  display: block;
+  margin-bottom: 7px;
+  color: #1f6543;
+  font-size: 18px;
+}
+
+.livestock-ready-v3723 span {
+  color: #63766a;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+@media(max-width:760px) {
+  .livestock-page-v3723 {
+    padding: 0 12px 22px;
+  }
+
+  .livestock-header-v3723 {
+    padding: 24px 16px;
+  }
+
+  .livestock-title-v3723 {
+    font-size: 23px;
+  }
+
+  .livestock-body-v3723 {
+    padding: 16px;
+  }
+}
+
+
+/* =========================================================
+   V37.24 — LIVESTOCK POPULATION FULL MODULE
+========================================================= */
+
+.lsp-official-v3724 {
+  padding: 20px 16px;
+  margin-bottom: 16px;
+  border: 1px solid #cfe3d4;
+  border-radius: 14px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.lsp-logo-v3724 {
+  width: 74px;
+  height: 74px;
+  object-fit: contain;
+  margin: 0 auto 7px;
+}
+
+.lsp-official-v3724 .small {
+  color: #405649;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.lsp-official-v3724 .barangay {
+  margin-top: 3px;
+  color: #194f35;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.lsp-card-v3724 {
+  margin-bottom: 16px;
+  padding: 18px;
+  border: 1px solid #cfe3d4;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.lsp-card-v3724 h3 {
+  margin: 0 0 13px;
+  color: #1f6543;
+  font-size: 16px;
+}
+
+.lsp-help-v3724 {
+  margin: -5px 0 13px;
+  color: #6a7d70;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.lsp-grid-v3724 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.lsp-field-v3724 label {
+  display: block;
+  margin-bottom: 5px;
+  color: #587061;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.lsp-field-v3724 input,
+.lsp-field-v3724 select {
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 11px;
+  border: 1px solid #bfd8c6;
+  border-radius: 9px;
+  background: #fbfefb;
+  color: #1f2937;
+  font: inherit;
+}
+
+.lsp-actions-v3724 {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.lsp-btn-v3724 {
+  min-height: 42px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 9px;
+  background: #2d7653;
+  color: #ffffff;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.lsp-btn-v3724.secondary {
+  background: #667a6e;
+}
+
+.lsp-btn-v3724.blue {
+  background: #275a86;
+}
+
+.lsp-btn-v3724.danger {
+  background: #a33d3d;
+}
+
+.lsp-metrics-v3724 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.lsp-metric-v3724 {
+  padding: 16px;
+  border: 1px solid #cae0d0;
+  border-radius: 13px;
+  background: linear-gradient(180deg, #ffffff 0%, #f2faf4 100%);
+}
+
+.lsp-metric-v3724 .label {
+  color: #62776a;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.lsp-metric-v3724 .value {
+  margin-top: 5px;
+  color: #1f6543;
+  font-size: 27px;
+  font-weight: 900;
+}
+
+.lsp-table-wrap-v3724 {
+  overflow-x: auto;
+  border: 1px solid #cfdfd3;
+  border-radius: 12px;
+}
+
+.lsp-table-v3724 {
+  width: 100%;
+  min-width: 650px;
+  border-collapse: collapse;
+  background: #ffffff;
+}
+
+.lsp-table-v3724 th,
+.lsp-table-v3724 td {
+  padding: 9px 8px;
+  border-right: 1px solid #e1eae3;
+  border-bottom: 1px solid #e1eae3;
+  font-size: 11px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.lsp-table-v3724 th {
+  background: #e7f3ea;
+  color: #1d5b3c;
+  font-weight: 900;
+}
+
+.lsp-table-v3724 th:first-child,
+.lsp-table-v3724 td:first-child {
+  text-align: left;
+}
+
+.lsp-empty-v3724 {
+  padding: 20px;
+  text-align: center;
+  color: #6d7f73;
+  font-size: 12px;
+}
+
+.lsp-remove-v3724 {
+  border: 0;
+  border-radius: 7px;
+  background: #a33d3d;
+  color: #ffffff;
+  padding: 6px 9px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.lsp-status-v3724 {
+  display: none;
+  margin-top: 13px;
+  padding: 11px 13px;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.lsp-status-v3724.success {
+  display: block;
+  background: #e9f7ed;
+  color: #1d693d;
+  border: 1px solid #bce2c7;
+}
+
+.lsp-status-v3724.error {
+  display: block;
+  background: #fff0f0;
+  color: #9a2f2f;
+  border: 1px solid #efc2c2;
+}
+
+.lsp-generated-v3724 {
+  display: none;
+  margin-top: 14px;
+  padding: 15px;
+  border: 1px solid #9fd2af;
+  border-radius: 11px;
+  background: #f1fbf4;
+}
+
+.lsp-generated-v3724.show {
+  display: block;
+}
+
+.lsp-generated-actions-v3724 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  margin-top: 11px;
+}
+
+.lsp-generated-actions-v3724 a,
+.lsp-generated-actions-v3724 button {
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 9px;
+  font-weight: 900;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.lsp-generated-actions-v3724 a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2d7653;
+  color: #ffffff;
+}
+
+.lsp-generated-actions-v3724 button {
+  background: #275a86;
+  color: #ffffff;
+}
+
+@media(max-width:760px) {
+  .lsp-grid-v3724,
+  .lsp-metrics-v3724 {
+    grid-template-columns: 1fr;
+  }
+
+  .lsp-card-v3724 {
+    padding: 15px;
+  }
+
+  .lsp-actions-v3724 .lsp-btn-v3724 {
+    width: 100%;
+  }
+
+  .lsp-generated-actions-v3724 {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================================
+   V37.26 — LIVESTOCK POPULATION MATRIX TABLE ENTRY
+========================================================= */
+
+.lsp-matrix-wrap-v3726 {
+  overflow-x: auto;
+  border: 1px solid #cfdfd3;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.lsp-matrix-v3726 {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+}
+
+.lsp-matrix-v3726 th,
+.lsp-matrix-v3726 td {
+  border-right: 1px solid #dfe8e1;
+  border-bottom: 1px solid #dfe8e1;
+  padding: 6px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 10px;
+}
+
+.lsp-matrix-v3726 th {
+  background: #e7f3ea;
+  color: #1d5b3c;
+  font-weight: 900;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  white-space: normal;
+  min-width: 86px;
+}
+
+.lsp-matrix-v3726 th:first-child,
+.lsp-matrix-v3726 td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  background: #f7fbf8;
+  min-width: 180px;
+  text-align: left;
+}
+
+.lsp-matrix-v3726 th:first-child {
+  background: #dceee1;
+  z-index: 4;
+}
+
+.lsp-matrix-v3726 th:last-child,
+.lsp-matrix-v3726 td:last-child {
+  min-width: 78px;
+  font-weight: 900;
+  background: #f1f8f3;
+}
+
+.lsp-matrix-owner-v3726 {
+  width: 100%;
+  min-width: 160px;
+  min-height: 36px;
+  padding: 7px 8px;
+  border: 1px solid #bfd8c6;
+  border-radius: 7px;
+  background: #ffffff;
+  font: inherit;
+}
+
+.lsp-matrix-qty-v3726 {
+  width: 58px;
+  min-height: 36px;
+  padding: 6px;
+  border: 1px solid #bfd8c6;
+  border-radius: 7px;
+  text-align: center;
+  background: #ffffff;
+  font: inherit;
+}
+
+.lsp-matrix-total-v3726 {
+  font-size: 12px;
+  color: #1f6543;
+}
+
+.lsp-matrix-total-row-v3726 td {
+  background: #eaf6ed;
+  font-weight: 900;
+  color: #1f6543;
+}
+
+.lsp-matrix-remove-v3726 {
+  border: 0;
+  border-radius: 6px;
+  background: #a33d3d;
+  color: #ffffff;
+  padding: 6px 8px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.lsp-matrix-actions-v3726 {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+@media(max-width:760px) {
+  .lsp-matrix-v3726 th,
+  .lsp-matrix-v3726 td {
+    font-size: 9px;
+    padding: 5px;
+  }
+
+  .lsp-matrix-v3726 th:first-child,
+  .lsp-matrix-v3726 td:first-child {
+    min-width: 155px;
+  }
+}
+
 </style>
 
 <!-- FRONTEND VERSION: V37.1 SILENT BACKEND CONNECTION -->
@@ -3308,6 +3819,325 @@ button:hover:not(:disabled),
 
         <div class="portal-card-action">
           Open DANA Reports
+        </div>
+
+      </div>
+
+
+      <div
+        class="portal-card"
+        role="button"
+        tabindex="0"
+        onclick="BARCO_openLivestockV3723()"
+        onkeydown="if(event.key==='Enter'){BARCO_openLivestockV3723();}"
+      >
+
+        <div class="portal-card-icon">🐄</div>
+
+        <div class="portal-card-title">
+          Livestock Population
+        </div>
+
+        <div class="portal-card-text">
+          Barangay livestock population recording, monitoring and report generation.
+        </div>
+
+        <div class="portal-card-action">
+          Open Livestock Population
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =======================================================
+     LIVESTOCK POPULATION MODULE
+======================================================== -->
+
+<div
+  id="livestockModuleV3723"
+  class="module-screen"
+>
+
+  <div class="module-topbar">
+    <button
+      type="button"
+      class="module-back-button"
+      onclick="BARCO_backToPortalV32()"
+    >
+      ← Back to Committee Portal
+    </button>
+  </div>
+
+
+  <div class="livestock-page-v3723">
+
+    <div class="livestock-shell-v3723">
+
+      <div class="livestock-header-v3723">
+
+        <div class="livestock-icon-v3723">
+          🐄
+        </div>
+
+        <div class="livestock-title-v3723">
+          Livestock Population
+        </div>
+
+        <div class="livestock-subtitle-v3723">
+          Barangay Tupol Oeste · Livestock Monitoring and Reporting
+        </div>
+
+      </div>
+
+
+      <div class="livestock-body-v3723">
+
+        <div class="lsp-official-v3724">
+
+          <img
+            class="lsp-logo-v3724"
+            src="https://drive.google.com/thumbnail?id=16PcdOAzVEe9CIgW16g7outJG06u1zGAa&sz=w300"
+            alt="Barangay Tupol Oeste Logo"
+          >
+
+          <div class="small">
+            Republic of the Philippines<br>
+            Province of Iloilo<br>
+            Municipality of Cabatuan
+          </div>
+
+          <div class="barangay">
+            Barangay Tupol Oeste
+          </div>
+
+        </div>
+
+
+        <div class="lsp-card-v3724">
+
+          <h3>Report Information</h3>
+
+          <div class="lsp-grid-v3724">
+
+            <div class="lsp-field-v3724">
+              <label>Report Date</label>
+              <input
+                id="lspReportDateV3724"
+                type="date"
+                oninput="LSP_cacheLocalV3724()"
+              >
+            </div>
+
+            <div class="lsp-field-v3724">
+              <label>Prepared By</label>
+              <input
+                id="lspPreparedByV3724"
+                type="text"
+                value="Kgd. Jonel G. Rosano"
+                oninput="LSP_cacheLocalV3724()"
+              >
+            </div>
+
+            <div class="lsp-field-v3724">
+              <label>Designation / Position</label>
+              <input
+                id="lspDesignationV3724"
+                type="text"
+                value="Chairman, Committee on Agriculture"
+                oninput="LSP_cacheLocalV3724()"
+              >
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="lsp-card-v3724">
+
+          <h3>Livestock Population Table</h3>
+
+          <div class="lsp-help-v3724">
+            One row per owner. Enter the quantity under each livestock type.
+            The Total column is computed automatically for every owner, while
+            the bottom row shows the barangay total for each livestock type.
+          </div>
+
+          <div
+            id="lspMatrixWrapV3726"
+            class="lsp-matrix-wrap-v3726"
+          ></div>
+
+          <div class="lsp-matrix-actions-v3726">
+
+            <button
+              type="button"
+              class="lsp-btn-v3724"
+              onclick="LSP_addOwnerRowV3726()"
+            >
+              + Add Owner
+            </button>
+
+            <button
+              type="button"
+              class="lsp-btn-v3724 secondary"
+              onclick="LSP_addFiveOwnerRowsV3726()"
+            >
+              + Add 5 Blank Rows
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="lsp-metrics-v3724">
+
+          <div class="lsp-metric-v3724">
+            <div class="label">Total Owners</div>
+            <div
+              id="lspTotalOwnersV3724"
+              class="value"
+            >0</div>
+          </div>
+
+          <div class="lsp-metric-v3724">
+            <div class="label">Livestock Types</div>
+            <div
+              id="lspTotalTypesV3724"
+              class="value"
+            >0</div>
+          </div>
+
+          <div class="lsp-metric-v3724">
+            <div class="label">Total Livestock Population</div>
+            <div
+              id="lspGrandTotalV3724"
+              class="value"
+            >0</div>
+          </div>
+
+        </div>
+
+
+        <div class="lsp-card-v3724">
+
+          <h3>Livestock Records</h3>
+
+          <div
+            id="lspRecordsTableV3724"
+            class="lsp-table-wrap-v3724"
+          ></div>
+
+        </div>
+
+
+        <div class="lsp-card-v3724">
+
+          <h3>Total Livestock Per Owner</h3>
+
+          <div class="lsp-help-v3724">
+            This summary automatically combines all livestock records under the same owner name.
+          </div>
+
+          <div
+            id="lspOwnerSummaryV3724"
+            class="lsp-table-wrap-v3724"
+          ></div>
+
+        </div>
+
+
+        <div class="lsp-card-v3724">
+
+          <h3>Population by Livestock Type</h3>
+
+          <div
+            id="lspTypeSummaryV3724"
+            class="lsp-table-wrap-v3724"
+          ></div>
+
+        </div>
+
+
+        <div class="lsp-card-v3724">
+
+          <h3>Save / Generate Report</h3>
+
+          <div class="lsp-help-v3724">
+            Save Draft keeps the current records. Final PDF generation requires internet.
+          </div>
+
+          <div class="lsp-actions-v3724">
+
+            <button
+              type="button"
+              class="lsp-btn-v3724 secondary"
+              onclick="LSP_saveDraftV3724()"
+            >
+              Save Draft
+            </button>
+
+            <button
+              type="button"
+              class="lsp-btn-v3724"
+              onclick="LSP_generatePdfV3724()"
+            >
+              Generate PDF
+            </button>
+
+            <button
+              type="button"
+              class="lsp-btn-v3724 danger"
+              onclick="LSP_newReportV3724()"
+            >
+              New / Clear Report
+            </button>
+
+          </div>
+
+          <div
+            id="lspStatusV3724"
+            class="lsp-status-v3724"
+          ></div>
+
+          <div
+            id="lspGeneratedV3724"
+            class="lsp-generated-v3724"
+          >
+
+            <strong>Livestock Population PDF generated successfully.</strong>
+
+            <div id="lspGeneratedFilenameV3724"></div>
+
+            <div class="lsp-generated-actions-v3724">
+
+              <a
+                id="lspOpenPdfV3724"
+                href="#"
+                target="_blank"
+                rel="noopener"
+              >
+                Open PDF
+              </a>
+
+              <button
+                type="button"
+                onclick="LSP_printPdfV3724()"
+              >
+                Print PDF
+              </button>
+
+            </div>
+
+          </div>
+
         </div>
 
       </div>
@@ -5539,7 +6369,8 @@ function BARCO_showOnlyV32(
     'portalHome',
     'barcoModule',
     'accomplishmentModule',
-    'danaModuleV3719'
+    'danaModuleV3719',
+    'livestockModuleV3723'
   ]
     .forEach(
       function(id) {
@@ -7661,6 +8492,2003 @@ function DANA_newReportV3720() {
     'success',
     'New DANA report ready.'
   );
+
+}
+
+
+
+
+/* =========================================================
+   V37.24 — LIVESTOCK POPULATION MODULE
+========================================================= */
+
+let LSP_initializedV3724 =
+  false;
+
+let LSP_recordsV3724 =
+  [];
+
+let LSP_reportIdV3724 =
+  '';
+
+let LSP_generatedPdfV3724 = {
+  fileId: '',
+  pdfUrl: '',
+  filename: ''
+};
+
+const LSP_LOCAL_KEY_V3724 =
+  'LIVESTOCK_POPULATION_DRAFT_V3724';
+
+
+function LSP_todayV3724() {
+
+  const now = new Date();
+
+  return (
+    now.getFullYear() +
+    '-' +
+    String(now.getMonth() + 1).padStart(2,'0') +
+    '-' +
+    String(now.getDate()).padStart(2,'0')
+  );
+
+}
+
+
+function LSP_normalizeOwnerV3724(
+  value
+) {
+
+  return String(value || '')
+    .trim()
+    .replace(/\s+/g,' ');
+
+}
+
+
+function LSP_normalizeLivestockV3724(
+  value
+) {
+
+  return String(value || '')
+    .trim()
+    .replace(/\s+/g,' ');
+
+}
+
+
+function LSP_escapeV3724(
+  value
+) {
+
+  return String(value == null ? '' : value)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+
+}
+
+
+
+const LSP_LIVESTOCK_TYPES_V3726 = [
+  'Cattle/Baka',
+  'Carabao',
+  'Swine/Baboy',
+  'Cat',
+  'Goat',
+  'Dog',
+  'Horse',
+  'Sheep',
+  'Native Chicken',
+  'Broilers/45 days',
+  'Gamefowl/Sulog',
+  'Layered Egg/Bebe',
+  'Pato',
+  'Pugo',
+  'Guinea Fowl',
+  'Geese/Gansa',
+  'Rabbit',
+  'Pabo'
+];
+
+let LSP_ownerRowsV3726 = [];
+
+
+function LSP_newOwnerRowV3726() {
+
+  const counts = {};
+
+  LSP_LIVESTOCK_TYPES_V3726.forEach(
+    function(type) {
+      counts[type] = 0;
+    }
+  );
+
+
+  return {
+    ownerName: '',
+    counts: counts
+  };
+
+}
+
+
+function LSP_addOwnerRowV3726() {
+
+  LSP_ownerRowsV3726.push(
+    LSP_newOwnerRowV3726()
+  );
+
+  LSP_matrixToRecordsV3726();
+  LSP_renderMatrixV3726();
+  LSP_renderAllV3724();
+  LSP_cacheLocalV3724(false);
+
+}
+
+
+function LSP_addFiveOwnerRowsV3726() {
+
+  for (let i = 0; i < 5; i++) {
+    LSP_ownerRowsV3726.push(
+      LSP_newOwnerRowV3726()
+    );
+  }
+
+  LSP_matrixToRecordsV3726();
+  LSP_renderMatrixV3726();
+  LSP_renderAllV3724();
+  LSP_cacheLocalV3724(false);
+
+}
+
+
+function LSP_removeOwnerRowV3726(
+  index
+) {
+
+  index = Number(index);
+
+  if (
+    !Number.isInteger(index) ||
+    index < 0 ||
+    index >= LSP_ownerRowsV3726.length
+  ) {
+    return;
+  }
+
+  LSP_ownerRowsV3726.splice(
+    index,
+    1
+  );
+
+  if (!LSP_ownerRowsV3726.length) {
+    LSP_ownerRowsV3726.push(
+      LSP_newOwnerRowV3726()
+    );
+  }
+
+  LSP_matrixToRecordsV3726();
+  LSP_renderMatrixV3726();
+  LSP_renderAllV3724();
+  LSP_cacheLocalV3724(false);
+
+}
+
+
+function LSP_updateOwnerNameV3726(
+  index,
+  value
+) {
+
+  if (
+    !LSP_ownerRowsV3726[index]
+  ) {
+    return;
+  }
+
+  LSP_ownerRowsV3726[index].ownerName =
+    LSP_normalizeOwnerV3724(
+      value
+    );
+
+  LSP_matrixToRecordsV3726();
+  LSP_renderAllV3724();
+  LSP_cacheLocalV3724(false);
+
+}
+
+
+function LSP_updateOwnerQtyV3726(
+  rowIndex,
+  typeIndex,
+  value
+) {
+
+  const row =
+    LSP_ownerRowsV3726[rowIndex];
+
+  const type =
+    LSP_LIVESTOCK_TYPES_V3726[typeIndex];
+
+
+  if (
+    !row ||
+    !type
+  ) {
+    return;
+  }
+
+
+  let qty =
+    Math.floor(
+      Number(value || 0)
+    );
+
+
+  if (
+    !Number.isFinite(qty) ||
+    qty < 0
+  ) {
+    qty = 0;
+  }
+
+
+  row.counts[type] =
+    qty;
+
+
+  LSP_matrixToRecordsV3726();
+  LSP_updateMatrixTotalsOnlyV3726();
+  LSP_renderAllV3724();
+  LSP_cacheLocalV3724(false);
+
+}
+
+
+function LSP_ownerRowTotalV3726(
+  row
+) {
+
+  return LSP_LIVESTOCK_TYPES_V3726.reduce(
+    function(total,type) {
+
+      return (
+        total +
+        Number(
+          row.counts[type] || 0
+        )
+      );
+
+    },
+    0
+  );
+
+}
+
+
+function LSP_typeTotalV3726(
+  type
+) {
+
+  return LSP_ownerRowsV3726.reduce(
+    function(total,row) {
+
+      return (
+        total +
+        Number(
+          row.counts[type] || 0
+        )
+      );
+
+    },
+    0
+  );
+
+}
+
+
+function LSP_matrixToRecordsV3726() {
+
+  const records = [];
+
+
+  LSP_ownerRowsV3726.forEach(
+    function(row) {
+
+      const owner =
+        LSP_normalizeOwnerV3724(
+          row.ownerName
+        );
+
+
+      if (!owner) {
+        return;
+      }
+
+
+      LSP_LIVESTOCK_TYPES_V3726.forEach(
+        function(type) {
+
+          const qty =
+            Math.floor(
+              Number(
+                row.counts[type] || 0
+              )
+            );
+
+
+          if (qty > 0) {
+
+            records.push({
+              ownerName:
+                owner,
+              livestockName:
+                type,
+              quantity:
+                qty
+            });
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+
+  LSP_recordsV3724 =
+    records;
+
+
+  return records;
+
+}
+
+
+function LSP_recordsToMatrixV3726() {
+
+  const ownerMap =
+    new Map();
+
+
+  LSP_recordsV3724.forEach(
+    function(record) {
+
+      const owner =
+        LSP_normalizeOwnerV3724(
+          record.ownerName
+        );
+
+
+      const type =
+        LSP_normalizeLivestockV3724(
+          record.livestockName
+        );
+
+
+      if (
+        !owner ||
+        !type ||
+        !LSP_LIVESTOCK_TYPES_V3726.includes(
+          type
+        )
+      ) {
+        return;
+      }
+
+
+      const key =
+        owner.toLowerCase();
+
+
+      if (!ownerMap.has(key)) {
+
+        const row =
+          LSP_newOwnerRowV3726();
+
+        row.ownerName =
+          owner;
+
+        ownerMap.set(
+          key,
+          row
+        );
+
+      }
+
+
+      const row =
+        ownerMap.get(
+          key
+        );
+
+
+      row.counts[type] =
+        Number(
+          row.counts[type] || 0
+        ) +
+        Number(
+          record.quantity || 0
+        );
+
+    }
+  );
+
+
+  LSP_ownerRowsV3726 =
+    Array.from(
+      ownerMap.values()
+    );
+
+
+  if (!LSP_ownerRowsV3726.length) {
+
+    LSP_ownerRowsV3726.push(
+      LSP_newOwnerRowV3726()
+    );
+
+  }
+
+}
+
+
+function LSP_renderMatrixV3726() {
+
+  const host =
+    document.getElementById(
+      'lspMatrixWrapV3726'
+    );
+
+
+  if (!host) {
+    return;
+  }
+
+
+  if (!LSP_ownerRowsV3726.length) {
+
+    LSP_ownerRowsV3726.push(
+      LSP_newOwnerRowV3726()
+    );
+
+  }
+
+
+  const typeHeaders =
+    LSP_LIVESTOCK_TYPES_V3726.map(
+      function(type) {
+
+        return (
+          '<th>' +
+          LSP_escapeV3724(type) +
+          '</th>'
+        );
+
+      }
+    ).join('');
+
+
+  const rows =
+    LSP_ownerRowsV3726.map(
+      function(row,rowIndex) {
+
+        const qtyCells =
+          LSP_LIVESTOCK_TYPES_V3726.map(
+            function(type,typeIndex) {
+
+              const value =
+                Number(
+                  row.counts[type] || 0
+                );
+
+
+              return (
+                '<td>' +
+                  '<input ' +
+                    'class="lsp-matrix-qty-v3726" ' +
+                    'type="number" min="0" step="1" ' +
+                    'value="' +
+                      (
+                        value > 0
+                          ? value
+                          : ''
+                      ) +
+                    '" ' +
+                    'onchange="LSP_updateOwnerQtyV3726(' +
+                      rowIndex +
+                      ',' +
+                      typeIndex +
+                      ',this.value)"' +
+                  '>' +
+                '</td>'
+              );
+
+            }
+          ).join('');
+
+
+        return (
+          '<tr>' +
+            '<td>' +
+              '<div style="display:flex;gap:6px;align-items:center;">' +
+                '<input ' +
+                  'class="lsp-matrix-owner-v3726" ' +
+                  'type="text" ' +
+                  'value="' +
+                    LSP_escapeV3724(
+                      row.ownerName || ''
+                    ) +
+                  '" ' +
+                  'placeholder="Owner Name" ' +
+                  'onchange="LSP_updateOwnerNameV3726(' +
+                    rowIndex +
+                    ',this.value)"' +
+                '>' +
+                '<button ' +
+                  'type="button" ' +
+                  'class="lsp-matrix-remove-v3726" ' +
+                  'onclick="LSP_removeOwnerRowV3726(' +
+                    rowIndex +
+                  ')"' +
+                '>×</button>' +
+              '</div>' +
+            '</td>' +
+            qtyCells +
+            '<td>' +
+              '<span id="lspOwnerTotalV3726_' +
+                rowIndex +
+              '" class="lsp-matrix-total-v3726">' +
+                LSP_ownerRowTotalV3726(
+                  row
+                ) +
+              '</span>' +
+            '</td>' +
+          '</tr>'
+        );
+
+      }
+    ).join('');
+
+
+  const totalCells =
+    LSP_LIVESTOCK_TYPES_V3726.map(
+      function(type,typeIndex) {
+
+        return (
+          '<td>' +
+            '<span id="lspTypeTotalV3726_' +
+              typeIndex +
+            '">' +
+              LSP_typeTotalV3726(
+                type
+              ) +
+            '</span>' +
+          '</td>'
+        );
+
+      }
+    ).join('');
+
+
+  host.innerHTML =
+    '<table class="lsp-matrix-v3726">' +
+      '<thead>' +
+        '<tr>' +
+          '<th>Owner Name</th>' +
+          typeHeaders +
+          '<th>Total</th>' +
+        '</tr>' +
+      '</thead>' +
+      '<tbody>' +
+        rows +
+        '<tr class="lsp-matrix-total-row-v3726">' +
+          '<td>BARANGAY TOTAL</td>' +
+          totalCells +
+          '<td id="lspMatrixGrandTotalV3726">' +
+            LSP_grandTotalV3724() +
+          '</td>' +
+        '</tr>' +
+      '</tbody>' +
+    '</table>';
+
+}
+
+
+function LSP_updateMatrixTotalsOnlyV3726() {
+
+  LSP_ownerRowsV3726.forEach(
+    function(row,index) {
+
+      const el =
+        document.getElementById(
+          'lspOwnerTotalV3726_' +
+          index
+        );
+
+
+      if (el) {
+
+        el.textContent =
+          LSP_ownerRowTotalV3726(
+            row
+          );
+
+      }
+
+    }
+  );
+
+
+  LSP_LIVESTOCK_TYPES_V3726.forEach(
+    function(type,index) {
+
+      const el =
+        document.getElementById(
+          'lspTypeTotalV3726_' +
+          index
+        );
+
+
+      if (el) {
+
+        el.textContent =
+          LSP_typeTotalV3726(
+            type
+          );
+
+      }
+
+    }
+  );
+
+
+  const grand =
+    document.getElementById(
+      'lspMatrixGrandTotalV3726'
+    );
+
+
+  if (grand) {
+
+    grand.textContent =
+      LSP_grandTotalV3724();
+
+  }
+
+}
+
+
+function LSP_initializeV3724() {
+
+  if (LSP_initializedV3724) {
+    return;
+  }
+
+
+  LSP_initializedV3724 =
+    true;
+
+
+  const date =
+    document.getElementById(
+      'lspReportDateV3724'
+    );
+
+
+  if (
+    date &&
+    !date.value
+  ) {
+    date.value =
+      LSP_todayV3724();
+  }
+
+
+  LSP_restoreLocalV3724();
+  LSP_recordsToMatrixV3726();
+  LSP_renderMatrixV3726();
+  LSP_renderAllV3724();
+
+
+  window.addEventListener(
+    'online',
+    function() {
+      LSP_syncPendingV3724();
+    }
+  );
+
+}
+
+
+function LSP_clearEntryV3724() {
+
+  const owner =
+    document.getElementById(
+      'lspOwnerNameV3724'
+    );
+
+  const livestock =
+    document.getElementById(
+      'lspLivestockNameV3724'
+    );
+
+  const quantity =
+    document.getElementById(
+      'lspQuantityV3724'
+    );
+
+
+  if (owner) {
+    owner.value = '';
+  }
+
+  if (livestock) {
+    livestock.value = '';
+  }
+
+  if (quantity) {
+    quantity.value = '1';
+  }
+
+
+  if (owner) {
+    owner.focus();
+  }
+
+}
+
+
+function LSP_addRecordV3724() {
+
+  const owner =
+    LSP_normalizeOwnerV3724(
+      (
+        document.getElementById(
+          'lspOwnerNameV3724'
+        ) || {}
+      ).value
+    );
+
+
+  const livestock =
+    LSP_normalizeLivestockV3724(
+      (
+        document.getElementById(
+          'lspLivestockNameV3724'
+        ) || {}
+      ).value
+    );
+
+
+  const quantity =
+    Math.floor(
+      Number(
+        (
+          document.getElementById(
+            'lspQuantityV3724'
+          ) || {}
+        ).value ||
+        0
+      )
+    );
+
+
+  if (!owner) {
+
+    alert(
+      'Enter the Owner Name.'
+    );
+
+    return;
+  }
+
+
+  if (!livestock) {
+
+    alert(
+      'Enter the Name / Type of Livestock.'
+    );
+
+    return;
+  }
+
+
+  if (
+    !Number.isFinite(quantity) ||
+    quantity < 1
+  ) {
+
+    alert(
+      'Quantity must be at least 1.'
+    );
+
+    return;
+  }
+
+
+  /*
+   * If the same owner + same livestock already exists,
+   * add the new quantity instead of creating a duplicate row.
+   */
+  const existing =
+    LSP_recordsV3724.find(
+      function(row) {
+
+        return (
+          row.ownerName.toLowerCase() ===
+          owner.toLowerCase() &&
+          row.livestockName.toLowerCase() ===
+          livestock.toLowerCase()
+        );
+
+      }
+    );
+
+
+  if (existing) {
+
+    existing.quantity +=
+      quantity;
+
+  } else {
+
+    LSP_recordsV3724.push({
+      ownerName:
+        owner,
+      livestockName:
+        livestock,
+      quantity:
+        quantity
+    });
+
+  }
+
+
+  LSP_clearEntryV3724();
+  LSP_renderAllV3724();
+  LSP_cacheLocalV3724(false);
+
+}
+
+
+function LSP_removeRecordV3724(
+  index
+) {
+
+  index =
+    Number(index);
+
+
+  if (
+    !Number.isInteger(index) ||
+    index < 0 ||
+    index >= LSP_recordsV3724.length
+  ) {
+    return;
+  }
+
+
+  LSP_recordsV3724.splice(
+    index,
+    1
+  );
+
+
+  LSP_renderAllV3724();
+  LSP_cacheLocalV3724(false);
+
+}
+
+
+function LSP_getOwnerSummaryV3724() {
+
+  const map =
+    new Map();
+
+
+  LSP_recordsV3724.forEach(
+    function(row) {
+
+      const key =
+        row.ownerName
+          .trim()
+          .toLowerCase();
+
+
+      if (!map.has(key)) {
+
+        map.set(key,{
+          ownerName:
+            row.ownerName,
+          total:
+            0
+        });
+
+      }
+
+
+      map.get(key).total +=
+        Number(
+          row.quantity || 0
+        );
+
+    }
+  );
+
+
+  return Array.from(
+    map.values()
+  ).sort(
+    function(a,b) {
+
+      return a.ownerName.localeCompare(
+        b.ownerName
+      );
+
+    }
+  );
+
+}
+
+
+function LSP_getTypeSummaryV3724() {
+
+  const map =
+    new Map();
+
+
+  LSP_recordsV3724.forEach(
+    function(row) {
+
+      const key =
+        row.livestockName
+          .trim()
+          .toLowerCase();
+
+
+      if (!map.has(key)) {
+
+        map.set(key,{
+          livestockName:
+            row.livestockName,
+          total:
+            0
+        });
+
+      }
+
+
+      map.get(key).total +=
+        Number(
+          row.quantity || 0
+        );
+
+    }
+  );
+
+
+  return Array.from(
+    map.values()
+  ).sort(
+    function(a,b) {
+
+      return a.livestockName.localeCompare(
+        b.livestockName
+      );
+
+    }
+  );
+
+}
+
+
+function LSP_grandTotalV3724() {
+
+  return LSP_recordsV3724.reduce(
+    function(total,row) {
+
+      return (
+        total +
+        Number(
+          row.quantity || 0
+        )
+      );
+
+    },
+    0
+  );
+
+}
+
+
+function LSP_renderAllV3724() {
+
+  const owners =
+    LSP_getOwnerSummaryV3724();
+
+  const types =
+    LSP_getTypeSummaryV3724();
+
+
+  const ownersMetric =
+    document.getElementById(
+      'lspTotalOwnersV3724'
+    );
+
+  const typesMetric =
+    document.getElementById(
+      'lspTotalTypesV3724'
+    );
+
+  const totalMetric =
+    document.getElementById(
+      'lspGrandTotalV3724'
+    );
+
+
+  if (ownersMetric) {
+    ownersMetric.textContent =
+      owners.length;
+  }
+
+  if (typesMetric) {
+    typesMetric.textContent =
+      types.length;
+  }
+
+  if (totalMetric) {
+    totalMetric.textContent =
+      LSP_grandTotalV3724();
+  }
+
+
+  LSP_renderRecordsV3724();
+  LSP_renderOwnersV3724(
+    owners
+  );
+  LSP_renderTypesV3724(
+    types
+  );
+
+}
+
+
+function LSP_renderRecordsV3724() {
+
+  const host =
+    document.getElementById(
+      'lspRecordsTableV3724'
+    );
+
+
+  if (!host) {
+    return;
+  }
+
+
+  if (
+    !LSP_recordsV3724.length
+  ) {
+
+    host.innerHTML =
+      '<div class="lsp-empty-v3724">No livestock records added yet.</div>';
+
+    return;
+  }
+
+
+  const rows =
+    LSP_recordsV3724.map(
+      function(row,index) {
+
+        return (
+          '<tr>' +
+            '<td>' +
+              LSP_escapeV3724(
+                row.ownerName
+              ) +
+            '</td>' +
+            '<td>' +
+              LSP_escapeV3724(
+                row.livestockName
+              ) +
+            '</td>' +
+            '<td>' +
+              Number(
+                row.quantity || 0
+              ) +
+            '</td>' +
+            '<td>' +
+              '<button type="button" class="lsp-remove-v3724" onclick="LSP_removeRecordV3724(' +
+                index +
+              ')">Remove</button>' +
+            '</td>' +
+          '</tr>'
+        );
+
+      }
+    ).join('');
+
+
+  host.innerHTML =
+    '<table class="lsp-table-v3724">' +
+      '<thead><tr>' +
+        '<th>Owner Name</th>' +
+        '<th>Livestock</th>' +
+        '<th>Quantity</th>' +
+        '<th>Action</th>' +
+      '</tr></thead>' +
+      '<tbody>' +
+        rows +
+      '</tbody>' +
+    '</table>';
+
+}
+
+
+function LSP_renderOwnersV3724(
+  owners
+) {
+
+  const host =
+    document.getElementById(
+      'lspOwnerSummaryV3724'
+    );
+
+
+  if (!host) {
+    return;
+  }
+
+
+  if (!owners.length) {
+
+    host.innerHTML =
+      '<div class="lsp-empty-v3724">Owner totals will appear here automatically.</div>';
+
+    return;
+  }
+
+
+  host.innerHTML =
+    '<table class="lsp-table-v3724">' +
+      '<thead><tr>' +
+        '<th>Owner Name</th>' +
+        '<th>Total Livestock</th>' +
+      '</tr></thead>' +
+      '<tbody>' +
+        owners.map(
+          function(item) {
+
+            return (
+              '<tr>' +
+                '<td>' +
+                  LSP_escapeV3724(
+                    item.ownerName
+                  ) +
+                '</td>' +
+                '<td><strong>' +
+                  Number(
+                    item.total || 0
+                  ) +
+                '</strong></td>' +
+              '</tr>'
+            );
+
+          }
+        ).join('') +
+      '</tbody>' +
+    '</table>';
+
+}
+
+
+function LSP_renderTypesV3724(
+  types
+) {
+
+  const host =
+    document.getElementById(
+      'lspTypeSummaryV3724'
+    );
+
+
+  if (!host) {
+    return;
+  }
+
+
+  if (!types.length) {
+
+    host.innerHTML =
+      '<div class="lsp-empty-v3724">Livestock population totals will appear here automatically.</div>';
+
+    return;
+  }
+
+
+  host.innerHTML =
+    '<table class="lsp-table-v3724">' +
+      '<thead><tr>' +
+        '<th>Livestock Type</th>' +
+        '<th>Total Population</th>' +
+      '</tr></thead>' +
+      '<tbody>' +
+        types.map(
+          function(item) {
+
+            return (
+              '<tr>' +
+                '<td>' +
+                  LSP_escapeV3724(
+                    item.livestockName
+                  ) +
+                '</td>' +
+                '<td><strong>' +
+                  Number(
+                    item.total || 0
+                  ) +
+                '</strong></td>' +
+              '</tr>'
+            );
+
+          }
+        ).join('') +
+      '</tbody>' +
+    '</table>';
+
+}
+
+
+function LSP_getPayloadV3724() {
+
+  LSP_matrixToRecordsV3726();
+
+
+  return {
+    reportId:
+      LSP_reportIdV3724,
+
+    reportDate:
+      String(
+        (
+          document.getElementById(
+            'lspReportDateV3724'
+          ) || {}
+        ).value ||
+        ''
+      ).trim(),
+
+    preparedBy:
+      String(
+        (
+          document.getElementById(
+            'lspPreparedByV3724'
+          ) || {}
+        ).value ||
+        ''
+      ).trim(),
+
+    designation:
+      String(
+        (
+          document.getElementById(
+            'lspDesignationV3724'
+          ) || {}
+        ).value ||
+        ''
+      ).trim(),
+
+    records:
+      LSP_recordsV3724.map(
+        function(row) {
+
+          return {
+            ownerName:
+              row.ownerName,
+            livestockName:
+              row.livestockName,
+            quantity:
+              Number(
+                row.quantity || 0
+              )
+          };
+
+        }
+      )
+  };
+
+}
+
+
+function LSP_setStatusV3724(
+  type,
+  message
+) {
+
+  const box =
+    document.getElementById(
+      'lspStatusV3724'
+    );
+
+
+  if (!box) {
+    return;
+  }
+
+
+  box.className =
+    'lsp-status-v3724 ' +
+    (
+      type ===
+      'error'
+        ? 'error'
+        : 'success'
+    );
+
+
+  box.textContent =
+    String(
+      message || ''
+    );
+
+}
+
+
+function LSP_cacheLocalV3724(
+  pendingSync
+) {
+
+  try {
+
+    const payload =
+      LSP_getPayloadV3724();
+
+
+    payload.pendingSync =
+      !!pendingSync;
+
+
+    localStorage.setItem(
+      LSP_LOCAL_KEY_V3724,
+      JSON.stringify(
+        payload
+      )
+    );
+
+  } catch(error) {}
+
+}
+
+
+function LSP_restoreLocalV3724() {
+
+  try {
+
+    const raw =
+      localStorage.getItem(
+        LSP_LOCAL_KEY_V3724
+      );
+
+
+    if (!raw) {
+      return false;
+    }
+
+
+    const data =
+      JSON.parse(
+        raw
+      );
+
+
+    if (
+      !data ||
+      typeof data !==
+      'object'
+    ) {
+      return false;
+    }
+
+
+    LSP_reportIdV3724 =
+      String(
+        data.reportId || ''
+      );
+
+
+    LSP_recordsV3724 =
+      Array.isArray(
+        data.records
+      )
+        ? data.records.map(
+            function(row) {
+
+              return {
+                ownerName:
+                  LSP_normalizeOwnerV3724(
+                    row.ownerName
+                  ),
+                livestockName:
+                  LSP_normalizeLivestockV3724(
+                    row.livestockName
+                  ),
+                quantity:
+                  Math.max(
+                    1,
+                    Math.floor(
+                      Number(
+                        row.quantity || 1
+                      )
+                    )
+                  )
+              };
+
+            }
+          ).filter(
+            function(row) {
+
+              return (
+                row.ownerName &&
+                row.livestockName
+              );
+
+            }
+          )
+        : [];
+
+
+    const date =
+      document.getElementById(
+        'lspReportDateV3724'
+      );
+
+    const prepared =
+      document.getElementById(
+        'lspPreparedByV3724'
+      );
+
+    const designation =
+      document.getElementById(
+        'lspDesignationV3724'
+      );
+
+
+    if (date) {
+      date.value =
+        data.reportDate ||
+        LSP_todayV3724();
+    }
+
+    if (prepared) {
+      prepared.value =
+        data.preparedBy ||
+        'Kgd. Jonel G. Rosano';
+    }
+
+    if (designation) {
+      designation.value =
+        data.designation ||
+        'Chairman, Committee on Agriculture';
+    }
+
+
+    if (data.pendingSync) {
+
+      LSP_setStatusV3724(
+        'success',
+        'Offline livestock draft restored. It will sync when internet is available.'
+      );
+
+    }
+
+
+    return true;
+
+  } catch(error) {
+
+    return false;
+
+  }
+
+}
+
+
+async function LSP_saveDraftV3724() {
+
+  const payload =
+    LSP_getPayloadV3724();
+
+
+  if (
+    !payload.records.length
+  ) {
+
+    LSP_setStatusV3724(
+      'error',
+      'Add at least one livestock record first.'
+    );
+
+    return;
+
+  }
+
+
+  if (!navigator.onLine) {
+
+    LSP_cacheLocalV3724(
+      true
+    );
+
+
+    LSP_setStatusV3724(
+      'success',
+      'Saved locally while offline. The livestock draft will sync when internet returns.'
+    );
+
+
+    return;
+
+  }
+
+
+  try {
+
+    LSP_setStatusV3724(
+      'success',
+      'Saving livestock population draft...'
+    );
+
+
+    const result =
+      await barcoApi(
+        'livestockSaveReport',
+        payload
+      );
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to save livestock population draft.'
+      );
+
+    }
+
+
+    LSP_reportIdV3724 =
+      String(
+        result.reportId ||
+        LSP_reportIdV3724
+      );
+
+
+    LSP_cacheLocalV3724(
+      false
+    );
+
+
+    LSP_setStatusV3724(
+      'success',
+      'Livestock draft saved successfully. Report ID: ' +
+      LSP_reportIdV3724
+    );
+
+  } catch(error) {
+
+    LSP_cacheLocalV3724(
+      true
+    );
+
+
+    LSP_setStatusV3724(
+      'error',
+      'Save error: ' +
+      error.message +
+      '. A local copy was kept.'
+    );
+
+  }
+
+}
+
+
+async function LSP_syncPendingV3724() {
+
+  if (!navigator.onLine) {
+    return;
+  }
+
+
+  try {
+
+    const raw =
+      localStorage.getItem(
+        LSP_LOCAL_KEY_V3724
+      );
+
+
+    if (!raw) {
+      return;
+    }
+
+
+    const saved =
+      JSON.parse(
+        raw
+      );
+
+
+    if (
+      !saved ||
+      !saved.pendingSync
+    ) {
+      return;
+    }
+
+
+    const result =
+      await barcoApi(
+        'livestockSaveReport',
+        LSP_getPayloadV3724()
+      );
+
+
+    if (
+      result &&
+      result.success
+    ) {
+
+      LSP_reportIdV3724 =
+        String(
+          result.reportId || ''
+        );
+
+
+      LSP_cacheLocalV3724(
+        false
+      );
+
+
+      LSP_setStatusV3724(
+        'success',
+        'Internet restored. Offline livestock draft synchronized.'
+      );
+
+    }
+
+  } catch(error) {}
+
+}
+
+
+async function LSP_generatePdfV3724() {
+
+  const payload =
+    LSP_getPayloadV3724();
+
+
+  if (
+    !payload.records.length
+  ) {
+
+    LSP_setStatusV3724(
+      'error',
+      'Add at least one livestock record before generating the PDF.'
+    );
+
+    return;
+
+  }
+
+
+  if (!navigator.onLine) {
+
+    LSP_cacheLocalV3724(
+      true
+    );
+
+
+    LSP_setStatusV3724(
+      'error',
+      'PDF generation requires internet. Your livestock data is saved locally.'
+    );
+
+
+    return;
+
+  }
+
+
+  try {
+
+    LSP_setStatusV3724(
+      'success',
+      'Generating Livestock Population PDF...'
+    );
+
+
+    const result =
+      await barcoApi(
+        'livestockGeneratePdf',
+        payload
+      );
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to generate Livestock Population PDF.'
+      );
+
+    }
+
+
+    LSP_reportIdV3724 =
+      String(
+        result.reportId ||
+        LSP_reportIdV3724
+      );
+
+
+    LSP_generatedPdfV3724 = {
+      fileId:
+        String(
+          result.pdfFileId || ''
+        ),
+      pdfUrl:
+        String(
+          result.pdfUrl || ''
+        ),
+      filename:
+        String(
+          result.filename ||
+          'Livestock-Population-Report.pdf'
+        )
+    };
+
+
+    const generated =
+      document.getElementById(
+        'lspGeneratedV3724'
+      );
+
+    const filename =
+      document.getElementById(
+        'lspGeneratedFilenameV3724'
+      );
+
+    const open =
+      document.getElementById(
+        'lspOpenPdfV3724'
+      );
+
+
+    if (filename) {
+      filename.textContent =
+        LSP_generatedPdfV3724.filename;
+    }
+
+    if (open) {
+      open.href =
+        LSP_generatedPdfV3724.pdfUrl ||
+        '#';
+    }
+
+    if (generated) {
+      generated.classList.add(
+        'show'
+      );
+    }
+
+
+    LSP_cacheLocalV3724(
+      false
+    );
+
+
+    LSP_setStatusV3724(
+      'success',
+      'Livestock Population PDF generated successfully.'
+    );
+
+  } catch(error) {
+
+    LSP_setStatusV3724(
+      'error',
+      'Generate PDF error: ' +
+      error.message
+    );
+
+  }
+
+}
+
+
+async function LSP_printPdfV3724() {
+
+  const data =
+    LSP_generatedPdfV3724 ||
+    {};
+
+
+  if (!data.fileId) {
+
+    alert(
+      'Generate the Livestock Population PDF first.'
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    const result =
+      await barcoApi(
+        'getPdfForPrint',
+        {
+          fileId:
+            data.fileId
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success ||
+      !result.base64
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to prepare PDF for printing.'
+      );
+
+    }
+
+
+    if (
+      window.AndroidPrint &&
+      typeof window.AndroidPrint.printBase64Pdf ===
+        'function'
+    ) {
+
+      window.AndroidPrint.printBase64Pdf(
+        String(result.base64),
+        String(
+          data.filename ||
+          'Livestock-Population-Report.pdf'
+        ),
+        'ACCOMPLISHMENT_A4_PORTRAIT'
+      );
+
+
+      return;
+
+    }
+
+
+    if (data.pdfUrl) {
+      window.open(
+        data.pdfUrl,
+        '_blank'
+      );
+    }
+
+  } catch(error) {
+
+    alert(
+      'Print error: ' +
+      error.message
+    );
+
+  }
+
+}
+
+
+function LSP_newReportV3724() {
+
+  const ok =
+    window.confirm(
+      'Clear the current Livestock Population report and start a new one?'
+    );
+
+
+  if (!ok) {
+    return;
+  }
+
+
+  LSP_reportIdV3724 =
+    '';
+
+  LSP_recordsV3724 =
+    [];
+
+  LSP_ownerRowsV3726 = [
+    LSP_newOwnerRowV3726()
+  ];
+
+  LSP_generatedPdfV3724 = {
+    fileId: '',
+    pdfUrl: '',
+    filename: ''
+  };
+
+
+  localStorage.removeItem(
+    LSP_LOCAL_KEY_V3724
+  );
+
+
+  const date =
+    document.getElementById(
+      'lspReportDateV3724'
+    );
+
+  const generated =
+    document.getElementById(
+      'lspGeneratedV3724'
+    );
+
+
+  if (date) {
+    date.value =
+      LSP_todayV3724();
+  }
+
+  if (generated) {
+    generated.classList.remove(
+      'show'
+    );
+  }
+
+
+  LSP_renderMatrixV3726();
+  LSP_renderAllV3724();
+
+
+  LSP_setStatusV3724(
+    'success',
+    'New Livestock Population report ready.'
+  );
+
+}
+
+
+function BARCO_openLivestockV3723() {
+
+  BARCO_showOnlyV32(
+    'livestockModuleV3723'
+  );
+
+
+  LSP_initializeV3724();
 
 }
 
