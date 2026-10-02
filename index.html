@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.21 DANA NAVIGATION FIX -->
+<!-- FRONTEND VERSION: V37.22 DANA OPTIONAL ADDITIONAL DETAILS -->
 
 <style>
 
@@ -3103,6 +3103,25 @@ button:hover:not(:disabled),
   }
 }
 
+
+/* =========================================================
+   V37.22 — OPTIONAL ADDITIONAL DETAILS FIELD
+========================================================= */
+
+.dana-entry-form-v3720 .dana-field-v3720 textarea {
+  min-height: 92px;
+}
+
+.dana-entry-form-v3720 .dana-field-v3720:has(textarea) {
+  grid-column: 1 / -1;
+}
+
+@media(max-width:760px) {
+  .dana-entry-form-v3720 .dana-field-v3720:has(textarea) {
+    grid-column: auto;
+  }
+}
+
 </style>
 
 <!-- FRONTEND VERSION: V37.1 SILENT BACKEND CONNECTION -->
@@ -3473,6 +3492,7 @@ button:hover:not(:disabled),
               <label>Field Type</label>
               <select id="danaCustomFieldTypeV3720">
                 <option value="text">Text</option>
+                <option value="textarea">Long Text / Additional Details</option>
                 <option value="number">Number</option>
                 <option value="date">Date</option>
                 <option value="tel">Mobile Number</option>
@@ -5951,7 +5971,8 @@ function DANA_defaultDamageFieldsV3720() {
     DANA_makeFieldV3720('totalArea','Total Area','number'),
     DANA_makeFieldV3720('areaDamage','Area Damage','text'),
     DANA_makeFieldV3720('status','Status','status'),
-    DANA_makeFieldV3720('livestock','Livestock','text')
+    DANA_makeFieldV3720('livestock','Livestock','text'),
+    DANA_makeFieldV3720('additionalDetails','Additional Details','textarea')
   ];
 
 }
@@ -5963,7 +5984,8 @@ function DANA_defaultFarmHistoryFieldsV3720() {
     DANA_makeFieldV3720('farmerName','Name of Farmer','text'),
     DANA_makeFieldV3720('farmArea','Farm Area','text'),
     DANA_makeFieldV3720('dateOfPlanting','Date of Planting','date'),
-    DANA_makeFieldV3720('previousHarvest','Previous Harvest','text')
+    DANA_makeFieldV3720('previousHarvest','Previous Harvest','text'),
+    DANA_makeFieldV3720('additionalDetails','Additional Details','textarea')
   ];
 
 }
@@ -6459,6 +6481,16 @@ function DANA_renderEntryFormV3720() {
               '<option value="Partial Damage">Partial Damage</option>' +
               '<option value="Totally Damaged">Totally Damaged</option>' +
             '</select>';
+
+        } else if (
+          field.type ===
+          'textarea'
+        ) {
+
+          control =
+            '<textarea id="' +
+              id +
+            '" placeholder="Enter additional details / notes if needed"></textarea>';
 
         } else {
 
