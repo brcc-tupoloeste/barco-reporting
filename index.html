@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.26 LIVESTOCK MATRIX TABLE -->
+<!-- FRONTEND VERSION: V37.27 HOUSE-TO-HOUSE OFFLINE AUTOSAVE -->
 
 <style>
 
@@ -3633,6 +3633,40 @@ button:hover:not(:disabled),
   }
 }
 
+
+/* =========================================================
+   V37.27 — HOUSE-TO-HOUSE OFFLINE AUTOSAVE
+========================================================= */
+
+.lsp-offline-state-v3727 {
+  margin: 0 0 12px;
+  padding: 9px 11px;
+  border: 1px solid #c9dfcf;
+  border-radius: 9px;
+  background: #f1f8f3;
+  color: #315f43;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.lsp-offline-state-v3727.offline {
+  border-color: #e4cf94;
+  background: #fff8e5;
+  color: #7a5b08;
+}
+
+.lsp-offline-state-v3727.pending {
+  border-color: #d7c189;
+  background: #fff8e8;
+  color: #745608;
+}
+
+.lsp-offline-state-v3727.synced {
+  border-color: #b9dfc3;
+  background: #edf8f0;
+  color: #23643d;
+}
+
 </style>
 
 <!-- FRONTEND VERSION: V37.1 SILENT BACKEND CONNECTION -->
@@ -3923,6 +3957,13 @@ button:hover:not(:disabled),
 
           <h3>Report Information</h3>
 
+          <div
+            id="lspOfflineStateV3727"
+            class="lsp-offline-state-v3727"
+          >
+            Checking connection...
+          </div>
+
           <div class="lsp-grid-v3724">
 
             <div class="lsp-field-v3724">
@@ -3930,7 +3971,7 @@ button:hover:not(:disabled),
               <input
                 id="lspReportDateV3724"
                 type="date"
-                oninput="LSP_cacheLocalV3724()"
+                oninput="LSP_autoCacheV3727()"
               >
             </div>
 
@@ -3940,7 +3981,7 @@ button:hover:not(:disabled),
                 id="lspPreparedByV3724"
                 type="text"
                 value="Kgd. Jonel G. Rosano"
-                oninput="LSP_cacheLocalV3724()"
+                oninput="LSP_autoCacheV3727()"
               >
             </div>
 
@@ -3950,7 +3991,7 @@ button:hover:not(:disabled),
                 id="lspDesignationV3724"
                 type="text"
                 value="Chairman, Committee on Agriculture"
-                oninput="LSP_cacheLocalV3724()"
+                oninput="LSP_autoCacheV3727()"
               >
             </div>
 
@@ -8625,7 +8666,7 @@ function LSP_addOwnerRowV3726() {
   LSP_matrixToRecordsV3726();
   LSP_renderMatrixV3726();
   LSP_renderAllV3724();
-  LSP_cacheLocalV3724(false);
+  LSP_autoCacheV3727();
 
 }
 
@@ -8641,7 +8682,7 @@ function LSP_addFiveOwnerRowsV3726() {
   LSP_matrixToRecordsV3726();
   LSP_renderMatrixV3726();
   LSP_renderAllV3724();
-  LSP_cacheLocalV3724(false);
+  LSP_autoCacheV3727();
 
 }
 
@@ -8674,7 +8715,7 @@ function LSP_removeOwnerRowV3726(
   LSP_matrixToRecordsV3726();
   LSP_renderMatrixV3726();
   LSP_renderAllV3724();
-  LSP_cacheLocalV3724(false);
+  LSP_autoCacheV3727();
 
 }
 
@@ -8697,7 +8738,7 @@ function LSP_updateOwnerNameV3726(
 
   LSP_matrixToRecordsV3726();
   LSP_renderAllV3724();
-  LSP_cacheLocalV3724(false);
+  LSP_autoCacheV3727();
 
 }
 
@@ -8744,7 +8785,7 @@ function LSP_updateOwnerQtyV3726(
   LSP_matrixToRecordsV3726();
   LSP_updateMatrixTotalsOnlyV3726();
   LSP_renderAllV3724();
-  LSP_cacheLocalV3724(false);
+  LSP_autoCacheV3727();
 
 }
 
@@ -8999,7 +9040,7 @@ function LSP_renderMatrixV3726() {
                           : ''
                       ) +
                     '" ' +
-                    'onchange="LSP_updateOwnerQtyV3726(' +
+                    'oninput="LSP_updateOwnerQtyV3726(' +
                       rowIndex +
                       ',' +
                       typeIndex +
@@ -9025,7 +9066,7 @@ function LSP_renderMatrixV3726() {
                     ) +
                   '" ' +
                   'placeholder="Owner Name" ' +
-                  'onchange="LSP_updateOwnerNameV3726(' +
+                  'oninput="LSP_updateOwnerNameV3726(' +
                     rowIndex +
                     ',this.value)"' +
                 '>' +
@@ -9163,6 +9204,114 @@ function LSP_updateMatrixTotalsOnlyV3726() {
 }
 
 
+
+function LSP_setOfflineStateV3727(
+  mode,
+  message
+) {
+
+  const el =
+    document.getElementById(
+      'lspOfflineStateV3727'
+    );
+
+
+  if (!el) {
+    return;
+  }
+
+
+  el.className =
+    'lsp-offline-state-v3727 ' +
+    String(
+      mode || ''
+    );
+
+
+  el.textContent =
+    String(
+      message || ''
+    );
+
+}
+
+
+function LSP_refreshConnectionStateV3727() {
+
+  if (!navigator.onLine) {
+
+    LSP_setOfflineStateV3727(
+      'offline',
+      'OFFLINE • Changes are being saved on this device.'
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    const raw =
+      localStorage.getItem(
+        LSP_LOCAL_KEY_V3724
+      );
+
+
+    const data =
+      raw
+        ? JSON.parse(raw)
+        : null;
+
+
+    if (
+      data &&
+      data.pendingSync
+    ) {
+
+      LSP_setOfflineStateV3727(
+        'pending',
+        'ONLINE • Local changes are waiting to sync.'
+      );
+
+    } else {
+
+      LSP_setOfflineStateV3727(
+        'synced',
+        'ONLINE • Local draft is saved.'
+      );
+
+    }
+
+  } catch(error) {
+
+    LSP_setOfflineStateV3727(
+      'synced',
+      'ONLINE'
+    );
+
+  }
+
+}
+
+
+function LSP_autoCacheV3727() {
+
+  /*
+   * Any edit made while offline is automatically marked as pending sync.
+   * This means house-to-house encoding is preserved even if the user
+   * forgets to tap Save Draft after every household.
+   */
+  LSP_cacheLocalV3724(
+    !navigator.onLine
+  );
+
+
+  LSP_refreshConnectionStateV3727();
+
+}
+
+
 function LSP_initializeV3724() {
 
   if (LSP_initializedV3724) {
@@ -9195,10 +9344,26 @@ function LSP_initializeV3724() {
   LSP_renderAllV3724();
 
 
+  LSP_refreshConnectionStateV3727();
+
+
   window.addEventListener(
     'online',
     function() {
+
+      LSP_refreshConnectionStateV3727();
       LSP_syncPendingV3724();
+
+    }
+  );
+
+
+  window.addEventListener(
+    'offline',
+    function() {
+
+      LSP_autoCacheV3727();
+
     }
   );
 
@@ -9351,7 +9516,7 @@ function LSP_addRecordV3724() {
 
   LSP_clearEntryV3724();
   LSP_renderAllV3724();
-  LSP_cacheLocalV3724(false);
+  LSP_autoCacheV3727();
 
 }
 
@@ -9380,7 +9545,7 @@ function LSP_removeRecordV3724(
 
 
   LSP_renderAllV3724();
-  LSP_cacheLocalV3724(false);
+  LSP_autoCacheV3727();
 
 }
 
@@ -10026,6 +10191,9 @@ async function LSP_saveDraftV3724() {
     );
 
 
+    LSP_refreshConnectionStateV3727();
+
+
     LSP_setStatusV3724(
       'success',
       'Saved locally while offline. The livestock draft will sync when internet returns.'
@@ -10078,6 +10246,9 @@ async function LSP_saveDraftV3724() {
     LSP_cacheLocalV3724(
       false
     );
+
+
+    LSP_refreshConnectionStateV3727();
 
 
     LSP_setStatusV3724(
@@ -10160,6 +10331,9 @@ async function LSP_syncPendingV3724() {
       LSP_cacheLocalV3724(
         false
       );
+
+
+      LSP_refreshConnectionStateV3727();
 
 
       LSP_setStatusV3724(
@@ -10304,6 +10478,9 @@ async function LSP_generatePdfV3724() {
     LSP_cacheLocalV3724(
       false
     );
+
+
+    LSP_refreshConnectionStateV3727();
 
 
     LSP_setStatusV3724(
