@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.35 DANA FARMER MASTERLIST AUTOFILL -->
+<!-- FRONTEND VERSION: V37.36 DANA BLANK FORM PDF SUPPORT -->
 
 <style>
 
@@ -9693,20 +9693,6 @@ async function DANA_generatePdfV3720() {
 
 
   if (
-    !payload.rows.length
-  ) {
-
-    DANA_setStatusV3720(
-      'error',
-      'Add at least one record before generating the PDF.'
-    );
-
-    return;
-
-  }
-
-
-  if (
     !navigator.onLine
   ) {
 
@@ -9730,7 +9716,9 @@ async function DANA_generatePdfV3720() {
 
     DANA_setStatusV3720(
       'success',
-      'Generating DANA PDF...'
+      payload.rows.length
+        ? 'Generating DANA PDF...'
+        : 'Generating blank DANA form...'
     );
 
 
