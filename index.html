@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.36 DANA BLANK FORM PDF SUPPORT -->
+<!-- FRONTEND VERSION: V37.37 DANA CUSTOM BLANK ROW COUNT -->
 
 <style>
 
@@ -4208,6 +4208,58 @@ button:hover:not(:disabled),
   line-height: 1.35;
 }
 
+
+/* =========================================================
+   V37.37 — DANA BLANK FORM ROW COUNT
+========================================================= */
+
+.dana-blank-rows-v3737 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 110px;
+  gap: 10px;
+  align-items: center;
+  margin: 12px 0;
+  padding: 10px 12px;
+  border: 1px solid #cfe1d3;
+  border-radius: 10px;
+  background: #f7fbf8;
+}
+
+.dana-blank-rows-v3737 label {
+  color: #315f43;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.dana-blank-rows-v3737 small {
+  display: block;
+  margin-top: 3px;
+  color: #748179;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.dana-blank-rows-v3737 input {
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid #b9d4c0;
+  border-radius: 8px;
+  background: #fff;
+  color: #1f2937;
+  text-align: center;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+@media(max-width:520px) {
+  .dana-blank-rows-v3737 {
+    grid-template-columns: 1fr 90px;
+  }
+}
+
 </style>
 
 <!-- FRONTEND VERSION: V37.1 SILENT BACKEND CONNECTION -->
@@ -5193,6 +5245,27 @@ button:hover:not(:disabled),
           <div class="dana-help-v3720">
             Save Draft can also keep your work locally when offline.
             Final PDF generation requires an internet connection.
+          </div>
+
+          <div class="dana-blank-rows-v3737">
+
+            <label for="danaBlankRowCountV3737">
+              Blank Form Rows
+              <small>
+                Used only when there are no encoded records. Choose how many writable rows you want in the blank PDF.
+              </small>
+            </label>
+
+            <input
+              id="danaBlankRowCountV3737"
+              type="number"
+              min="1"
+              max="50"
+              step="1"
+              value="10"
+              inputmode="numeric"
+            >
+
           </div>
 
           <div class="dana-actions-v3720">
@@ -9666,6 +9739,41 @@ async function DANA_generatePdfV3720() {
     DANA_getPayloadV3720();
 
 
+  const blankRowInput =
+    document.getElementById(
+      'danaBlankRowCountV3737'
+    );
+
+
+  let blankRowCount =
+    Math.floor(
+      Number(
+        blankRowInput
+          ? blankRowInput.value
+          : 10
+      )
+    );
+
+
+  if (
+    !Number.isFinite(blankRowCount) ||
+    blankRowCount < 1
+  ) {
+    blankRowCount = 10;
+  }
+
+
+  blankRowCount =
+    Math.min(
+      50,
+      blankRowCount
+    );
+
+
+  payload.blankRowCount =
+    blankRowCount;
+
+
   if (!payload.title) {
 
     DANA_setStatusV3720(
@@ -9718,7 +9826,11 @@ async function DANA_generatePdfV3720() {
       'success',
       payload.rows.length
         ? 'Generating DANA PDF...'
-        : 'Generating blank DANA form...'
+        : (
+            'Generating blank DANA form with ' +
+            payload.blankRowCount +
+            ' row(s)...'
+          )
     );
 
 
