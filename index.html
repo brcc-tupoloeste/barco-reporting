@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.37 DANA CUSTOM BLANK ROW COUNT -->
+<!-- FRONTEND VERSION: V37.38 DANA BLANK ROW PROMPT -->
 
 <style>
 
@@ -5247,27 +5247,6 @@ button:hover:not(:disabled),
             Final PDF generation requires an internet connection.
           </div>
 
-          <div class="dana-blank-rows-v3737">
-
-            <label for="danaBlankRowCountV3737">
-              Blank Form Rows
-              <small>
-                Used only when there are no encoded records. Choose how many writable rows you want in the blank PDF.
-              </small>
-            </label>
-
-            <input
-              id="danaBlankRowCountV3737"
-              type="number"
-              min="1"
-              max="50"
-              step="1"
-              value="10"
-              inputmode="numeric"
-            >
-
-          </div>
-
           <div class="dana-actions-v3720">
 
             <button
@@ -9739,39 +9718,63 @@ async function DANA_generatePdfV3720() {
     DANA_getPayloadV3720();
 
 
-  const blankRowInput =
-    document.getElementById(
-      'danaBlankRowCountV3737'
-    );
-
-
-  let blankRowCount =
-    Math.floor(
-      Number(
-        blankRowInput
-          ? blankRowInput.value
-          : 10
-      )
-    );
-
-
+  /*
+   * If there are no encoded records, ask the user how many
+   * writable blank rows should appear in the PDF.
+   */
   if (
-    !Number.isFinite(blankRowCount) ||
-    blankRowCount < 1
+    !payload.rows.length
   ) {
-    blankRowCount = 10;
+
+    const answer =
+      window.prompt(
+        'Ilang blank rows ang gusto mo sa form?\n\nEnter a number from 1 to 50.',
+        '10'
+      );
+
+
+    if (
+      answer === null
+    ) {
+
+      DANA_setStatusV3720(
+        '',
+        'Blank PDF generation cancelled.'
+      );
+
+      return;
+
+    }
+
+
+    let blankRowCount =
+      Math.floor(
+        Number(
+          answer
+        )
+      );
+
+
+    if (
+      !Number.isFinite(blankRowCount) ||
+      blankRowCount < 1 ||
+      blankRowCount > 50
+    ) {
+
+      DANA_setStatusV3720(
+        'error',
+        'Enter a valid blank row count from 1 to 50.'
+      );
+
+      return;
+
+    }
+
+
+    payload.blankRowCount =
+      blankRowCount;
+
   }
-
-
-  blankRowCount =
-    Math.min(
-      50,
-      blankRowCount
-    );
-
-
-  payload.blankRowCount =
-    blankRowCount;
 
 
   if (!payload.title) {
