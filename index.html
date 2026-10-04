@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.40 DANA PREVIOUS REPORTS HISTORY -->
+<!-- FRONTEND VERSION: V37.41 FIX CARD CLICKS / PREVIOUS REPORTS JS -->
 
 <style>
 
@@ -10575,11 +10575,13 @@ async function DANA_loadPreviousReportsV3740(
                 '</div>' +
               '</div>' +
               '<div class="dana-history-actions-v3740">' +
-                '<button type="button" class="dana-history-load-v3740" onclick="DANA_loadPreviousReportV3740(\\'' +
+                '<button type="button" class="dana-history-load-v3740" ' +
+                  'data-report-id="' +
                   DANA_escapeHtmlV3720(
                     item.reportId
                   ) +
-                '\\')">Load / Edit</button>' +
+                  '" ' +
+                  'onclick="DANA_loadPreviousReportV3740(this.dataset.reportId)">Load / Edit</button>' +
                 pdfAction +
               '</div>' +
             '</div>'
