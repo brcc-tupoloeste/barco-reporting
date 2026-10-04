@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.38 DANA BLANK ROW PROMPT -->
+<!-- FRONTEND VERSION: V37.40 DANA PREVIOUS REPORTS HISTORY -->
 
 <style>
 
@@ -4260,6 +4260,126 @@ button:hover:not(:disabled),
   }
 }
 
+
+/* =========================================================
+   V37.40 — DANA PREVIOUS REPORTS
+========================================================= */
+
+.dana-history-panel-v3740 {
+  display: none;
+  margin-top: 12px;
+  border: 1px solid #cfe1d3;
+  border-radius: 12px;
+  background: #f8fcf9;
+  overflow: hidden;
+}
+
+.dana-history-panel-v3740.show {
+  display: block;
+}
+
+.dana-history-head-v3740 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #eaf6ed;
+  border-bottom: 1px solid #d5e5d9;
+}
+
+.dana-history-head-v3740 strong {
+  color: #245f41;
+  font-size: 13px;
+}
+
+.dana-history-head-v3740 button {
+  min-height: 34px;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: #60776a;
+  color: #fff;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.dana-history-list-v3740 {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+}
+
+.dana-history-item-v3740 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 11px 12px;
+  border: 1px solid #d6e5da;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.dana-history-title-v3740 {
+  color: #213c2c;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.dana-history-meta-v3740 {
+  margin-top: 4px;
+  color: #6e7d73;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.dana-history-actions-v3740 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: flex-end;
+}
+
+.dana-history-actions-v3740 button,
+.dana-history-actions-v3740 a {
+  min-height: 34px;
+  padding: 7px 9px;
+  border: 0;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.dana-history-load-v3740 {
+  background: #2d7653;
+  color: #fff;
+}
+
+.dana-history-pdf-v3740 {
+  background: #e8f1fb;
+  color: #24537d;
+}
+
+.dana-history-empty-v3740 {
+  padding: 18px;
+  color: #748179;
+  text-align: center;
+  font-size: 11px;
+}
+
+@media(max-width:640px) {
+  .dana-history-item-v3740 {
+    grid-template-columns: 1fr;
+  }
+
+  .dana-history-actions-v3740 {
+    justify-content: flex-start;
+  }
+}
+
 </style>
 
 <!-- FRONTEND VERSION: V37.1 SILENT BACKEND CONNECTION -->
@@ -5267,11 +5387,49 @@ button:hover:not(:disabled),
 
             <button
               type="button"
+              class="dana-btn-v3720 secondary"
+              onclick="DANA_togglePreviousReportsV3740()"
+            >
+              Previous Reports
+            </button>
+
+            <button
+              type="button"
               class="dana-btn-v3720 danger"
               onclick="DANA_newReportV3720()"
             >
               New / Clear Report
             </button>
+
+          </div>
+
+
+          <div
+            id="danaHistoryPanelV3740"
+            class="dana-history-panel-v3740"
+          >
+
+            <div class="dana-history-head-v3740">
+
+              <strong>Previous DANA Reports</strong>
+
+              <button
+                type="button"
+                onclick="DANA_loadPreviousReportsV3740(true)"
+              >
+                Refresh
+              </button>
+
+            </div>
+
+            <div
+              id="danaHistoryListV3740"
+              class="dana-history-list-v3740"
+            >
+              <div class="dana-history-empty-v3740">
+                Tap Previous Reports to load saved DANA reports.
+              </div>
+            </div>
 
           </div>
 
@@ -8216,7 +8374,7 @@ async function DANA_loadFarmerMasterlistV3735() {
       '',
       'Farmer masterlist: ' +
       DANA_farmerMasterlistV3735.length +
-      ' active farmer(s) loaded. Farmer Name is now a dropdown.'
+      ' active farmer(s) loaded. Fields named Name / Farmer Name / Name of Farmer will use the farmer dropdown.'
     );
 
   } catch(error) {
@@ -8253,6 +8411,16 @@ function DANA_findFieldInputByKeyV3735(
       : [keys];
 
 
+  const normalizedKeys =
+    keys.map(
+      function(value) {
+        return String(value || '')
+          .trim()
+          .toLowerCase();
+      }
+    );
+
+
   for (
     let i = 0;
     i < DANA_fieldsV3720.length;
@@ -8263,9 +8431,62 @@ function DANA_findFieldInputByKeyV3735(
       DANA_fieldsV3720[i];
 
 
+    const key =
+      String(
+        field.key || ''
+      )
+        .trim()
+        .toLowerCase();
+
+
+    const label =
+      String(
+        field.label || ''
+      )
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g,' ');
+
+
+    const aliases =
+      [key];
+
+
     if (
-      keys.includes(
-        field.key
+      label === 'farm area'
+    ) {
+      aliases.push(
+        'farmarea'
+      );
+    }
+
+
+    if (
+      label === 'total area'
+    ) {
+      aliases.push(
+        'totalarea'
+      );
+    }
+
+
+    if (
+      label === 'mobile number' ||
+      label === 'contact number'
+    ) {
+      aliases.push(
+        'mobilenumber'
+      );
+    }
+
+
+    if (
+      aliases.some(
+        function(alias) {
+          return normalizedKeys.includes(
+            alias
+          );
+        }
       )
     ) {
 
@@ -8776,20 +8997,62 @@ function DANA_renderEntryFormV3720(
           '';
 
 
-        const isFarmerName =
-          field.key ===
-          'farmerName' ||
+        const normalizedLabel =
           String(
             field.label || ''
-          ).trim().toLowerCase() ===
-          'name of farmer';
+          )
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g,' ');
 
 
+        const normalizedKey =
+          String(
+            field.key || ''
+          )
+            .trim()
+            .toLowerCase();
+
+
+        /*
+         * Farmer Name dropdown also works in Custom / Blank Form.
+         * Recognized custom field labels:
+         *   Name
+         *   Farmer Name
+         *   Name of Farmer
+         */
+        const isFarmerName =
+          [
+            'farmername',
+            'name'
+          ].includes(
+            normalizedKey
+          ) ||
+          [
+            'name',
+            'farmer name',
+            'name of farmer'
+          ].includes(
+            normalizedLabel
+          );
+
+
+        /*
+         * Farm Area auto-fill also works for custom fields.
+         */
         const isFarmArea =
-          field.key ===
-          'farmArea' ||
-          field.key ===
-          'totalArea';
+          [
+            'farmarea',
+            'totalarea'
+          ].includes(
+            normalizedKey
+          ) ||
+          [
+            'farm area',
+            'total area'
+          ].includes(
+            normalizedLabel
+          );
 
 
         if (
@@ -10123,6 +10386,491 @@ function DANA_newReportV3720() {
 
 }
 
+
+
+/* =========================================================
+   V37.40 — DANA PREVIOUS REPORTS
+========================================================= */
+
+let DANA_historyOpenV3740 =
+  false;
+
+let DANA_historyLoadedV3740 =
+  false;
+
+
+function DANA_togglePreviousReportsV3740() {
+
+  const panel =
+    document.getElementById(
+      'danaHistoryPanelV3740'
+    );
+
+
+  if (!panel) {
+    return;
+  }
+
+
+  DANA_historyOpenV3740 =
+    !DANA_historyOpenV3740;
+
+
+  panel.classList.toggle(
+    'show',
+    DANA_historyOpenV3740
+  );
+
+
+  if (
+    DANA_historyOpenV3740 &&
+    !DANA_historyLoadedV3740
+  ) {
+
+    DANA_loadPreviousReportsV3740(
+      false
+    );
+
+  }
+
+}
+
+
+async function DANA_loadPreviousReportsV3740(
+  force
+) {
+
+  const host =
+    document.getElementById(
+      'danaHistoryListV3740'
+    );
+
+
+  if (!host) {
+    return;
+  }
+
+
+  if (
+    !navigator.onLine
+  ) {
+
+    host.innerHTML =
+      '<div class="dana-history-empty-v3740">Internet connection is required to load previous reports.</div>';
+
+    return;
+  }
+
+
+  host.innerHTML =
+    '<div class="dana-history-empty-v3740">Loading previous reports...</div>';
+
+
+  try {
+
+    const result =
+      await barcoApi(
+        'danaGetPreviousReports',
+        {
+          limit:
+            50,
+          force:
+            !!force
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to load previous DANA reports.'
+      );
+
+    }
+
+
+    const reports =
+      Array.isArray(
+        result.reports
+      )
+        ? result.reports
+        : [];
+
+
+    DANA_historyLoadedV3740 =
+      true;
+
+
+    if (!reports.length) {
+
+      host.innerHTML =
+        '<div class="dana-history-empty-v3740">No previous DANA reports found yet.</div>';
+
+      return;
+
+    }
+
+
+    host.innerHTML =
+      reports.map(
+        function(item) {
+
+          const status =
+            String(
+              item.status ||
+              'DRAFT'
+            ).toUpperCase();
+
+
+          const meta =
+            [
+              item.reportId,
+              item.documentDate || '',
+              status,
+              (
+                Number(
+                  item.recordCount ||
+                  0
+                ) +
+                ' record(s)'
+              )
+            ]
+              .filter(Boolean)
+              .join(' • ');
+
+
+          const pdfAction =
+            item.pdfUrl
+              ? (
+                  '<a class="dana-history-pdf-v3740" ' +
+                    'href="' +
+                    DANA_escapeHtmlV3720(
+                      item.pdfUrl
+                    ) +
+                    '" target="_blank" rel="noopener">Open PDF</a>'
+                )
+              : '';
+
+
+          return (
+            '<div class="dana-history-item-v3740">' +
+              '<div>' +
+                '<div class="dana-history-title-v3740">' +
+                  DANA_escapeHtmlV3720(
+                    item.title ||
+                    'Untitled DANA Report'
+                  ) +
+                '</div>' +
+                '<div class="dana-history-meta-v3740">' +
+                  DANA_escapeHtmlV3720(
+                    meta
+                  ) +
+                '</div>' +
+              '</div>' +
+              '<div class="dana-history-actions-v3740">' +
+                '<button type="button" class="dana-history-load-v3740" onclick="DANA_loadPreviousReportV3740(\\'' +
+                  DANA_escapeHtmlV3720(
+                    item.reportId
+                  ) +
+                '\\')">Load / Edit</button>' +
+                pdfAction +
+              '</div>' +
+            '</div>'
+          );
+
+        }
+      ).join('');
+
+  } catch(error) {
+
+    host.innerHTML =
+      '<div class="dana-history-empty-v3740">' +
+        DANA_escapeHtmlV3720(
+          'Previous Reports error: ' +
+          error.message
+        ) +
+      '</div>';
+
+  }
+
+}
+
+
+async function DANA_loadPreviousReportV3740(
+  reportId
+) {
+
+  reportId =
+    String(
+      reportId || ''
+    ).trim();
+
+
+  if (!reportId) {
+    return;
+  }
+
+
+  if (
+    (
+      DANA_currentReportIdV3720 ||
+      DANA_rowsV3720.length ||
+      DANA_fieldsV3720.length
+    ) &&
+    !window.confirm(
+      'Load this previous report? The current on-screen DANA form will be replaced.'
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  try {
+
+    DANA_setStatusV3720(
+      'success',
+      'Loading previous DANA report...'
+    );
+
+
+    const result =
+      await barcoApi(
+        'danaGetPreviousReport',
+        {
+          reportId:
+            reportId
+        }
+      );
+
+
+    if (
+      !result ||
+      !result.success ||
+      !result.report
+    ) {
+
+      throw new Error(
+        (
+          result &&
+          result.error
+        ) ||
+        'Unable to load the selected DANA report.'
+      );
+
+    }
+
+
+    const data =
+      result.report;
+
+
+    DANA_currentReportIdV3720 =
+      String(
+        data.reportId ||
+        ''
+      );
+
+
+    DANA_fieldsV3720 =
+      Array.isArray(
+        data.fields
+      )
+        ? data.fields
+        : [];
+
+
+    DANA_rowsV3720 =
+      Array.isArray(
+        data.rows
+      )
+        ? data.rows
+        : [];
+
+
+    const setValue =
+      function(id,value) {
+
+        const el =
+          document.getElementById(
+            id
+          );
+
+
+        if (el) {
+          el.value =
+            value == null
+              ? ''
+              : value;
+        }
+
+      };
+
+
+    setValue(
+      'danaTitleV3720',
+      data.title
+    );
+
+    setValue(
+      'danaDocumentDateV3720',
+      data.documentDate ||
+      DANA_todayV3720()
+    );
+
+    setValue(
+      'danaPreparedByV3720',
+      data.preparedBy ||
+      'Kgd. Jonel G. Rosano'
+    );
+
+    setValue(
+      'danaPreparedDesignationV3720',
+      data.preparedDesignation ||
+      'Chairman, Committee on Agriculture'
+    );
+
+    setValue(
+      'danaLayoutV3720',
+      data.layout ||
+      'AUTO'
+    );
+
+    setValue(
+      'danaTemplateV3720',
+      data.template ||
+      'CUSTOM'
+    );
+
+
+    DANA_generatedPdfV3720 = {
+      fileId:
+        String(
+          data.pdfFileId ||
+          ''
+        ),
+      pdfUrl:
+        String(
+          data.pdfUrl ||
+          ''
+        ),
+      filename:
+        ''
+    };
+
+
+    DANA_renderFieldsV3720();
+    DANA_renderEntryFormV3720();
+    DANA_renderTableV3720();
+    DANA_cacheLocalV3720();
+
+
+    const generated =
+      document.getElementById(
+        'danaGeneratedV3720'
+      );
+
+
+    const filename =
+      document.getElementById(
+        'danaGeneratedFilenameV3720'
+      );
+
+
+    const openLink =
+      document.getElementById(
+        'danaOpenPdfV3720'
+      );
+
+
+    if (
+      data.pdfUrl &&
+      generated
+    ) {
+
+      generated.classList.add(
+        'show'
+      );
+
+
+      if (filename) {
+
+        filename.textContent =
+          data.title +
+          ' • ' +
+          data.reportId;
+
+      }
+
+
+      if (openLink) {
+
+        openLink.href =
+          data.pdfUrl;
+
+      }
+
+    } else if (generated) {
+
+      generated.classList.remove(
+        'show'
+      );
+
+    }
+
+
+    DANA_setStatusV3720(
+      'success',
+      'Previous report loaded: ' +
+      data.reportId
+    );
+
+
+    const module =
+      document.getElementById(
+        'danaModuleV3719'
+      );
+
+
+    if (module) {
+
+      module.scrollTo({
+        top:
+          0,
+        behavior:
+          'smooth'
+      });
+
+    } else {
+
+      window.scrollTo({
+        top:
+          0,
+        behavior:
+          'smooth'
+      });
+
+    }
+
+  } catch(error) {
+
+    DANA_setStatusV3720(
+      'error',
+      'Load previous report error: ' +
+      error.message
+    );
+
+  }
+
+}
 
 
 
