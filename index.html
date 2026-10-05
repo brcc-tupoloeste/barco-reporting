@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.41 FIX CARD CLICKS / PREVIOUS REPORTS JS -->
+<!-- FRONTEND VERSION: V37.43 FORCE VISIBLE DANA EDIT BUTTON -->
 
 <style>
 
@@ -3795,8 +3795,8 @@ button:hover:not(:disabled),
   padding: 0;
   border: 0;
   border-radius: 9px;
-  background: #e7f3ea;
-  color: #1f6543;
+  background: #2d7653;
+  color: #ffffff;
   font-size: 21px;
   font-weight: 900;
   cursor: pointer;
@@ -4378,6 +4378,50 @@ button:hover:not(:disabled),
   .dana-history-actions-v3740 {
     justify-content: flex-start;
   }
+}
+
+
+/* =========================================================
+   V37.42 — DANA EDIT ENCODED RECORD
+========================================================= */
+
+.dana-edit-v3742 {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 6px 9px;
+  border: 0;
+  border-radius: 7px;
+  background: #e7f3ea;
+  color: #1f6543;
+  font-size: 10px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.dana-record-actions-v3742 {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.dana-editing-note-v3742 {
+  display: none;
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  border: 1px solid #e1c66e;
+  border-radius: 8px;
+  background: #fff8dc;
+  color: #705500;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.dana-editing-note-v3742.show {
+  display: block;
 }
 
 </style>
@@ -5300,9 +5344,12 @@ button:hover:not(:disabled),
         </div>
 
 
-        <div class="dana-form-card-v3720">
+        <div
+          id="danaAddRecordCardV3742"
+          class="dana-form-card-v3720"
+        >
 
-          <h3>Add Record</h3>
+          <h3 id="danaAddRecordTitleV3742">Add Record</h3>
 
           <div
             id="danaFarmerMasterlistStatusV3735"
@@ -5316,9 +5363,17 @@ button:hover:not(:disabled),
             class="dana-entry-form-v3720"
           ></div>
 
+          <div
+            id="danaEditingNoteV3742"
+            class="dana-editing-note-v3742"
+          >
+            Editing existing record. Change the details, then tap Update Record.
+          </div>
+
           <div class="dana-actions-v3720">
 
             <button
+              id="danaRecordSaveBtnV3742"
               type="button"
               class="dana-btn-v3720"
               onclick="DANA_addRecordV3720()"
@@ -5327,9 +5382,10 @@ button:hover:not(:disabled),
             </button>
 
             <button
+              id="danaRecordCancelBtnV3742"
               type="button"
               class="dana-btn-v3720 secondary"
-              onclick="DANA_clearEntryFormV3720()"
+              onclick="DANA_cancelRecordEditV3742(true)"
             >
               Clear Fields
             </button>
@@ -5341,7 +5397,12 @@ button:hover:not(:disabled),
 
         <div class="dana-form-card-v3720">
 
-          <h3>Report Records</h3>
+          <h3>
+            Report Records
+            <span style="font-size:9px;font-weight:700;color:#7a887f;margin-left:6px;">
+              Edit enabled • v37.43
+            </span>
+          </h3>
 
           <div
             id="danaRecordCountV3720"
@@ -9220,6 +9281,182 @@ function DANA_renderEntryFormV3720(
 }
 
 
+
+let DANA_editingRecordIndexV3742 =
+  -1;
+
+
+function DANA_setRecordEditModeV3742(
+  index
+) {
+
+  const editing =
+    Number.isInteger(
+      Number(index)
+    ) &&
+    Number(index) >= 0;
+
+
+  DANA_editingRecordIndexV3742 =
+    editing
+      ? Number(index)
+      : -1;
+
+
+  const button =
+    document.getElementById(
+      'danaRecordSaveBtnV3742'
+    );
+
+  const clearButton =
+    document.getElementById(
+      'danaRecordCancelBtnV3742'
+    );
+
+  const title =
+    document.getElementById(
+      'danaAddRecordTitleV3742'
+    );
+
+  const note =
+    document.getElementById(
+      'danaEditingNoteV3742'
+    );
+
+
+  if (button) {
+
+    button.textContent =
+      editing
+        ? 'Update Record'
+        : '+ Add Record';
+
+  }
+
+
+  if (clearButton) {
+
+    clearButton.textContent =
+      editing
+        ? 'Cancel Edit'
+        : 'Clear Fields';
+
+  }
+
+
+  if (title) {
+
+    title.textContent =
+      editing
+        ? 'Edit Record'
+        : 'Add Record';
+
+  }
+
+
+  if (note) {
+
+    note.classList.toggle(
+      'show',
+      editing
+    );
+
+  }
+
+}
+
+
+function DANA_editRecordV3742(
+  index
+) {
+
+  index =
+    Number(index);
+
+
+  if (
+    !Number.isInteger(index) ||
+    index < 0 ||
+    index >= DANA_rowsV3720.length
+  ) {
+
+    return;
+
+  }
+
+
+  const row =
+    DANA_rowsV3720[
+      index
+    ];
+
+
+  DANA_setRecordEditModeV3742(
+    index
+  );
+
+
+  DANA_renderEntryFormV3720(
+    row
+  );
+
+
+  const card =
+    document.getElementById(
+      'danaAddRecordCardV3742'
+    );
+
+
+  if (card) {
+
+    card.scrollIntoView({
+      behavior:
+        'smooth',
+      block:
+        'start'
+    });
+
+  }
+
+
+  setTimeout(
+    function() {
+
+      const first =
+        document.querySelector(
+          '#danaEntryFormV3720 input, #danaEntryFormV3720 select, #danaEntryFormV3720 textarea'
+        );
+
+
+      if (first) {
+        first.focus();
+      }
+
+    },
+    250
+  );
+
+}
+
+
+function DANA_cancelRecordEditV3742(
+  clearFields
+) {
+
+  DANA_setRecordEditModeV3742(
+    -1
+  );
+
+
+  if (clearFields) {
+
+    DANA_clearEntryFormV3720();
+
+  }
+
+}
+
+
 function DANA_clearEntryFormV3720() {
 
   DANA_fieldsV3720.forEach(
@@ -9308,9 +9545,41 @@ function DANA_addRecordV3720() {
   }
 
 
-  DANA_rowsV3720.push(
-    row
-  );
+  const editingIndex =
+    Number(
+      DANA_editingRecordIndexV3742
+    );
+
+
+  if (
+    Number.isInteger(editingIndex) &&
+    editingIndex >= 0 &&
+    editingIndex < DANA_rowsV3720.length
+  ) {
+
+    DANA_rowsV3720[
+      editingIndex
+    ] =
+      row;
+
+
+    DANA_setRecordEditModeV3742(
+      -1
+    );
+
+
+    DANA_setStatusV3720(
+      'success',
+      'Record updated. Save Draft or Generate PDF to save the changes to the report.'
+    );
+
+  } else {
+
+    DANA_rowsV3720.push(
+      row
+    );
+
+  }
 
 
   DANA_clearEntryFormV3720();
@@ -9343,6 +9612,26 @@ function DANA_removeRecordV3720(
     index,
     1
   );
+
+
+  if (
+    DANA_editingRecordIndexV3742 ===
+    index
+  ) {
+
+    DANA_cancelRecordEditV3742(
+      true
+    );
+
+  } else if (
+    DANA_editingRecordIndexV3742 >
+    index
+  ) {
+
+    DANA_editingRecordIndexV3742 -=
+      1;
+
+  }
 
 
   DANA_renderTableV3720();
@@ -9446,9 +9735,14 @@ function DANA_renderTableV3720() {
           '<tr>' +
           cells +
           '<td>' +
-            '<button type="button" class="dana-remove-v3720" onclick="DANA_removeRecordV3720(' +
-              index +
-            ')">Remove</button>' +
+            '<div class="dana-record-actions-v3742">' +
+              '<button type="button" class="dana-edit-v3742" onclick="DANA_editRecordV3742(' +
+                index +
+              ')">Edit Record</button>' +
+              '<button type="button" class="dana-remove-v3720" onclick="DANA_removeRecordV3720(' +
+                index +
+              ')">Remove</button>' +
+            '</div>' +
           '</td>' +
           '</tr>'
         );
@@ -10673,6 +10967,11 @@ async function DANA_loadPreviousReportV3740(
 
     const data =
       result.report;
+
+
+    DANA_setRecordEditModeV3742(
+      -1
+    );
 
 
     DANA_currentReportIdV3720 =
