@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V38.2 BARCO MENU + UNIFORM NOTIFICATIONS -->
+<!-- FRONTEND VERSION: V38.5 CLEAN DANA/LIVESTOCK HEADERS + QUICK ENTRY -->
 
 <style>
 
@@ -4931,6 +4931,23 @@ button:hover:not(:disabled),
   .v383-menu-actions > * { flex:1 1 calc(50% - 9px); }
 }
 
+
+/* =========================================================
+   V38.5 — CLEANER DANA / LIVESTOCK SECTION SCREENS
+========================================================= */
+#danaModuleV3719 .dana-header-v3719,
+#livestockModuleV3723 .livestock-header-v3723 {
+  display: none !important;
+}
+#danaModuleV3719 .dana-shell-v3719,
+#livestockModuleV3723 .livestock-shell-v3723 {
+  padding-top: 0 !important;
+}
+#danaModuleV3719 .dana-body-v3719,
+#livestockModuleV3723 .livestock-body-v3723 {
+  padding-top: 18px !important;
+}
+
 </style>
 
 <!-- FRONTEND VERSION: V38.4 CLEAN SECTION SCREENS + MERGED MENUS + EDITABLE LIVESTOCK -->
@@ -5617,7 +5634,7 @@ button:hover:not(:disabled),
             <div class="lsp-mobile-owner-card-v3733">
 
               <div class="lsp-mobile-owner-head-v3733">
-                <strong>House-to-House Entry</strong>
+                <strong>Quick Entry</strong>
                 <span>
                   Isang owner lang muna. I-enter ang bilang ng kanyang mga livestock,
                   tapos tap Save Owner & Next.
@@ -25518,7 +25535,7 @@ BARCO_openLivestockV3723 = function() {
   if (panel) panel.classList.add('show');
   if (trigger) {
     trigger.classList.add('open');
-    trigger.textContent='House-to-House Quick Entry';
+    trigger.textContent='Quick Entry';
   }
   LSP_renderQuickEntryV3734();
 };
@@ -26171,7 +26188,7 @@ function V383_openLivestockSection(index) {
     const panel=document.getElementById('lspQuickPanelV3734');
     const trigger=document.getElementById('lspQuickTriggerV3734');
     if(panel) panel.classList.add('show');
-    if(trigger){trigger.classList.add('open');trigger.textContent='House-to-House Quick Entry';}
+    if(trigger){trigger.classList.add('open');trigger.textContent='Quick Entry';}
     LSP_renderQuickEntryV3734();
   }
 
@@ -26571,7 +26588,7 @@ V383_openLivestockSection = function(index) {
     if (panel) panel.classList.add('show');
     if (trigger) {
       trigger.classList.add('open');
-      trigger.textContent = 'House-to-House Quick Entry';
+      trigger.textContent = 'Quick Entry';
     }
     LSP_renderQuickEntryV3734();
   }
