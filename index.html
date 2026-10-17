@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V38.0 SIMPLE REPORTING PORTAL -->
+<!-- FRONTEND VERSION: V38.2 BARCO MENU + UNIFORM NOTIFICATIONS -->
 
 <style>
 
@@ -4607,6 +4607,206 @@ button:hover:not(:disabled),
   .v38-module-card { min-height:104px; }
   .v38-screen-title { font-size:21px; }
   .v38-report-top { align-items:center; }
+}
+
+
+
+/* =========================================================
+   V38.2 — BARCO SIMPLE MENU + UNIFORM NOTIFICATION MODAL
+========================================================= */
+
+/* Override v38 continuous-form behavior. */
+#app.barco-menu-mode-v382 > .section,
+#app.barco-section-focus-mode-v382 > .section {
+  display: none !important;
+}
+#app.barco-section-focus-mode-v382 > .section.barco-active-section-v382 {
+  display: block !important;
+  margin-top: 0;
+}
+#app.barco-section-focus-mode-v382 > .section.barco-active-section-v382 .section-body {
+  display: block !important;
+}
+#app.barco-section-focus-mode-v382 > .section .section-collapse-button,
+#app.barco-menu-mode-v382 > .section .section-collapse-button {
+  display: none !important;
+}
+
+.barco-menu-v382 {
+  margin: 14px 0 18px;
+}
+.barco-menu-head-v382 {
+  margin-bottom: 12px;
+  padding: 13px 14px;
+  border: 1px solid #d6e6da;
+  border-radius: 12px;
+  background: #f7fbf8;
+}
+.barco-menu-title-v382 {
+  color: #245c3f;
+  font-size: 17px;
+  font-weight: 900;
+}
+.barco-menu-sub-v382 {
+  margin-top: 4px;
+  color: #6b7f71;
+  font-size: 11px;
+  line-height: 1.4;
+}
+.barco-menu-grid-v382 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 10px;
+}
+.barco-menu-card-v382 {
+  width: 100%;
+  min-height: 104px;
+  padding: 14px;
+  border: 1px solid #cfe0d3;
+  border-radius: 12px;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(36,92,63,.05);
+}
+.barco-menu-card-v382:hover {
+  background: #f8fcf9;
+  border-color: #9fc6aa;
+}
+.barco-menu-card-v382 .icon {
+  font-size: 24px;
+  line-height: 1;
+}
+.barco-menu-card-v382 strong {
+  display: block;
+  margin-top: 8px;
+  color: #245c3f;
+  font-size: 14px;
+}
+.barco-menu-card-v382 small {
+  display: block;
+  margin-top: 4px;
+  color: #718096;
+  font-size: 10px;
+  line-height: 1.35;
+}
+.barco-menu-actions-v382 {
+  margin-top: 14px;
+}
+.barco-menu-actions-v382 .save-area {
+  margin: 0;
+}
+.barco-section-toolbar-v382 {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 10px 0 14px;
+}
+#app.barco-section-focus-mode-v382 .barco-section-toolbar-v382 {
+  display: flex;
+}
+.barco-section-toolbar-v382 .barco-section-back-v382 {
+  border: 0;
+  border-radius: 8px;
+  background: #2d6a4f;
+  color: #fff;
+  padding: 9px 12px;
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+}
+.barco-section-name-v382 {
+  color: #50685a;
+  font-size: 11px;
+  font-weight: 900;
+}
+.barco-section-save-v382 {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #e2ebe4;
+  display: flex;
+  justify-content: flex-end;
+}
+.barco-section-save-v382 button {
+  border: 0;
+  border-radius: 8px;
+  background: #2d6a4f;
+  color: #fff;
+  padding: 10px 14px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+}
+.barco-delete-report-v382 {
+  background: #b42318 !important;
+}
+
+/* One notification modal style for all portal alerts. */
+.portal-notify-overlay-v382 {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15,23,42,.42);
+}
+.portal-notify-overlay-v382.show { display: flex; }
+.portal-notify-card-v382 {
+  width: min(420px,100%);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 18px 50px rgba(15,23,42,.24);
+  overflow: hidden;
+}
+.portal-notify-top-v382 {
+  padding: 15px 17px 10px;
+  border-bottom: 1px solid #edf1ee;
+}
+.portal-notify-title-v382 {
+  color: #245c3f;
+  font-size: 16px;
+  font-weight: 900;
+}
+.portal-notify-overlay-v382.error .portal-notify-title-v382 { color: #a52820; }
+.portal-notify-overlay-v382.warning .portal-notify-title-v382 { color: #8a6500; }
+.portal-notify-message-v382 {
+  padding: 15px 17px;
+  color: #475569;
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+.portal-notify-actions-v382 {
+  padding: 0 17px 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.portal-notify-actions-v382 button {
+  border: 0;
+  border-radius: 8px;
+  padding: 9px 14px;
+  background: #2d6a4f;
+  color: #fff;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.v382-delete-library {
+  background: #b42318 !important;
+  color: #fff !important;
+}
+
+@media(max-width:640px) {
+  .barco-menu-grid-v382 { grid-template-columns: 1fr; }
+  .barco-menu-card-v382 { min-height: 88px; }
+  .barco-section-toolbar-v382 { align-items: flex-start; }
 }
 
 </style>
@@ -24639,6 +24839,8 @@ function V38_reportCardHtml(item) {
     actions += '<button type="button" class="v38-edit" data-module="'+V38_escape(item.module||'')+'" data-id="'+V38_escape(item.reportId||'')+'" onclick="V38_editSavedReport(this.dataset.module,this.dataset.id)">Edit Report</button>';
   }
 
+  actions += '<button type="button" class="v382-delete-library" data-module="'+V38_escape(item.module||'')+'" data-id="'+V38_escape(item.reportId||'')+'" data-title="'+V38_escape(item.title||'Report')+'" onclick="V382_deleteReportFromLibrary(this.dataset.module,this.dataset.id,this.dataset.title)">Delete</button>';
+
   return '<div class="v38-report-card">' +
     '<div class="v38-report-top">' +
       '<div><div class="v38-report-title">'+V38_escape(item.title||'Report')+'</div>' +
@@ -25010,6 +25212,352 @@ document.addEventListener('DOMContentLoaded',function(){
     });
 });
 
+</script>
+
+
+<script>
+/* =========================================================
+   V38.2 — BARCO MENU MODE + UNIFORM NOTIFICATIONS
+========================================================= */
+
+const V382_NATIVE_ALERT = window.alert ? window.alert.bind(window) : null;
+
+function V382_ensureNotificationModal() {
+  let overlay = document.getElementById('portalNotifyOverlayV382');
+  if (overlay) return overlay;
+  if (!document.body) return null;
+
+  overlay = document.createElement('div');
+  overlay.id = 'portalNotifyOverlayV382';
+  overlay.className = 'portal-notify-overlay-v382';
+  overlay.innerHTML = `
+    <div class="portal-notify-card-v382" role="dialog" aria-modal="true" aria-labelledby="portalNotifyTitleV382">
+      <div class="portal-notify-top-v382">
+        <div id="portalNotifyTitleV382" class="portal-notify-title-v382">Notification</div>
+      </div>
+      <div id="portalNotifyMessageV382" class="portal-notify-message-v382"></div>
+      <div class="portal-notify-actions-v382">
+        <button type="button" onclick="V382_closeNotification()">OK</button>
+      </div>
+    </div>`;
+  overlay.addEventListener('click', function(event){
+    if (event.target === overlay) V382_closeNotification();
+  });
+  document.body.appendChild(overlay);
+  return overlay;
+}
+
+function V382_noticeType(message) {
+  const value = String(message || '').toLowerCase();
+  if (/error|failed|unable|invalid|cannot|could not/.test(value)) return 'error';
+  if (/offline|warning|required|please|select|enter/.test(value)) return 'warning';
+  if (/success|saved|ready|generated|copied|updated|deleted|removed/.test(value)) return 'success';
+  return 'info';
+}
+
+function V382_notify(message, title, type) {
+  const overlay = V382_ensureNotificationModal();
+  if (!overlay) {
+    if (V382_NATIVE_ALERT) V382_NATIVE_ALERT(String(message || ''));
+    return;
+  }
+
+  type = type || V382_noticeType(message);
+  overlay.className = 'portal-notify-overlay-v382 show ' + type;
+  const titleEl = document.getElementById('portalNotifyTitleV382');
+  const messageEl = document.getElementById('portalNotifyMessageV382');
+  if (titleEl) {
+    titleEl.textContent = title || (
+      type === 'error' ? 'Error' :
+      type === 'warning' ? 'Notice' :
+      type === 'success' ? 'Successful' : 'Notification'
+    );
+  }
+  if (messageEl) messageEl.textContent = String(message || '');
+}
+
+function V382_closeNotification() {
+  const overlay = document.getElementById('portalNotifyOverlayV382');
+  if (overlay) overlay.className = 'portal-notify-overlay-v382';
+}
+
+/* All existing alert notifications now use the same portal modal. */
+window.alert = function(message) {
+  V382_notify(message);
+};
+
+function V382_sectionConfig() {
+  return [
+    {title:'Report Information', icon:'📋', summary:V382_reportInfoSummary},
+    {title:'Road Clearing Entries', icon:'🛣️', summary:V382_roadSummary},
+    {title:'Participation / Attendance', icon:'👥', summary:V382_participationSummary},
+    {title:'Photo Documentation', icon:'📷', summary:V382_photoSummary},
+    {title:'Signatories', icon:'✍️', summary:V382_signatorySummary}
+  ];
+}
+
+function V382_reportInfoSummary() {
+  const month = (document.getElementById('month')||{}).value || '-';
+  const year = (document.getElementById('year')||{}).value || '-';
+  const date = (document.getElementById('dateOfBarco')||{}).value || 'No date';
+  return month + ' ' + year + ' • ' + date;
+}
+
+function V382_roadSummary() {
+  const rows = document.querySelectorAll('#roadRows tr');
+  return rows.length + ' road entr' + (rows.length === 1 ? 'y' : 'ies') + ' • ' +
+    String((document.getElementById('totalRoadLength')||{}).textContent || '0.00').trim() + ' km';
+}
+
+function V382_participationSummary() {
+  const participated = String((document.getElementById('participatedTotal')||{}).textContent || '0').trim();
+  const expected = String((document.getElementById('expectedTotal')||{}).textContent || '0').trim();
+  return participated + ' of ' + expected + ' participated';
+}
+
+function V382_photoSummary() {
+  const total = String((document.getElementById('totalPhotoCounter')||{}).textContent || '0 / 15').trim();
+  return total + ' photos';
+}
+
+function V382_signatorySummary() {
+  const inputs = Array.from(document.querySelectorAll('#signatoryPunongBarangay,#signatorySkChairperson,#sbMemberInputs input,#skMemberInputs input,#tanodInputs input'));
+  const filled = inputs.filter(function(input){ return String(input.value || '').trim(); }).length;
+  return filled + ' name' + (filled === 1 ? '' : 's') + ' filled';
+}
+
+function V382_updateBarcoMenu() {
+  const config = V382_sectionConfig();
+  config.forEach(function(item,index){
+    const el = document.getElementById('barcoMenuSummaryV382_' + index);
+    if (el) el.textContent = item.summary();
+  });
+
+  const status = String((document.getElementById('reportStatus')||{}).value || 'DRAFT').trim().toUpperCase();
+  const badge = document.getElementById('barcoMenuStatusV382');
+  if (badge) badge.textContent = status;
+}
+
+function V382_barcoReportId() {
+  const el = document.getElementById('reportId');
+  const id = String(el ? el.textContent : '').trim();
+  return (!id || id === '-') ? '' : id;
+}
+
+function V382_setupBarcoMenu() {
+  const app = document.getElementById('app');
+  if (!app) return;
+
+  app.classList.remove('barco-section-focus-mode-v3717');
+  app.classList.remove('barco-section-focus-mode-v382');
+  app.classList.add('barco-menu-mode-v382');
+
+  ['barcoSectionMenuV3717','barcoSectionFocusToolbarV3717','barcoSectionCollapseToolbar'].forEach(function(id){
+    const old = document.getElementById(id);
+    if (old) old.remove();
+  });
+
+  const sections = Array.from(app.querySelectorAll(':scope > .section'));
+  if (!sections.length) return;
+
+  sections.forEach(function(section,index){
+    section.classList.remove('collapsed','barco-active-section-v3717','barco-active-section-v382');
+    section.dataset.v382Index = String(index);
+    const oldButton = section.querySelector('.section-collapse-button');
+    if (oldButton) oldButton.remove();
+
+    const body = section.querySelector('.section-body');
+    if (body && !body.querySelector('.barco-section-save-v382')) {
+      const footer = document.createElement('div');
+      footer.className = 'barco-section-save-v382';
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = index === 3 ? 'Save Report Changes' : 'Save Changes';
+      button.onclick = function(){ V382_saveBarcoSection(index, button); };
+      footer.appendChild(button);
+      body.appendChild(footer);
+    }
+  });
+
+  let menu = document.getElementById('barcoMenuV382');
+  if (!menu) {
+    menu = document.createElement('div');
+    menu.id = 'barcoMenuV382';
+    menu.className = 'barco-menu-v382';
+    menu.innerHTML = `
+      <div class="barco-menu-head-v382">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;">
+          <div>
+            <div class="barco-menu-title-v382">BaRCO Report Menu</div>
+            <div class="barco-menu-sub-v382">Open one section at a time. Every section remains editable.</div>
+          </div>
+          <div id="barcoMenuStatusV382" class="v38-report-status">DRAFT</div>
+        </div>
+      </div>
+      <div id="barcoMenuGridV382" class="barco-menu-grid-v382"></div>
+      <div id="barcoMenuActionsV382" class="barco-menu-actions-v382"></div>`;
+    app.insertBefore(menu, sections[0]);
+  }
+
+  let toolbar = document.getElementById('barcoSectionToolbarV382');
+  if (!toolbar) {
+    toolbar = document.createElement('div');
+    toolbar.id = 'barcoSectionToolbarV382';
+    toolbar.className = 'barco-section-toolbar-v382';
+    toolbar.innerHTML = `
+      <button type="button" class="barco-section-back-v382" onclick="V382_backToBarcoMenu()">← Back</button>
+      <div id="barcoSectionNameV382" class="barco-section-name-v382"></div>`;
+    app.insertBefore(toolbar, sections[0]);
+  }
+
+  const grid = document.getElementById('barcoMenuGridV382');
+  const config = V382_sectionConfig();
+  if (grid) {
+    grid.innerHTML = config.map(function(item,index){
+      return '<button type="button" class="barco-menu-card-v382" data-index="'+index+'" onclick="V382_openBarcoSection(Number(this.dataset.index))">' +
+        '<span class="icon">'+item.icon+'</span>' +
+        '<strong>'+V38_escape(item.title)+'</strong>' +
+        '<small id="barcoMenuSummaryV382_'+index+'"></small>' +
+      '</button>';
+    }).join('');
+  }
+
+  const actionHost = document.getElementById('barcoMenuActionsV382');
+  const saveArea = app.querySelector(':scope > .save-area') || document.getElementById('barcoGlobalActionsV3717')?.querySelector('.save-area');
+  const pdfResult = document.getElementById('pdfResult');
+  if (actionHost) {
+    if (saveArea && saveArea.parentNode !== actionHost) actionHost.appendChild(saveArea);
+    if (pdfResult && pdfResult.parentNode !== actionHost) actionHost.appendChild(pdfResult);
+
+    if (!document.getElementById('barcoDeleteReportV382')) {
+      const deleteButton = document.createElement('button');
+      deleteButton.id = 'barcoDeleteReportV382';
+      deleteButton.type = 'button';
+      deleteButton.className = 'btn-red barco-delete-report-v382';
+      deleteButton.textContent = 'Delete Report';
+      deleteButton.onclick = V382_deleteCurrentBarcoReport;
+      const area = actionHost.querySelector('.save-area');
+      if (area) area.appendChild(deleteButton);
+    }
+  }
+
+  V38_loadRoadMasterlist();
+  V382_updateBarcoMenu();
+}
+
+function V382_openBarcoSection(index) {
+  const app = document.getElementById('app');
+  if (!app) return;
+  const sections = Array.from(app.querySelectorAll(':scope > .section'));
+  const section = sections[index];
+  if (!section) return;
+
+  app.classList.remove('barco-menu-mode-v382');
+  app.classList.add('barco-section-focus-mode-v382');
+  sections.forEach(function(item,i){
+    item.classList.toggle('barco-active-section-v382', i === index);
+  });
+
+  const menu = document.getElementById('barcoMenuV382');
+  if (menu) menu.style.display = 'none';
+  const toolbar = document.getElementById('barcoSectionToolbarV382');
+  if (toolbar) toolbar.style.display = 'flex';
+  const title = document.getElementById('barcoSectionNameV382');
+  const config = V382_sectionConfig();
+  if (title) title.textContent = config[index] ? config[index].title : '';
+
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function V382_backToBarcoMenu() {
+  const app = document.getElementById('app');
+  if (!app) return;
+  app.classList.remove('barco-section-focus-mode-v382');
+  app.classList.add('barco-menu-mode-v382');
+  Array.from(app.querySelectorAll(':scope > .section')).forEach(function(section){
+    section.classList.remove('barco-active-section-v382');
+  });
+  const menu = document.getElementById('barcoMenuV382');
+  if (menu) menu.style.display = 'block';
+  const toolbar = document.getElementById('barcoSectionToolbarV382');
+  if (toolbar) toolbar.style.display = 'none';
+  V382_updateBarcoMenu();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+async function V382_saveBarcoSection(index, button) {
+  const originalText = button ? button.textContent : '';
+  if (button) { button.disabled = true; button.textContent = 'Saving...'; }
+  try {
+    await saveDraft();
+    V382_updateBarcoMenu();
+    const title = (V382_sectionConfig()[index] || {}).title || 'BaRCO section';
+    V382_notify(title + ' saved successfully.', 'Changes Saved', 'success');
+  } catch(error) {
+    V382_notify('Unable to save changes: ' + error.message, 'Save Error', 'error');
+  } finally {
+    if (button) { button.disabled = false; button.textContent = originalText || 'Save Changes'; }
+  }
+}
+
+/* Keep legacy calls compatible with the new single-menu flow. */
+BARCO_setupCollapsibleSectionsV31 = V382_setupBarcoMenu;
+BARCO_backToSectionMenuV3717 = V382_backToBarcoMenu;
+
+const V382_originalOpenBarcoModule = BARCO_openModuleV32;
+BARCO_openModuleV32 = async function() {
+  await V382_originalOpenBarcoModule();
+  setTimeout(V382_setupBarcoMenu,0);
+};
+
+async function V382_deleteCurrentBarcoReport() {
+  const id = V382_barcoReportId();
+  if (!id) {
+    V382_notify('There is no saved BaRCO report to delete yet.', 'Delete Report', 'warning');
+    return;
+  }
+  if (!window.confirm('Delete this BaRCO report? This will remove its saved report data and generated PDF.')) return;
+  const deleted = await V382_deleteReport('BARCO',id,'BaRCO Report');
+  if (deleted) {
+    try { await startNewMonthlyReport(); } catch(error) {}
+    V382_setupBarcoMenu();
+  }
+}
+
+async function V382_deleteReport(module, reportId, title) {
+  try {
+    const result = await barcoApi('portalDeleteReport',{module:module,reportId:reportId});
+    if (!result || !result.success) throw new Error((result && result.error) || 'Delete failed.');
+    V382_notify(result.message || (title + ' deleted successfully.'), 'Report Deleted', 'success');
+    return true;
+  } catch(error) {
+    V382_notify('Delete error: ' + error.message, 'Delete Error', 'error');
+    return false;
+  }
+}
+
+async function V382_deleteReportFromLibrary(module, reportId, title) {
+  if (!reportId) return;
+  if (!window.confirm('Delete "' + String(title || 'Report') + '"? The saved report and generated PDF will be removed.')) return;
+  const ok = await V382_deleteReport(module,reportId,title);
+  if (!ok) return;
+  const year = (document.getElementById('v38LibraryYear')||{}).value || 0;
+  await V38_loadGeneratedReports(year);
+}
+
+/* Refresh menu summaries after common edits. */
+['change','input'].forEach(function(eventName){
+  document.addEventListener(eventName,function(event){
+    if (event.target && event.target.closest && event.target.closest('#barcoModule')) {
+      clearTimeout(window.V382_barcoSummaryTimer);
+      window.V382_barcoSummaryTimer = setTimeout(V382_updateBarcoMenu,80);
+    }
+  });
+});
+
+document.addEventListener('DOMContentLoaded',function(){
+  V382_ensureNotificationModal();
+});
 </script>
 
 </body>
