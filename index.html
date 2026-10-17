@@ -4809,9 +4809,131 @@ button:hover:not(:disabled),
   .barco-section-toolbar-v382 { align-items: flex-start; }
 }
 
+
+/* =========================================================
+   V38.3 — SIMPLE MENU MODE FOR ACCOMPLISHMENT / DANA / LIVESTOCK
+========================================================= */
+.v383-module-menu {
+  margin: 14px 0 18px;
+  padding: 16px;
+  border: 1px solid #cfe3d4;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 7px 20px rgba(22,60,44,.07);
+}
+.v383-menu-head { margin-bottom: 13px; }
+.v383-menu-title { color:#173f2d; font-size:20px; font-weight:900; }
+.v383-menu-sub { margin-top:4px; color:#66776d; font-size:12px; line-height:1.45; }
+.v383-menu-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+.v383-menu-card {
+  min-height:100px;
+  padding:14px;
+  border:1px solid #bdd8c5;
+  border-radius:12px;
+  background:#f7fcf8;
+  text-align:left;
+  cursor:pointer;
+  font:inherit;
+  color:#1d3528;
+}
+.v383-menu-card:hover { background:#eff8f1; border-color:#8fb99d; }
+.v383-menu-card .v383-icon { display:block; font-size:25px; margin-bottom:7px; }
+.v383-menu-card strong { display:block; font-size:14px; }
+.v383-menu-card small { display:block; margin-top:5px; color:#64756a; line-height:1.35; }
+.v383-menu-actions {
+  margin-top:14px;
+  padding-top:14px;
+  border-top:1px solid #dce9df;
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+}
+.v383-menu-actions button {
+  min-height:40px;
+  border:0;
+  border-radius:9px;
+  padding:9px 14px;
+  font:inherit;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+.v383-primary { background:#216644; color:#fff; }
+.v383-secondary { background:#e8f2eb; color:#24523a; }
+.v383-blue { background:#1769aa; color:#fff; }
+.v383-danger { background:#b42318; color:#fff; }
+.v383-section-toolbar {
+  display:none;
+  align-items:center;
+  gap:10px;
+  margin:10px 0 14px;
+}
+.v383-section-toolbar button {
+  border:0;
+  border-radius:8px;
+  background:#2d6a4f;
+  color:#fff;
+  padding:9px 12px;
+  font:inherit;
+  font-weight:900;
+  cursor:pointer;
+}
+.v383-section-name { color:#173f2d; font-size:16px; font-weight:900; }
+.v383-section-save {
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px solid #dce9df;
+  text-align:right;
+}
+.v383-section-save button {
+  border:0;
+  border-radius:8px;
+  background:#216644;
+  color:#fff;
+  padding:9px 15px;
+  font:inherit;
+  font-weight:900;
+  cursor:pointer;
+}
+.v383-manual-farmer-note {
+  margin-top:6px;
+  padding:7px 9px;
+  border-radius:7px;
+  background:#fff8e7;
+  color:#78560a;
+  font-size:11px;
+  line-height:1.4;
+}
+.v383-use-masterlist {
+  margin-top:7px;
+  border:1px solid #b7d1bf;
+  border-radius:7px;
+  background:#eef7f0;
+  color:#24523a;
+  padding:7px 9px;
+  font-size:11px;
+  font-weight:800;
+  cursor:pointer;
+}
+.v383-summary-note {
+  margin-top:10px;
+  color:#64756a;
+  font-size:11px;
+}
+@media(max-width:640px) {
+  .v383-menu-grid { grid-template-columns:1fr; }
+  .v383-menu-card { min-height:84px; }
+  .v383-section-toolbar { align-items:flex-start; }
+  .v383-menu-actions > * { flex:1 1 calc(50% - 9px); }
+}
+
 </style>
 
-<!-- FRONTEND VERSION: V37.1 SILENT BACKEND CONNECTION -->
+<!-- FRONTEND VERSION: V38.3 SIMPLE MENUS + DANA NON-MEMBER -->
 </head>
 
 
@@ -9567,7 +9689,8 @@ function DANA_renderEntryFormV3720(
 
         if (
           isFarmerName &&
-          DANA_farmerMasterlistV3735.length
+          DANA_farmerMasterlistV3735.length &&
+          !(window.DANA_manualFarmerModeV383 === true)
         ) {
 
           const options =
@@ -9608,9 +9731,10 @@ function DANA_renderEntryFormV3720(
               id +
               '" ' +
               'class="dana-farmer-select-v3735" ' +
-              'onchange="DANA_onFarmerSelectedV3735(this.value)"' +
+              'onchange="V383_danaFarmerSelectChanged(this.value)"' +
             '>' +
               '<option value="">— Select Farmer —</option>' +
+              '<option value="__DANA_MANUAL__">+ Add Non-Member / Manual Entry</option>' +
               options +
             '</select>';
 
@@ -9686,6 +9810,13 @@ function DANA_renderEntryFormV3720(
               ) +
             '</label>' +
             control +
+            (
+              isFarmerName &&
+              window.DANA_manualFarmerModeV383 === true
+                ? '<div class="v383-manual-farmer-note">Non-member / manual entry. This person will not be added to the Farmer Masterlist automatically.</div>' +
+                  '<button type="button" class="v383-use-masterlist" onclick="V383_danaUseFarmerMasterlist()">Use Farmer Masterlist</button>'
+                : ''
+            ) +
             (
               isFarmArea &&
               DANA_farmerMasterlistV3735.length
@@ -25558,6 +25689,578 @@ async function V382_deleteReportFromLibrary(module, reportId, title) {
 document.addEventListener('DOMContentLoaded',function(){
   V382_ensureNotificationModal();
 });
+
+
+/* =========================================================
+   V38.3 — SIMPLE SECTION MENUS FOR ALL REPORT MODULES
+   ---------------------------------------------------------
+   Same interaction pattern as BaRCO:
+   Module Menu -> one editable section -> Back.
+========================================================= */
+
+window.DANA_manualFarmerModeV383 = false;
+
+function V383_createMenuCard(icon,title,summary,index,handlerName) {
+  return '<button type="button" class="v383-menu-card" data-index="'+index+'" onclick="'+handlerName+'(Number(this.dataset.index))">' +
+    '<span class="v383-icon">'+icon+'</span>' +
+    '<strong>'+V38_escape(title)+'</strong>' +
+    '<small id="'+handlerName+'Summary_'+index+'">'+V38_escape(summary || '')+'</small>' +
+  '</button>';
+}
+
+function V383_scrollTop() {
+  try { window.scrollTo({top:0,behavior:'smooth'}); }
+  catch(error) { window.scrollTo(0,0); }
+}
+
+function V383_addSaveFooter(section, key, saveFn) {
+  if (!section || section.querySelector('.v383-section-save[data-key="'+key+'"]')) return;
+  const footer = document.createElement('div');
+  footer.className = 'v383-section-save';
+  footer.dataset.key = key;
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.textContent = 'Save Changes';
+  button.onclick = async function(){
+    const old = button.textContent;
+    button.disabled = true;
+    button.textContent = 'Saving...';
+    try {
+      await saveFn();
+      V382_notify('Changes saved successfully.','Changes Saved','success');
+    } catch(error) {
+      V382_notify('Unable to save changes: ' + error.message,'Save Error','error');
+    } finally {
+      button.disabled = false;
+      button.textContent = old;
+    }
+  };
+  footer.appendChild(button);
+  section.appendChild(footer);
+}
+
+/* =========================================================
+   ACCOMPLISHMENT
+========================================================= */
+function V383_accompSections() {
+  const screen = document.getElementById('accompMonthlyScreenV33');
+  return screen ? Array.from(screen.querySelectorAll(':scope > .accomp-form-section')) : [];
+}
+
+function V383_accompConfig() {
+  return [
+    {title:'Report Information',icon:'📋'},
+    {title:'Accomplishments',icon:'✅'},
+    {title:'Submitted / Approved By',icon:'✍️'}
+  ];
+}
+
+function V383_accompSummary(index) {
+  if (index === 0) {
+    const month = (document.getElementById('accompMonthV33')||{}).value || '-';
+    const year = (document.getElementById('accompYearV33')||{}).value || '-';
+    return month + ' ' + year;
+  }
+  if (index === 1) {
+    const count = document.querySelectorAll('#accompEntriesV33 .accomp-entry-row').length;
+    return count + ' accomplishment entr' + (count === 1 ? 'y' : 'ies');
+  }
+  const submitted = String((document.getElementById('accompSubmittedByV33')||{}).value || '').trim();
+  const approved = String((document.getElementById('accompApprovedByV33')||{}).value || '').trim();
+  return (submitted || 'No submitter') + ' • ' + (approved || 'No approver');
+}
+
+function V383_setupAccompMenu() {
+  const screen = document.getElementById('accompMonthlyScreenV33');
+  if (!screen) return;
+
+  const landing = document.getElementById('accompLandingV33');
+  if (landing) landing.style.display = 'none';
+  screen.style.display = 'block';
+
+  const oldToolbar = screen.querySelector('.accomp-editor-toolbar');
+  if (oldToolbar) oldToolbar.style.display = 'none';
+
+  const sections = V383_accompSections();
+  sections.forEach(function(section,index){
+    section.classList.remove('collapsed-v34');
+    section.style.display = 'none';
+    const toggle = section.querySelector('.accomp-section-toggle-v34');
+    if (toggle) toggle.remove();
+    V383_addSaveFooter(section,'accomp-'+index,ACCOMP_saveDraftV33);
+  });
+
+  let menu = document.getElementById('accompMenuV383');
+  if (!menu) {
+    menu = document.createElement('div');
+    menu.id = 'accompMenuV383';
+    menu.className = 'v383-module-menu';
+    const header = screen.querySelector('.accomp-header');
+    if (header) header.insertAdjacentElement('afterend',menu);
+    else screen.insertBefore(menu,screen.firstChild);
+  }
+
+  const config = V383_accompConfig();
+  menu.innerHTML = '<div class="v383-menu-head">' +
+      '<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;">' +
+        '<div><div class="v383-menu-title">Accomplishment Report Menu</div>' +
+        '<div class="v383-menu-sub">Open one section at a time. Every section can be edited and saved.</div></div>' +
+        '<div class="v38-report-status">'+V38_escape(String(ACCOMP_currentStatusV33 || 'DRAFT'))+'</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="v383-menu-grid">' +
+      config.map(function(item,index){return V383_createMenuCard(item.icon,item.title,V383_accompSummary(index),index,'V383_openAccompSection');}).join('') +
+      '<button type="button" class="v383-menu-card" onclick="V383_openAccompConsolidated()">' +
+        '<span class="v383-icon">📚</span><strong>Quarterly / Annual Reports</strong><small>Consolidate finalized monthly reports</small>' +
+      '</button>' +
+    '</div>' +
+    '<div class="v383-menu-actions">' +
+      '<button type="button" class="v383-secondary" onclick="ACCOMP_newMonthlyV33().then(V383_setupAccompMenu)">New Report</button>' +
+      '<button type="button" class="v383-primary" onclick="ACCOMP_saveDraftV33().then(function(){V383_setupAccompMenu();V382_notify(\'Accomplishment report saved.\',\'Saved\',\'success\');})">Save Draft</button>' +
+      '<button type="button" class="v383-blue" onclick="ACCOMP_generatePdfV33()">Generate / Regenerate PDF</button>' +
+      '<button type="button" class="v383-danger" onclick="V383_deleteAccompCurrent()">Delete Report</button>' +
+    '</div>';
+
+  let toolbar = document.getElementById('accompSectionToolbarV383');
+  if (!toolbar) {
+    toolbar = document.createElement('div');
+    toolbar.id = 'accompSectionToolbarV383';
+    toolbar.className = 'v383-section-toolbar';
+    toolbar.innerHTML = '<button type="button" onclick="V383_backToAccompMenu()">← Back</button><div id="accompSectionNameV383" class="v383-section-name"></div>';
+    menu.insertAdjacentElement('afterend',toolbar);
+  }
+
+  const formActions = screen.querySelector('.accomp-form-actions');
+  if (formActions) formActions.style.display = 'none';
+  const pdfLink = document.getElementById('accompFinalLinkV33');
+  if (pdfLink && pdfLink.style.display !== 'none') menu.appendChild(pdfLink);
+
+  menu.style.display = 'block';
+  toolbar.style.display = 'none';
+  V383_updateAccompMenu();
+}
+
+function V383_updateAccompMenu() {
+  V383_accompConfig().forEach(function(item,index){
+    const el = document.getElementById('V383_openAccompSectionSummary_'+index);
+    if (el) el.textContent = V383_accompSummary(index);
+  });
+}
+
+function V383_openAccompSection(index) {
+  const sections = V383_accompSections();
+  if (!sections[index]) return;
+  sections.forEach(function(section,i){section.style.display = i === index ? 'block' : 'none';});
+  const menu = document.getElementById('accompMenuV383');
+  const toolbar = document.getElementById('accompSectionToolbarV383');
+  if (menu) menu.style.display = 'none';
+  if (toolbar) toolbar.style.display = 'flex';
+  const name = document.getElementById('accompSectionNameV383');
+  if (name) name.textContent = (V383_accompConfig()[index]||{}).title || '';
+  V383_scrollTop();
+}
+
+function V383_backToAccompMenu() {
+  V383_accompSections().forEach(function(section){section.style.display='none';});
+  const menu = document.getElementById('accompMenuV383');
+  const toolbar = document.getElementById('accompSectionToolbarV383');
+  if (menu) menu.style.display='block';
+  if (toolbar) toolbar.style.display='none';
+  V383_updateAccompMenu();
+  V383_scrollTop();
+}
+
+function V383_openAccompConsolidated() {
+  ACCOMP_openConsolidatedV37('quarterly');
+}
+
+async function V383_deleteAccompCurrent() {
+  const id = String(ACCOMP_currentReportIdV33 || '').trim();
+  if (!id) { V382_notify('There is no saved Accomplishment Report to delete yet.','Delete Report','warning'); return; }
+  if (!window.confirm('Delete this Monthly Accomplishment Report and its generated PDF?')) return;
+  const ok = await V382_deleteReport('ACCOMP_MONTHLY',id,'Monthly Accomplishment Report');
+  if (ok) { await ACCOMP_newMonthlyV33(); V383_setupAccompMenu(); }
+}
+
+/* =========================================================
+   LIVESTOCK
+========================================================= */
+function V383_lspCards() {
+  const module = document.getElementById('livestockModuleV3723');
+  return module ? Array.from(module.querySelectorAll('.lsp-card-v3724')) : [];
+}
+
+function V383_lspConfig() {
+  return [
+    {card:0,title:'Report Information',icon:'📋'},
+    {card:1,title:'Livestock Entries',icon:'🐄'},
+    {card:2,title:'Review / Edit Records',icon:'📝'}
+  ];
+}
+
+function V383_lspSummary(index) {
+  if (index === 0) return String((document.getElementById('lspReportDateV3724')||{}).value || 'No date');
+  if (index === 1) {
+    const owners = new Set((LSP_recordsV3724 || []).map(function(r){return String(r.ownerName||'').trim().toLowerCase();}).filter(Boolean)).size;
+    return owners + ' owner(s) • ' + (LSP_recordsV3724 || []).length + ' livestock record(s)';
+  }
+  return (LSP_recordsV3724 || []).length + ' record(s) available to review or edit';
+}
+
+function V383_setupLivestockMenu() {
+  const module = document.getElementById('livestockModuleV3723');
+  if (!module) return;
+  const body = module.querySelector('.livestock-body-v3723');
+  const cards = V383_lspCards();
+  if (!body || !cards.length) return;
+
+  cards.forEach(function(card,index){
+    card.style.display='none';
+    if (index <= 2) V383_addSaveFooter(card,'lsp-'+index,LSP_saveDraftV3724);
+  });
+
+  let menu = document.getElementById('lspMenuV383');
+  if (!menu) {
+    menu=document.createElement('div');
+    menu.id='lspMenuV383';
+    menu.className='v383-module-menu';
+    body.insertBefore(menu,body.firstChild);
+  }
+
+  const config=V383_lspConfig();
+  const status = LSP_generatedPdfV3724 && LSP_generatedPdfV3724.pdfUrl ? 'FINAL' : 'DRAFT';
+  menu.innerHTML='<div class="v383-menu-head"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center;">' +
+      '<div><div class="v383-menu-title">Livestock Population Menu</div><div class="v383-menu-sub">Open one section at a time. Animal entry uses a dropdown for faster house-to-house encoding.</div></div>' +
+      '<div class="v38-report-status">'+status+'</div></div></div>' +
+    '<div class="v383-menu-grid">'+config.map(function(item,index){return V383_createMenuCard(item.icon,item.title,V383_lspSummary(index),index,'V383_openLivestockSection');}).join('')+'</div>' +
+    '<div class="v383-summary-note">Owner and livestock summaries update automatically from the editable records.</div>' +
+    '<div class="v383-menu-actions">' +
+      '<button type="button" class="v383-secondary" onclick="LSP_newReportV3724();setTimeout(V383_setupLivestockMenu,0)">New Report</button>' +
+      '<button type="button" class="v383-primary" onclick="LSP_saveDraftV3724().then(function(){V383_setupLivestockMenu();V382_notify(\'Livestock report saved.\',\'Saved\',\'success\');})">Save Draft</button>' +
+      '<button type="button" class="v383-blue" onclick="LSP_generatePdfV3724()">Generate / Regenerate PDF</button>' +
+      '<button type="button" class="v383-danger" onclick="V383_deleteLivestockCurrent()">Delete Report</button>' +
+    '</div>';
+
+  let toolbar=document.getElementById('lspSectionToolbarV383');
+  if (!toolbar) {
+    toolbar=document.createElement('div');
+    toolbar.id='lspSectionToolbarV383';
+    toolbar.className='v383-section-toolbar';
+    toolbar.innerHTML='<button type="button" onclick="V383_backToLivestockMenu()">← Back</button><div id="lspSectionNameV383" class="v383-section-name"></div>';
+    menu.insertAdjacentElement('afterend',toolbar);
+  }
+
+  const actionCard = cards[5];
+  if (actionCard) {
+    const generated=document.getElementById('lspGeneratedV3724');
+    if (generated && generated.classList.contains('show')) menu.appendChild(generated);
+  }
+
+  menu.style.display='block';
+  toolbar.style.display='none';
+  V383_updateLivestockMenu();
+}
+
+function V383_updateLivestockMenu() {
+  V383_lspConfig().forEach(function(item,index){
+    const el=document.getElementById('V383_openLivestockSectionSummary_'+index);
+    if(el) el.textContent=V383_lspSummary(index);
+  });
+}
+
+function V383_openLivestockSection(index) {
+  const cards=V383_lspCards();
+  const item=V383_lspConfig()[index];
+  if(!item || !cards[item.card]) return;
+  cards.forEach(function(card){card.style.display='none';});
+  cards[item.card].style.display='block';
+
+  if (item.card === 1) {
+    LSP_quickOpenV3734=true;
+    const panel=document.getElementById('lspQuickPanelV3734');
+    const trigger=document.getElementById('lspQuickTriggerV3734');
+    if(panel) panel.classList.add('show');
+    if(trigger){trigger.classList.add('open');trigger.textContent='House-to-House Quick Entry';}
+    LSP_renderQuickEntryV3734();
+  }
+
+  const menu=document.getElementById('lspMenuV383');
+  const toolbar=document.getElementById('lspSectionToolbarV383');
+  if(menu) menu.style.display='none';
+  if(toolbar) toolbar.style.display='flex';
+  const name=document.getElementById('lspSectionNameV383');
+  if(name) name.textContent=item.title;
+  V383_scrollTop();
+}
+
+function V383_backToLivestockMenu() {
+  V383_lspCards().forEach(function(card){card.style.display='none';});
+  const menu=document.getElementById('lspMenuV383');
+  const toolbar=document.getElementById('lspSectionToolbarV383');
+  if(menu) menu.style.display='block';
+  if(toolbar) toolbar.style.display='none';
+  V383_updateLivestockMenu();
+  V383_scrollTop();
+}
+
+async function V383_deleteLivestockCurrent() {
+  const id=String(LSP_reportIdV3724 || '').trim();
+  if(!id){V382_notify('There is no saved Livestock Report to delete yet.','Delete Report','warning');return;}
+  if(!window.confirm('Delete this Livestock Population Report and its generated PDF?')) return;
+  const ok=await V382_deleteReport('LIVESTOCK',id,'Livestock Population Report');
+  if(ok){LSP_newReportV3724();setTimeout(V383_setupLivestockMenu,0);}
+}
+
+/* =========================================================
+   DANA
+========================================================= */
+function V383_danaCards() {
+  const module=document.getElementById('danaModuleV3719');
+  return module ? Array.from(module.querySelectorAll('.dana-form-card-v3720')) : [];
+}
+
+function V383_danaConfig() {
+  return [
+    {card:0,title:'Report Information',icon:'📋'},
+    {card:1,title:'Form Template / Fields',icon:'🧩'},
+    {card:2,title:'Add / Edit Records',icon:'➕'},
+    {card:3,title:'Report Records',icon:'📝'}
+  ];
+}
+
+function V383_danaSummary(index) {
+  if(index===0){
+    const title=String((document.getElementById('danaTitleV3720')||{}).value || 'Untitled DANA').trim();
+    const date=String((document.getElementById('danaDocumentDateV3720')||{}).value || 'No date').trim();
+    return title+' • '+date;
+  }
+  if(index===1) return (DANA_fieldsV3720 || []).length+' field(s) configured';
+  if(index===2) return 'Farmer Masterlist or Non-Member / Manual Entry';
+  return (DANA_rowsV3720 || []).length+' record(s) • Edit or Remove available';
+}
+
+function V383_setupDanaMenu() {
+  const module=document.getElementById('danaModuleV3719');
+  if(!module) return;
+  const body=module.querySelector('.dana-body-v3719');
+  const cards=V383_danaCards();
+  if(!body || !cards.length) return;
+
+  cards.forEach(function(card,index){
+    card.classList.remove('v38-collapsible-card','v38-collapsed');
+    card.style.display='none';
+    const toggle=card.querySelector('.v38-card-toggle');
+    if(toggle) toggle.remove();
+    if(index<4) V383_addSaveFooter(card,'dana-'+index,DANA_saveDraftV3720);
+  });
+
+  let menu=document.getElementById('danaMenuV383');
+  if(!menu){
+    menu=document.createElement('div');
+    menu.id='danaMenuV383';
+    menu.className='v383-module-menu';
+    body.insertBefore(menu,body.firstChild);
+  }
+
+  const status = DANA_generatedPdfV3720 && DANA_generatedPdfV3720.pdfUrl ? 'FINAL' : 'DRAFT';
+  const config=V383_danaConfig();
+  menu.innerHTML='<div class="v383-menu-head"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center;">' +
+      '<div><div class="v383-menu-title">DANA Report Menu</div><div class="v383-menu-sub">Open one section at a time. Saved farmers and non-members are both allowed.</div></div>' +
+      '<div class="v38-report-status">'+status+'</div></div></div>' +
+    '<div class="v383-menu-grid">'+config.map(function(item,index){return V383_createMenuCard(item.icon,item.title,V383_danaSummary(index),index,'V383_openDanaSection');}).join('')+'</div>' +
+    '<div class="v383-menu-actions">' +
+      '<button type="button" class="v383-secondary" onclick="DANA_newReportV3720();setTimeout(V383_setupDanaMenu,0)">New Report</button>' +
+      '<button type="button" class="v383-primary" onclick="DANA_saveDraftV3720().then(function(){V383_setupDanaMenu();V382_notify(\'DANA report saved.\',\'Saved\',\'success\');})">Save Draft</button>' +
+      '<button type="button" class="v383-blue" onclick="DANA_generatePdfV3720()">Generate / Regenerate PDF</button>' +
+      '<button type="button" class="v383-danger" onclick="V383_deleteDanaCurrent()">Delete Report</button>' +
+    '</div>';
+
+  let toolbar=document.getElementById('danaSectionToolbarV383');
+  if(!toolbar){
+    toolbar=document.createElement('div');
+    toolbar.id='danaSectionToolbarV383';
+    toolbar.className='v383-section-toolbar';
+    toolbar.innerHTML='<button type="button" onclick="V383_backToDanaMenu()">← Back</button><div id="danaSectionNameV383" class="v383-section-name"></div>';
+    menu.insertAdjacentElement('afterend',toolbar);
+  }
+
+  const generated=document.getElementById('danaGeneratedV3720');
+  if(generated && generated.classList.contains('show')) menu.appendChild(generated);
+
+  menu.style.display='block';
+  toolbar.style.display='none';
+  V383_updateDanaMenu();
+}
+
+function V383_updateDanaMenu(){
+  V383_danaConfig().forEach(function(item,index){
+    const el=document.getElementById('V383_openDanaSectionSummary_'+index);
+    if(el) el.textContent=V383_danaSummary(index);
+  });
+}
+
+function V383_openDanaSection(index){
+  const cards=V383_danaCards();
+  const item=V383_danaConfig()[index];
+  if(!item || !cards[item.card]) return;
+  cards.forEach(function(card){card.style.display='none';});
+  cards[item.card].style.display='block';
+  const menu=document.getElementById('danaMenuV383');
+  const toolbar=document.getElementById('danaSectionToolbarV383');
+  if(menu) menu.style.display='none';
+  if(toolbar) toolbar.style.display='flex';
+  const name=document.getElementById('danaSectionNameV383');
+  if(name) name.textContent=item.title;
+  V383_scrollTop();
+}
+
+function V383_backToDanaMenu(){
+  V383_danaCards().forEach(function(card){card.style.display='none';});
+  const menu=document.getElementById('danaMenuV383');
+  const toolbar=document.getElementById('danaSectionToolbarV383');
+  if(menu) menu.style.display='block';
+  if(toolbar) toolbar.style.display='none';
+  V383_updateDanaMenu();
+  V383_scrollTop();
+}
+
+async function V383_deleteDanaCurrent(){
+  const id=String(DANA_currentReportIdV3720 || '').trim();
+  if(!id){V382_notify('There is no saved DANA Report to delete yet.','Delete Report','warning');return;}
+  if(!window.confirm('Delete this DANA Report and its generated PDF?')) return;
+  const ok=await V382_deleteReport('DANA',id,'DANA Report');
+  if(ok){DANA_newReportV3720();setTimeout(V383_setupDanaMenu,0);}
+}
+
+/* ---------- DANA NON-MEMBER / MANUAL FARMER ---------- */
+function V383_danaEnsureManualFields(){
+  const hasSitio=(DANA_fieldsV3720 || []).some(function(f){return String(f.key||'').toLowerCase()==='sitio' || String(f.label||'').trim().toLowerCase()==='sitio';});
+  const hasMobile=(DANA_fieldsV3720 || []).some(function(f){return String(f.key||'').toLowerCase()==='mobilenumber' || /mobile number|contact number/i.test(String(f.label||''));});
+  let farmerIndex=(DANA_fieldsV3720 || []).findIndex(function(f){return ['farmername','name'].includes(String(f.key||'').toLowerCase()) || ['name','farmer name','name of farmer'].includes(String(f.label||'').trim().toLowerCase());});
+  if(farmerIndex<0) farmerIndex=0;
+  let insertAt=farmerIndex+1;
+  if(!hasSitio){DANA_fieldsV3720.splice(insertAt,0,DANA_makeFieldV3720('sitio','Sitio','text'));insertAt++;}
+  if(!hasMobile){DANA_fieldsV3720.splice(insertAt,0,DANA_makeFieldV3720('mobileNumber','Mobile Number','tel'));}
+}
+
+function V383_danaFarmerSelectChanged(value){
+  value=String(value||'').trim();
+  if(value !== '__DANA_MANUAL__'){
+    window.DANA_manualFarmerModeV383=false;
+    DANA_onFarmerSelectedV3735(value);
+    return;
+  }
+
+  const preserved=DANA_captureEntryValuesV3735();
+  preserved.farmerName='';
+  preserved.name='';
+  V383_danaEnsureManualFields();
+  window.DANA_manualFarmerModeV383=true;
+  DANA_renderFieldsV3720();
+  DANA_renderEntryFormV3720(preserved);
+  DANA_cacheLocalV3720();
+  V382_notify('Enter the non-member name and other available details. This entry is saved only in this DANA report and is not added to the Farmer Masterlist.','Manual Farmer Entry','info');
+
+  setTimeout(function(){
+    const field=(DANA_fieldsV3720 || []).findIndex(function(f){return ['farmername','name'].includes(String(f.key||'').toLowerCase()) || ['name','farmer name','name of farmer'].includes(String(f.label||'').trim().toLowerCase());});
+    const input=document.getElementById('danaEntryFieldV3720_'+field);
+    if(input) input.focus();
+  },50);
+}
+
+function V383_danaUseFarmerMasterlist(){
+  const preserved=DANA_captureEntryValuesV3735();
+  preserved.farmerName='';
+  preserved.name='';
+  window.DANA_manualFarmerModeV383=false;
+  DANA_renderEntryFormV3720(preserved);
+}
+
+function V383_isMasterlistFarmer(name){
+  name=String(name||'').trim().toLowerCase();
+  if(!name) return false;
+  return (DANA_farmerMasterlistV3735 || []).some(function(item){return String(item.farmerName||'').trim().toLowerCase()===name;});
+}
+
+/* =========================================================
+   OPENERS / BACK BUTTON COMPATIBILITY
+========================================================= */
+const V383_openAccompOriginal = BARCO_openAccomplishmentV32;
+BARCO_openAccomplishmentV32 = async function(){
+  await V383_openAccompOriginal();
+  setTimeout(V383_setupAccompMenu,0);
+};
+
+const V383_openLivestockOriginal = BARCO_openLivestockV3723;
+BARCO_openLivestockV3723 = function(){
+  V383_openLivestockOriginal();
+  setTimeout(V383_setupLivestockMenu,0);
+};
+
+const V383_openDanaOriginal = BARCO_openDanaV3719;
+BARCO_openDanaV3719 = function(){
+  V383_openDanaOriginal();
+  setTimeout(V383_setupDanaMenu,0);
+};
+
+/* Consolidated Back now returns to the simple Accomplishment menu. */
+const V383_accompBackConsolidatedOriginal = ACCOMP_backToMenuV37;
+ACCOMP_backToMenuV37 = function(scrollTop){
+  const consolidated=document.getElementById('accompConsolidatedScreenV37');
+  const landing=document.getElementById('accompLandingV33');
+  const monthly=document.getElementById('accompMonthlyScreenV33');
+  if(consolidated) consolidated.style.display='none';
+  if(landing) landing.style.display='none';
+  if(monthly) monthly.style.display='block';
+  V383_setupAccompMenu();
+  if(scrollTop !== false) V383_scrollTop();
+};
+ACCOMP_backToMenuV33 = V383_backToAccompMenu;
+
+/* Saved-report editing returns to the matching section menu. */
+if (typeof ACCOMP_openSavedReportV33 === 'function') {
+  const V383_accompOpenSavedOriginal=ACCOMP_openSavedReportV33;
+  ACCOMP_openSavedReportV33=async function(reportId){
+    const result=await V383_accompOpenSavedOriginal(reportId);
+    setTimeout(V383_setupAccompMenu,0);
+    return result;
+  };
+}
+
+if (typeof DANA_editRecordV3742 === 'function') {
+  const V383_danaEditOriginal=DANA_editRecordV3742;
+  DANA_editRecordV3742=function(index){
+    const row=(DANA_rowsV3720 || [])[Number(index)] || {};
+    const farmerKey=(DANA_fieldsV3720 || []).find(function(f){return ['farmername','name'].includes(String(f.key||'').toLowerCase()) || ['name','farmer name','name of farmer'].includes(String(f.label||'').trim().toLowerCase());});
+    const farmerName=farmerKey ? String(row[farmerKey.key] || '') : '';
+    window.DANA_manualFarmerModeV383=!!farmerName && !V383_isMasterlistFarmer(farmerName);
+    if(window.DANA_manualFarmerModeV383) V383_danaEnsureManualFields();
+    V383_openDanaSection(2);
+    return V383_danaEditOriginal(index);
+  };
+}
+
+if (typeof DANA_newReportV3720 === 'function') {
+  const V383_danaNewOriginal=DANA_newReportV3720;
+  DANA_newReportV3720=function(){
+    window.DANA_manualFarmerModeV383=false;
+    const result=V383_danaNewOriginal();
+    setTimeout(V383_setupDanaMenu,0);
+    return result;
+  };
+}
+
+/* Menu summaries refresh while the user edits. */
+['input','change'].forEach(function(eventName){
+  document.addEventListener(eventName,function(event){
+    if(!event.target || !event.target.closest) return;
+    if(event.target.closest('#accomplishmentModule')) setTimeout(V383_updateAccompMenu,30);
+    if(event.target.closest('#livestockModuleV3723')) setTimeout(V383_updateLivestockMenu,30);
+    if(event.target.closest('#danaModuleV3719')) setTimeout(V383_updateDanaMenu,30);
+  });
+});
+
+
 </script>
 
 </body>
