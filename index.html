@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V37.43 FORCE VISIBLE DANA EDIT BUTTON -->
+<!-- FRONTEND VERSION: V38.0 SIMPLE REPORTING PORTAL -->
 
 <style>
 
@@ -4424,6 +4424,191 @@ button:hover:not(:disabled),
   display: block;
 }
 
+
+/* =========================================================
+   V38 — SIMPLE REPORTING PORTAL
+========================================================= */
+.v38-home-cards {
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.v38-simple-screen {
+  min-height: 100vh;
+  background: #f4f8f5;
+}
+
+.v38-screen-shell {
+  width: min(1050px,calc(100% - 24px));
+  margin: 0 auto;
+  padding: 20px 0 40px;
+}
+
+.v38-screen-title {
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 900;
+  color: #245c3f;
+}
+
+.v38-screen-subtitle {
+  margin-top: 6px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.v38-module-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.v38-module-card {
+  appearance: none;
+  border: 1px solid #cfdfd3;
+  border-radius: 14px;
+  background: #fff;
+  padding: 20px 16px;
+  text-align: left;
+  cursor: pointer;
+  min-height: 128px;
+  box-shadow: 0 3px 12px rgba(25,70,46,.06);
+}
+
+.v38-module-card strong {
+  display: block;
+  margin-top: 8px;
+  color: #245c3f;
+  font-size: 17px;
+}
+
+.v38-module-card small {
+  display: block;
+  margin-top: 6px;
+  color: #64748b;
+}
+
+.v38-module-icon { font-size: 30px; }
+
+.v38-details {
+  margin-top: 12px;
+  border: 1px solid #cfe0d3;
+  border-radius: 10px;
+  background: #f8fcf9;
+  overflow: hidden;
+}
+
+.v38-details > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 12px 14px;
+  font-weight: 900;
+  color: #245c3f;
+  background: #edf7f0;
+}
+
+.v38-details > summary::-webkit-details-marker { display:none; }
+.v38-details > summary::after { content:'▾'; float:right; }
+.v38-details:not([open]) > summary::after { content:'▸'; }
+
+.v38-road-manager { padding: 14px; }
+.v38-road-block { display:grid; gap:8px; }
+.v38-road-block label { font-size:11px; font-weight:900; color:#41574a; }
+.v38-road-block input,
+.v38-road-block select {
+  width:100%;
+  min-height:42px;
+  padding:8px 10px;
+  border:1px solid #cfd8d2;
+  border-radius:8px;
+  background:#fff;
+  font:inherit;
+}
+.v38-road-divider { text-align:center; color:#94a3b8; margin:12px 0; font-size:11px; font-weight:800; }
+.v38-inline-actions { display:flex; gap:8px; flex-wrap:wrap; }
+
+/* BaRCO: continuous form, no separate section menu / back-to-menu. */
+#barcoSectionMenuV3717,
+#barcoSectionFocusToolbarV3717,
+#barcoSectionCollapseToolbar { display:none !important; }
+#app.barco-section-focus-mode-v3717 > .section { display:block !important; }
+#app > .section { margin-bottom: 12px; }
+#app > .section.collapsed > .section-body { display:none !important; }
+#app > .section > .section-title { cursor:pointer; user-select:none; }
+#app > .section > .section-title .section-collapse-button {
+  margin-left:auto;
+  border:0;
+  background:transparent;
+  color:#245c3f;
+  font-weight:900;
+  cursor:pointer;
+}
+
+/* DANA: central Report Library replaces the old Previous Reports area. */
+#danaHistoryPanelV3740 { display:none !important; }
+.v38-hide { display:none !important; }
+
+/* Simple collapsible cards used by DANA advanced options. */
+.v38-collapsible-card > h3 { cursor:pointer; display:flex; align-items:center; justify-content:space-between; }
+.v38-card-toggle { border:0; background:#edf7f0; color:#245c3f; border-radius:7px; padding:5px 9px; font-weight:900; cursor:pointer; }
+.v38-collapsible-card.v38-collapsed > :not(h3) { display:none !important; }
+
+/* Accomplishment: keep only the useful New Report action. */
+#accompMonthlyScreenV33 .accomp-editor-toolbar { display:flex !important; justify-content:flex-end; }
+#accompMonthlyScreenV33 .accomp-editor-toolbar-left > button:first-child,
+#accompMonthlyScreenV33 .accomp-editor-toolbar-right { display:none !important; }
+#accompCollapseToolbarV34 { display:none !important; }
+
+/* BaRCO: central library replaces Saved Drafts; keep only New Report. */
+#barcoModule .draft-toolbar > button:first-child { display:none !important; }
+#barcoModule .draft-toolbar { justify-content:flex-end; }
+
+/* Livestock: Quick Entry is the primary form. */
+#lspMobileEntryV3733 { display:none !important; }
+#lspQuickPanelV3734 { display:block; }
+#lspQuickPanelV3734.show { display:block; }
+
+/* Report Library */
+.v38-library-head {
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  gap:14px;
+  flex-wrap:wrap;
+}
+.v38-year-box { min-width:140px; }
+.v38-year-box label { display:block; font-size:11px; font-weight:900; color:#53655a; margin-bottom:5px; }
+.v38-year-box select { width:100%; min-height:40px; border:1px solid #cfd8d2; border-radius:8px; padding:7px 10px; background:#fff; }
+.v38-library-status { margin-top:16px; padding:10px 12px; border-radius:9px; background:#eef6f0; color:#466050; font-size:12px; }
+.v38-library-month { margin-top:20px; }
+.v38-library-month-title { font-size:15px; font-weight:900; color:#245c3f; padding-bottom:7px; border-bottom:2px solid #dbe9df; }
+.v38-report-card { margin-top:10px; border:1px solid #d7e3da; border-radius:11px; background:#fff; padding:12px; }
+.v38-report-top { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+.v38-report-title { font-weight:900; color:#263b2e; }
+.v38-report-sub { margin-top:3px; font-size:11px; color:#718096; }
+.v38-report-status { white-space:nowrap; border-radius:999px; padding:4px 8px; font-size:10px; font-weight:900; background:#fff5d8; color:#725b00; }
+.v38-report-status.final,
+.v38-report-status.finalized { background:#e7f5eb; color:#24613d; }
+.v38-report-url { margin-top:8px; font-size:10px; color:#64748b; word-break:break-all; }
+.v38-report-actions { margin-top:10px; display:flex; gap:7px; flex-wrap:wrap; }
+.v38-report-actions a,
+.v38-report-actions button { border:0; border-radius:8px; padding:8px 10px; font-size:11px; font-weight:900; cursor:pointer; text-decoration:none; }
+.v38-open { background:#2d7653; color:#fff; }
+.v38-edit { background:#e9f2ec; color:#245c3f; }
+.v38-copy { background:#eef2f7; color:#334155; }
+.v38-empty { margin-top:20px; padding:25px 15px; text-align:center; border:1px dashed #cbd5cf; border-radius:12px; color:#64748b; background:#fff; }
+
+@media(max-width:700px) {
+  .v38-home-cards,
+  .v38-module-grid { grid-template-columns:1fr; }
+  .v38-module-card { min-height:104px; }
+  .v38-screen-title { font-size:21px; }
+  .v38-report-top { align-items:center; }
+}
+
 </style>
 
 <!-- FRONTEND VERSION: V37.1 SILENT BACKEND CONNECTION -->
@@ -4502,9 +4687,7 @@ button:hover:not(:disabled),
   <div class="portal-shell">
 
     <div class="portal-header">
-
       <div class="portal-brand-wrap">
-
         <div class="portal-logo-wrap">
           <img
             class="portal-logo"
@@ -4519,9 +4702,7 @@ button:hover:not(:disabled),
           Province of Iloilo · Municipality of Cabatuan
         </div>
 
-        <div class="portal-barangay">
-          BARANGAY TUPOL OESTE
-        </div>
+        <div class="portal-barangay">BARANGAY TUPOL OESTE</div>
 
         <div class="portal-title">
           Committee on Agriculture and Environmental Protection
@@ -4530,119 +4711,136 @@ button:hover:not(:disabled),
         <div class="portal-subtitle">
           Reporting and Documentation Portal
         </div>
-
       </div>
-
     </div>
 
-
-    <div class="portal-cards">
+    <div class="portal-cards v38-home-cards">
 
       <div
         class="portal-card"
         role="button"
         tabindex="0"
-        onclick="BARCO_openModuleV32()"
-        onkeydown="if(event.key==='Enter'){BARCO_openModuleV32();}"
+        onclick="V38_openEncodeMenu()"
+        onkeydown="if(event.key==='Enter'){V38_openEncodeMenu();}"
       >
-
-        <div class="portal-card-icon">🛣️</div>
-
-        <div class="portal-card-title">
-          BaRCO Reporting
-        </div>
-
+        <div class="portal-card-icon">📝</div>
+        <div class="portal-card-title">Encode / Update Reports</div>
         <div class="portal-card-text">
-          Monthly Barangay Road Clearing Operations report,
-          participation, photo documentation, signatories and PDF.
+          Create a new report or update an existing BaRCO,
+          Accomplishment, DANA, or Livestock report.
         </div>
-
-        <div class="portal-card-action">
-          Open BaRCO
-        </div>
-
+        <div class="portal-card-action">Open Reports</div>
       </div>
 
-
       <div
         class="portal-card"
         role="button"
         tabindex="0"
-        onclick="BARCO_openAccomplishmentV32()"
-        onkeydown="if(event.key==='Enter'){BARCO_openAccomplishmentV32();}"
+        onclick="V38_openGeneratedReports()"
+        onkeydown="if(event.key==='Enter'){V38_openGeneratedReports();}"
       >
-
-        <div class="portal-card-icon">📋</div>
-
-        <div class="portal-card-title">
-          Accomplishment Reports
-        </div>
-
+        <div class="portal-card-icon">📁</div>
+        <div class="portal-card-title">Generated Reports</div>
         <div class="portal-card-text">
-          Monthly accomplishment reports with future automatic
-          Quarterly and Annual consolidation.
+          View saved reports by month, open PDF links, edit records,
+          and regenerate updated PDFs.
         </div>
-
-        <div class="portal-card-action">
-          Open Accomplishment
-        </div>
-
-      </div>
-
-
-      <div
-        class="portal-card"
-        role="button"
-        tabindex="0"
-        onclick="BARCO_openDanaV3719()"
-        onkeydown="if(event.key==='Enter'){BARCO_openDanaV3719();}"
-      >
-
-        <div class="portal-card-icon">📊</div>
-
-        <div class="portal-card-title">
-          DANA Reports
-        </div>
-
-        <div class="portal-card-text">
-          Flexible Damage Assessment and Needs Analysis forms and document generation.
-        </div>
-
-        <div class="portal-card-action">
-          Open DANA Reports
-        </div>
-
-      </div>
-
-
-      <div
-        class="portal-card"
-        role="button"
-        tabindex="0"
-        onclick="BARCO_openLivestockV3723()"
-        onkeydown="if(event.key==='Enter'){BARCO_openLivestockV3723();}"
-      >
-
-        <div class="portal-card-icon">🐄</div>
-
-        <div class="portal-card-title">
-          Livestock Population
-        </div>
-
-        <div class="portal-card-text">
-          Barangay livestock population recording, monitoring and report generation.
-        </div>
-
-        <div class="portal-card-action">
-          Open Livestock Population
-        </div>
-
+        <div class="portal-card-action">Open Report Library</div>
       </div>
 
     </div>
 
   </div>
+</div>
 
+
+<!-- =======================================================
+     V38 — ENCODE / UPDATE MENU
+======================================================== -->
+<div
+  id="simpleEncodeMenuV38"
+  class="module-screen v38-simple-screen"
+>
+  <div class="module-topbar">
+    <button
+      type="button"
+      class="module-back-button"
+      onclick="BARCO_backToPortalV32()"
+    >
+      ← Back
+    </button>
+  </div>
+
+  <div class="v38-screen-shell">
+    <div class="v38-screen-title">Encode / Update Reports</div>
+    <div class="v38-screen-subtitle">
+      Select the report you want to prepare or update.
+    </div>
+
+    <div class="v38-module-grid">
+      <button type="button" class="v38-module-card" onclick="BARCO_openModuleV32()">
+        <span class="v38-module-icon">🛣️</span>
+        <strong>BaRCO Report</strong>
+        <small>Monthly road clearing report</small>
+      </button>
+
+      <button type="button" class="v38-module-card" onclick="BARCO_openAccomplishmentV32()">
+        <span class="v38-module-icon">📋</span>
+        <strong>Accomplishment</strong>
+        <small>Monthly accomplishment report</small>
+      </button>
+
+      <button type="button" class="v38-module-card" onclick="BARCO_openDanaV3719()">
+        <span class="v38-module-icon">📊</span>
+        <strong>DANA Report</strong>
+        <small>Damage assessment and other forms</small>
+      </button>
+
+      <button type="button" class="v38-module-card" onclick="BARCO_openLivestockV3723()">
+        <span class="v38-module-icon">🐄</span>
+        <strong>Livestock Population</strong>
+        <small>House-to-house livestock encoding</small>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- =======================================================
+     V38 — SAVED / GENERATED REPORT LIBRARY
+======================================================== -->
+<div
+  id="generatedReportsV38"
+  class="module-screen v38-simple-screen"
+>
+  <div class="module-topbar">
+    <button
+      type="button"
+      class="module-back-button"
+      onclick="BARCO_backToPortalV32()"
+    >
+      ← Back
+    </button>
+  </div>
+
+  <div class="v38-screen-shell">
+    <div class="v38-library-head">
+      <div>
+        <div class="v38-screen-title">Saved / Generated Reports</div>
+        <div class="v38-screen-subtitle">
+          Open PDF, copy its URL, or edit a saved report and regenerate it.
+        </div>
+      </div>
+
+      <div class="v38-year-box">
+        <label for="v38LibraryYear">Year</label>
+        <select id="v38LibraryYear" onchange="V38_loadGeneratedReports(this.value)"></select>
+      </div>
+    </div>
+
+    <div id="v38LibraryStatus" class="v38-library-status">Loading reports...</div>
+    <div id="v38LibraryList" class="v38-library-list"></div>
+  </div>
 </div>
 
 
@@ -4659,9 +4857,9 @@ button:hover:not(:disabled),
     <button
       type="button"
       class="module-back-button"
-      onclick="BARCO_backToPortalV32()"
+      onclick="V38_backToEncodeMenu()"
     >
-      ← Back to Committee Portal
+      ← Back to Reports
     </button>
   </div>
 
@@ -5163,9 +5361,9 @@ button:hover:not(:disabled),
     <button
       type="button"
       class="module-back-button"
-      onclick="BARCO_backToPortalV32()"
+      onclick="V38_backToEncodeMenu()"
     >
-      ← Back to Committee Portal
+      ← Back to Reports
     </button>
   </div>
 
@@ -5399,9 +5597,6 @@ button:hover:not(:disabled),
 
           <h3>
             Report Records
-            <span style="font-size:9px;font-weight:700;color:#7a887f;margin-left:6px;">
-              Edit enabled • v37.43
-            </span>
           </h3>
 
           <div
@@ -5554,9 +5749,9 @@ button:hover:not(:disabled),
     <button
       type="button"
       class="module-back-button"
-      onclick="BARCO_backToPortalV32()"
+      onclick="V38_backToEncodeMenu()"
     >
-      ← Back to Committee Portal
+      ← Back to Reports
     </button>
   </div>
 
@@ -5865,17 +6060,46 @@ button:hover:not(:disabled),
         </div>
 
 
-        <div class="actions">
+        <details id="barcoRoadManagerV38" class="v38-details">
+          <summary>+ Add / Manage Road</summary>
 
-          <button
-            class="btn-green"
-            type="button"
-            onclick="addRoadRow()"
-          >
-            + Add Road
-          </button>
+          <div class="v38-road-manager">
+            <div class="v38-road-block">
+              <label>Saved Permanent Road</label>
+              <select id="v38SavedRoadSelect">
+                <option value="">Select saved road</option>
+              </select>
 
-        </div>
+              <div class="v38-inline-actions">
+                <button type="button" class="btn-green" onclick="V38_addSavedRoadToReport()">
+                  Add to This Report
+                </button>
+                <button type="button" class="btn-red" onclick="V38_removePermanentRoad()">
+                  Remove Saved Road
+                </button>
+              </div>
+            </div>
+
+            <div class="v38-road-divider">or</div>
+
+            <div class="v38-road-block">
+              <label>New Permanent Road</label>
+              <input id="v38NewRoadName" type="text" placeholder="Road / street / alley name">
+
+              <label>Length (km)</label>
+              <input id="v38NewRoadLength" type="number" min="0" step="0.01" value="0">
+
+              <div class="v38-inline-actions">
+                <button type="button" class="btn-green" onclick="V38_savePermanentRoad()">
+                  Save Permanent Road
+                </button>
+                <button type="button" class="btn-gray" onclick="addRoadRow()">
+                  + Add One-Time Road
+                </button>
+              </div>
+            </div>
+          </div>
+        </details>
 
 
         <div class="total">
@@ -6377,9 +6601,14 @@ button:hover:not(:disabled),
             ></div>
 
             <div class="signatory-note">
-              Vacant/blank Tanod fields are automatically ignored in the PDF.
-              The remaining names are compacted, centered, and evenly aligned
-              on Page 4.
+              Vacant/blank Tanod fields are ignored. Page 4 formatting follows
+              the existing Google Slides template placeholders.
+            </div>
+
+            <div class="v38-inline-actions" style="margin-top:10px;">
+              <button type="button" class="btn-gray" onclick="loadDefaultSignatories()">
+                Restore Default Officials
+              </button>
             </div>
 
           </div>
@@ -6413,9 +6642,9 @@ button:hover:not(:disabled),
     <button
       type="button"
       class="module-back-button"
-      onclick="BARCO_backToPortalV32()"
+      onclick="V38_backToEncodeMenu()"
     >
-      ← Back to Committee Portal
+      ← Back to Reports
     </button>
   </div>
 
@@ -6648,6 +6877,24 @@ button:hover:not(:disabled),
         Generate Final PDF
       </button>
     </div>
+
+    <details class="v38-details" style="margin-top:14px;">
+      <summary>Quarterly / Annual Consolidated Report</summary>
+      <div style="padding:14px;">
+        <div class="accomp-field">
+          <label>Report Type</label>
+          <select id="v38AccompConsolidatedType">
+            <option value="quarterly">Quarterly Report</option>
+            <option value="annual">Annual Report</option>
+          </select>
+        </div>
+        <div class="v38-inline-actions" style="margin-top:10px;">
+          <button type="button" class="accomp-btn-blue" onclick="V38_openNewConsolidated()">
+            Open Consolidated Report
+          </button>
+        </div>
+      </div>
+    </details>
 
 
     <div id="accompFinalLinkV33" class="accomp-final-link">
@@ -7664,6 +7911,8 @@ function BARCO_showOnlyV32(
 
   [
     'portalHome',
+    'simpleEncodeMenuV38',
+    'generatedReportsV38',
     'barcoModule',
     'accomplishmentModule',
     'danaModuleV3719',
@@ -24220,6 +24469,547 @@ function ACCOMP_hideConsolidatedStatusV37() {
     );
   }
 })();
+
+
+/* =========================================================
+   V38 — SIMPLE REPORTING PORTAL
+========================================================= */
+
+const V38_ROAD_CACHE_KEY =
+  'BARCO_PERMANENT_ROADS_V38';
+
+let V38_permanentRoads =
+  [];
+
+
+function V38_openEncodeMenu() {
+  BARCO_showOnlyV32('simpleEncodeMenuV38');
+}
+
+
+function V38_backToEncodeMenu() {
+  BARCO_showOnlyV32('simpleEncodeMenuV38');
+}
+
+
+async function V38_openGeneratedReports() {
+  BARCO_showOnlyV32('generatedReportsV38');
+  await V38_loadGeneratedReports();
+}
+
+
+function V38_escape(value) {
+  return String(value === null || value === undefined ? '' : value)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+}
+
+
+function V38_monthName(no) {
+  return [
+    '', 'January','February','March','April','May','June',
+    'July','August','September','October','November','December'
+  ][Number(no)||0] || 'Other Reports';
+}
+
+
+async function V38_loadGeneratedReports(yearValue) {
+  const status = document.getElementById('v38LibraryStatus');
+  const host = document.getElementById('v38LibraryList');
+  const yearSelect = document.getElementById('v38LibraryYear');
+
+  if (status) {
+    status.style.display = 'block';
+    status.textContent = 'Loading saved reports...';
+  }
+  if (host) host.innerHTML = '';
+
+  try {
+    await ensureBarcoBridge();
+
+    let requestedYear = Number(yearValue || (yearSelect && yearSelect.value) || 0);
+    const result = await barcoApi('portalGetGeneratedReports',{year:requestedYear});
+    if (!result || !result.success) {
+      throw new Error((result && result.error) || 'Unable to load report library.');
+    }
+
+    const years = Array.isArray(result.years) ? result.years : [];
+
+    if (yearSelect) {
+      const current = Number(yearSelect.value || requestedYear || 0);
+      yearSelect.innerHTML = years.length
+        ? years.map(y => '<option value="'+Number(y)+'">'+Number(y)+'</option>').join('')
+        : '<option value="'+new Date().getFullYear()+'">'+new Date().getFullYear()+'</option>';
+
+      let target = requestedYear || current;
+      if (!target || !years.includes(target)) {
+        const currentYear = new Date().getFullYear();
+        target = years.includes(currentYear) ? currentYear : (years[0] || currentYear);
+      }
+      yearSelect.value = String(target);
+
+      if (!requestedYear && years.length) {
+        const second = await barcoApi('portalGetGeneratedReports',{year:target});
+        if (second && second.success) {
+          V38_renderGeneratedReports(second.reports || []);
+          if (status) status.style.display = 'none';
+          return;
+        }
+      }
+    }
+
+    V38_renderGeneratedReports(result.reports || []);
+    if (status) status.style.display = 'none';
+
+  } catch(error) {
+    if (status) {
+      status.style.display = 'block';
+      status.textContent = 'Report Library error: ' + error.message;
+    }
+    if (host) {
+      host.innerHTML = '<div class="v38-empty">Unable to load reports. Make sure the v38 backend and router cases are deployed.</div>';
+    }
+  }
+}
+
+
+function V38_renderGeneratedReports(reports) {
+  const host = document.getElementById('v38LibraryList');
+  if (!host) return;
+
+  reports = Array.isArray(reports) ? reports : [];
+  if (!reports.length) {
+    host.innerHTML = '<div class="v38-empty">No saved reports for this year.</div>';
+    return;
+  }
+
+  const monthly = {};
+  const consolidated = [];
+
+  reports.forEach(item => {
+    if (item.module === 'ACCOMP_CONSOLIDATED' || !Number(item.monthNo||0)) {
+      consolidated.push(item);
+      return;
+    }
+    const key = Number(item.monthNo||0);
+    if (!monthly[key]) monthly[key] = [];
+    monthly[key].push(item);
+  });
+
+  let html = '';
+
+  Object.keys(monthly)
+    .map(Number)
+    .sort((a,b)=>b-a)
+    .forEach(monthNo => {
+      html += '<div class="v38-library-month">' +
+        '<div class="v38-library-month-title">'+V38_escape(V38_monthName(monthNo))+'</div>' +
+        monthly[monthNo].map(V38_reportCardHtml).join('') +
+      '</div>';
+    });
+
+  if (consolidated.length) {
+    html += '<div class="v38-library-month">' +
+      '<div class="v38-library-month-title">Quarterly / Annual Accomplishment</div>' +
+      consolidated.map(V38_reportCardHtml).join('') +
+    '</div>';
+  }
+
+  host.innerHTML = html;
+}
+
+
+function V38_reportCardHtml(item) {
+  const status = String(item.status || 'DRAFT').toUpperCase();
+  const finalClass = status === 'FINAL' || status === 'FINALIZED' ? ' final' : '';
+  const pdfUrl = String(item.pdfUrl || '');
+
+  let actions = '';
+  if (pdfUrl) {
+    actions += '<a class="v38-open" target="_blank" rel="noopener" href="'+V38_escape(pdfUrl)+'">Open PDF</a>';
+    actions += '<button type="button" class="v38-copy" data-url="'+V38_escape(pdfUrl)+'" onclick="V38_copyPdfUrl(this.dataset.url)">Copy URL</button>';
+  }
+
+  if (item.module === 'ACCOMP_CONSOLIDATED') {
+    actions += '<button type="button" class="v38-edit" data-type="'+V38_escape(item.reportType||'')+'" data-quarter="'+V38_escape(item.quarter||'')+'" data-year="'+Number(item.year||0)+'" onclick="V38_openConsolidatedFromLibrary(this.dataset.type,this.dataset.quarter,this.dataset.year)">Edit Sources / Regenerate</button>';
+  } else {
+    actions += '<button type="button" class="v38-edit" data-module="'+V38_escape(item.module||'')+'" data-id="'+V38_escape(item.reportId||'')+'" onclick="V38_editSavedReport(this.dataset.module,this.dataset.id)">Edit Report</button>';
+  }
+
+  return '<div class="v38-report-card">' +
+    '<div class="v38-report-top">' +
+      '<div><div class="v38-report-title">'+V38_escape(item.title||'Report')+'</div>' +
+      '<div class="v38-report-sub">'+V38_escape(item.subtitle||item.reportId||'')+'</div></div>' +
+      '<div class="v38-report-status'+finalClass+'">'+V38_escape(status)+'</div>' +
+    '</div>' +
+    (pdfUrl ? '<div class="v38-report-url">PDF URL: '+V38_escape(pdfUrl)+'</div>' : '<div class="v38-report-url">PDF: Not generated yet</div>') +
+    '<div class="v38-report-actions">'+actions+'</div>' +
+  '</div>';
+}
+
+
+async function V38_copyPdfUrl(url) {
+  url = String(url || '');
+  if (!url) return;
+  try {
+    await navigator.clipboard.writeText(url);
+    alert('PDF URL copied.');
+  } catch(error) {
+    window.prompt('Copy PDF URL:',url);
+  }
+}
+
+
+async function V38_editSavedReport(module,reportId) {
+  module = String(module||'');
+  reportId = String(reportId||'');
+  if (!reportId) return;
+
+  if (module === 'BARCO') {
+    await BARCO_openModuleV32();
+    await openDraftById(reportId);
+    return;
+  }
+
+  if (module === 'ACCOMP_MONTHLY') {
+    await BARCO_openAccomplishmentV32();
+    await ACCOMP_openSavedReportV33(reportId);
+    return;
+  }
+
+  if (module === 'DANA') {
+    BARCO_openDanaV3719();
+    setTimeout(function(){ DANA_loadPreviousReportV3740(reportId); },120);
+    return;
+  }
+
+  if (module === 'LIVESTOCK') {
+    await V38_openLivestockSavedReport(reportId);
+  }
+}
+
+
+async function V38_openLivestockSavedReport(reportId) {
+  BARCO_openLivestockV3723();
+  try {
+    await ensureBarcoBridge();
+    const result = await barcoApi('portalGetLivestockReport',{reportId:reportId});
+    if (!result || !result.success || !result.found) throw new Error('Livestock report not found.');
+
+    const report = result.report || {};
+    LSP_reportIdV3724 = String(report.reportId || reportId);
+    LSP_recordsV3724 = Array.isArray(result.records) ? result.records : [];
+
+    const date = document.getElementById('lspReportDateV3724');
+    const prepared = document.getElementById('lspPreparedByV3724');
+    const designation = document.getElementById('lspDesignationV3724');
+    if (date) date.value = report.reportDate || LSP_todayV3724();
+    if (prepared) prepared.value = report.preparedBy || '';
+    if (designation) designation.value = report.designation || '';
+
+    LSP_generatedPdfV3724 = {
+      fileId:String(report.pdfFileId||''),
+      pdfUrl:String(report.pdfUrl||''),
+      filename:'Livestock-Population-Report.pdf'
+    };
+
+    LSP_recordsToMatrixV3726();
+    LSP_renderMatrixV3726();
+    LSP_renderAllV3724();
+    LSP_quickStateV3734 = {ownerName:'',counts:LSP_quickEmptyCountsV3734()};
+    LSP_quickOpenV3734 = true;
+    const panel = document.getElementById('lspQuickPanelV3734');
+    if (panel) panel.classList.add('show');
+    LSP_renderQuickEntryV3734();
+    LSP_cacheLocalV3724(false);
+    LSP_setStatusV3724('success','Saved Livestock report opened. Edit then Generate PDF to regenerate it.');
+    window.scrollTo(0,0);
+  } catch(error) {
+    LSP_setStatusV3724('error','Unable to open report: '+error.message);
+  }
+}
+
+
+async function V38_openConsolidatedFromLibrary(type,quarter,year) {
+  await BARCO_openAccomplishmentV32();
+  const hiddenType = document.getElementById('accompReportTypeV36');
+  if (hiddenType) hiddenType.value = String(type||'').toUpperCase()==='ANNUAL' ? 'annual' : 'quarterly';
+  await ACCOMP_openSortedReportV36();
+
+  setTimeout(function(){
+    const y = document.getElementById('accompConsolidatedYearV37');
+    const q = document.getElementById('accompConsolidatedQuarterV37');
+    if (y && year) y.value = String(year);
+    if (q && quarter) q.value = String(quarter);
+    if (typeof ACCOMP_refreshConsolidatedV37 === 'function') ACCOMP_refreshConsolidatedV37();
+  },120);
+}
+
+
+/* =========================================================
+   V38 — BARCO PERMANENT ROAD MASTERLIST
+========================================================= */
+
+function V38_cachePermanentRoads() {
+  try { localStorage.setItem(V38_ROAD_CACHE_KEY,JSON.stringify(V38_permanentRoads)); } catch(error) {}
+}
+
+
+function V38_restorePermanentRoads() {
+  try {
+    const raw = localStorage.getItem(V38_ROAD_CACHE_KEY);
+    V38_permanentRoads = raw ? JSON.parse(raw) : [];
+  } catch(error) { V38_permanentRoads = []; }
+  V38_renderRoadMasterlist();
+}
+
+
+async function V38_loadRoadMasterlist() {
+  V38_restorePermanentRoads();
+  if (!navigator.onLine) return;
+  try {
+    const result = await barcoApi('portalGetRoadMasterlist',{});
+    if (result && result.success) {
+      V38_permanentRoads = Array.isArray(result.roads) ? result.roads : [];
+      V38_cachePermanentRoads();
+      V38_renderRoadMasterlist();
+    }
+  } catch(error) {}
+}
+
+
+function V38_renderRoadMasterlist() {
+  const select = document.getElementById('v38SavedRoadSelect');
+  if (!select) return;
+  select.innerHTML = '<option value="">Select saved road</option>' +
+    V38_permanentRoads.map(function(item,index){
+      return '<option value="'+index+'">'+V38_escape(item.roadName)+' — '+Number(item.roadLength||0)+' km</option>';
+    }).join('');
+}
+
+
+function V38_addSavedRoadToReport() {
+  const select = document.getElementById('v38SavedRoadSelect');
+  const index = select ? Number(select.value) : -1;
+  const road = V38_permanentRoads[index];
+  if (!road) { alert('Select a saved road first.'); return; }
+
+  addRoadRow();
+  const rows = document.querySelectorAll('#roadRows tr');
+  const row = rows[rows.length-1];
+  if (!row) return;
+  const name = row.querySelector('.roadName');
+  const length = row.querySelector('.roadLength');
+  if (name) name.value = road.roadName || '';
+  if (length) length.value = Number(road.roadLength||0);
+  computeRoadTotal();
+}
+
+
+async function V38_savePermanentRoad() {
+  const name = String((document.getElementById('v38NewRoadName')||{}).value||'').trim();
+  const length = Number((document.getElementById('v38NewRoadLength')||{}).value||0);
+  if (!name) { alert('Enter the road name.'); return; }
+  if (!navigator.onLine) { alert('Internet is required to save a permanent road.'); return; }
+  try {
+    const result = await barcoApi('portalSaveRoadMaster',{roadName:name,roadLength:length});
+    if (!result || !result.success) throw new Error((result&&result.error)||'Unable to save road.');
+    const nameEl = document.getElementById('v38NewRoadName');
+    const lenEl = document.getElementById('v38NewRoadLength');
+    if (nameEl) nameEl.value = '';
+    if (lenEl) lenEl.value = '0';
+    await V38_loadRoadMasterlist();
+    alert('Permanent road saved.');
+  } catch(error) { alert('Road save error: '+error.message); }
+}
+
+
+async function V38_removePermanentRoad() {
+  const select = document.getElementById('v38SavedRoadSelect');
+  const index = select ? Number(select.value) : -1;
+  const road = V38_permanentRoads[index];
+  if (!road) { alert('Select a saved road first.'); return; }
+  if (!confirm('Remove '+road.roadName+' from the permanent road list?')) return;
+  try {
+    const result = await barcoApi('portalDeleteRoadMaster',{roadId:road.roadId});
+    if (!result || !result.success) throw new Error((result&&result.error)||'Unable to remove road.');
+    await V38_loadRoadMasterlist();
+  } catch(error) { alert('Road remove error: '+error.message); }
+}
+
+
+/* =========================================================
+   V38 — BARCO CONTINUOUS COLLAPSIBLE FORM
+========================================================= */
+
+BARCO_setupCollapsibleSectionsV31 = function() {
+  const app = document.getElementById('app');
+  if (!app) return;
+
+  app.classList.remove('barco-section-focus-mode-v3717');
+  ['barcoSectionMenuV3717','barcoSectionFocusToolbarV3717','barcoSectionCollapseToolbar']
+    .forEach(function(id){ const el=document.getElementById(id); if(el) el.remove(); });
+
+  const sections = Array.from(app.querySelectorAll(':scope > .section'));
+  sections.forEach(function(section,index){
+    section.classList.remove('barco-active-section-v3717');
+    const title = section.querySelector('.section-title');
+    const body = section.querySelector('.section-body');
+    if (!title || !body) return;
+
+    let button = title.querySelector('.section-collapse-button');
+    if (!button) {
+      button = document.createElement('button');
+      button.type='button';
+      button.className='section-collapse-button';
+      title.appendChild(button);
+    }
+
+    const titleText = String(title.textContent||'').trim();
+    const defaultOpen = index === 0 || index === 1 || /Road Clearing Entries/i.test(titleText);
+    if (!section.dataset.v38Ready) section.classList.toggle('collapsed',!defaultOpen);
+    section.dataset.v38Ready='1';
+
+    const update = function(){
+      const hidden = section.classList.contains('collapsed');
+      button.textContent = hidden ? '▸ Open' : '▾ Hide';
+      button.setAttribute('aria-expanded',hidden?'false':'true');
+    };
+    const toggle = function(event){
+      if(event){event.preventDefault();event.stopPropagation();}
+      section.classList.toggle('collapsed');
+      update();
+    };
+    button.onclick=toggle;
+    title.onclick=function(event){ if(event.target===button || button.contains(event.target)) return; toggle(event); };
+    update();
+  });
+
+  V38_loadRoadMasterlist();
+};
+
+
+/* =========================================================
+   V38 — ACCOMPLISHMENT SIMPLE FORM
+========================================================= */
+
+ACCOMP_setupCollapsibleSectionsV34 = function() {
+  const screen = document.getElementById('accompMonthlyScreenV33');
+  if (!screen) return;
+  const old = document.getElementById('accompCollapseToolbarV34');
+  if (old) old.remove();
+
+  const sections = Array.from(screen.querySelectorAll('.accomp-form-section'));
+  sections.forEach(function(section,index){
+    const title = section.querySelector('.accomp-form-section-title');
+    if (!title) return;
+    let button = title.querySelector('.accomp-section-toggle-v34');
+    if (!button) {
+      button=document.createElement('button');
+      button.type='button';
+      button.className='accomp-section-toggle-v34';
+      title.appendChild(button);
+    }
+    if (!section.dataset.v38Ready) {
+      section.classList.toggle('collapsed-v34',index >= 2);
+      section.dataset.v38Ready='1';
+    }
+    const update=function(){
+      const hidden=section.classList.contains('collapsed-v34');
+      button.textContent=hidden?'Open':'Hide';
+      button.setAttribute('aria-expanded',hidden?'false':'true');
+    };
+    button.onclick=function(event){event.preventDefault();event.stopPropagation();section.classList.toggle('collapsed-v34');update();};
+    update();
+  });
+};
+
+
+BARCO_openAccomplishmentV32 = async function() {
+  const barcoStatus = document.getElementById('statusBox');
+  if (barcoStatus) { barcoStatus.style.display='none'; barcoStatus.textContent=''; }
+  BARCO_showOnlyV32('accomplishmentModule');
+  await ACCOMP_openMonthlyV33();
+  ACCOMP_setupCollapsibleSectionsV34();
+};
+
+
+
+function V38_openNewConsolidated() {
+  const source = document.getElementById('v38AccompConsolidatedType');
+  const hidden = document.getElementById('accompReportTypeV36');
+  if (hidden) hidden.value = source ? source.value : 'quarterly';
+  ACCOMP_openSortedReportV36();
+}
+
+
+/* =========================================================
+   V38 — DANA SIMPLE FORM
+========================================================= */
+
+function V38_setupDanaSimple() {
+  const module = document.getElementById('danaModuleV3719');
+  if (!module) return;
+
+  Array.from(module.querySelectorAll('button')).forEach(function(button){
+    if (String(button.textContent||'').trim() === 'Previous Reports') button.classList.add('v38-hide');
+  });
+
+  Array.from(module.querySelectorAll('.dana-form-card-v3720')).forEach(function(card){
+    const h3 = card.querySelector('h3');
+    if (!h3) return;
+    if (!/Form Template \/ Fields/i.test(h3.textContent||'')) return;
+    card.classList.add('v38-collapsible-card','v38-collapsed');
+    if (!h3.querySelector('.v38-card-toggle')) {
+      const btn=document.createElement('button');
+      btn.type='button';
+      btn.className='v38-card-toggle';
+      btn.textContent='More Options';
+      btn.onclick=function(event){event.preventDefault();event.stopPropagation();card.classList.toggle('v38-collapsed');btn.textContent=card.classList.contains('v38-collapsed')?'More Options':'Hide Options';};
+      h3.appendChild(btn);
+    }
+  });
+}
+
+const V38_originalOpenDana = BARCO_openDanaV3719;
+BARCO_openDanaV3719 = function() {
+  V38_originalOpenDana();
+  V38_setupDanaSimple();
+};
+
+
+/* =========================================================
+   V38 — LIVESTOCK QUICK ENTRY AS PRIMARY FORM
+========================================================= */
+
+const V38_originalOpenLivestock = BARCO_openLivestockV3723;
+BARCO_openLivestockV3723 = function() {
+  V38_originalOpenLivestock();
+  LSP_quickOpenV3734 = true;
+  const panel = document.getElementById('lspQuickPanelV3734');
+  const trigger = document.getElementById('lspQuickTriggerV3734');
+  if (panel) panel.classList.add('show');
+  if (trigger) {
+    trigger.classList.add('open');
+    trigger.textContent='House-to-House Quick Entry';
+  }
+  LSP_renderQuickEntryV3734();
+};
+
+
+/* Set up simple DANA state after DOM is ready. */
+document.addEventListener('DOMContentLoaded',function(){
+  V38_setupDanaSimple();
+
+  Array.from(document.querySelectorAll('#barcoModule .draft-toolbar button, #accompMonthlyScreenV33 .accomp-editor-toolbar button'))
+    .forEach(function(button){
+      if (/New Monthly Report/i.test(String(button.textContent||''))) button.textContent='New Report';
+    });
+});
+
 </script>
 
 </body>
