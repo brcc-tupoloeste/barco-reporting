@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V38.6 MODULE HISTORY DOCUMENTS -->
+<!-- FRONTEND VERSION: V38.7 OPEN PDF NATIVE BRIDGE FIX -->
 
 <style>
 
@@ -27129,7 +27129,7 @@ function V386_historyCardHtml(item,module) {
       '<div class="v386-history-status">'+V38_escape(status)+'</div>' +
     '</div>' +
     '<div class="v386-history-actions">' +
-      '<button type="button" class="v386-history-open" data-file-id="'+V38_escape(fileId)+'" data-url="'+V38_escape(pdfUrl)+'" onclick="V386_openPdf(this.dataset.fileId,this.dataset.url)">Open PDF</button>' +
+      '<button type="button" class="v386-history-open" data-file-id="'+V38_escape(fileId)+'" data-url="'+V38_escape(pdfUrl)+'" data-module="'+V38_escape(module)+'" onclick="V386_openPdf(this.dataset.fileId,this.dataset.url,this.dataset.module)">Open PDF</button>' +
       '<button type="button" class="v386-history-edit" data-module="'+V38_escape(module)+'" data-id="'+V38_escape(item.reportId || '')+'" onclick="V38_editSavedReport(this.dataset.module,this.dataset.id)">Edit</button>' +
       '<button type="button" class="v386-history-delete" data-module="'+V38_escape(module)+'" data-id="'+V38_escape(item.reportId || '')+'" data-title="'+V38_escape(title)+'" onclick="V386_deleteHistoryReport(this.dataset.module,this.dataset.id,this.dataset.title)">Delete</button>' +
     '</div>' +
@@ -27190,15 +27190,39 @@ async function V386_loadModuleHistory(module,force) {
   }
 }
 
-async function V386_openPdf(fileId,fallbackUrl) {
+function V387_pdfPrintProfile(module) {
+  module = String(module || '').trim().toUpperCase();
+
+  if (module === 'BARCO') {
+    return 'BARCO_LONG_BOND_LANDSCAPE';
+  }
+
+  if (module === 'LIVESTOCK') {
+    return 'LIVESTOCK_LONG_BOND_PORTRAIT';
+  }
+
+  if (module === 'ACCOMP_MONTHLY' || module === 'ACCOMP_CONSOLIDATED') {
+    return 'ACCOMPLISHMENT_A4_PORTRAIT';
+  }
+
+  return 'A4_PORTRAIT';
+}
+
+async function V386_openPdf(fileId,fallbackUrl,module) {
   fileId = String(fileId || '').trim();
   fallbackUrl = String(fallbackUrl || '').trim();
+  module = String(module || '').trim();
 
   try {
     if (fileId && window.AndroidPrint && typeof window.AndroidPrint.openBase64Pdf === 'function') {
       const pdf = await barcoApi('getPdfForPrint',{fileId:fileId});
       if (!pdf || !pdf.success || !pdf.base64) throw new Error('Unable to load PDF.');
-      window.AndroidPrint.openBase64Pdf(pdf.base64,pdf.fileName || 'Report.pdf');
+
+      window.AndroidPrint.openBase64Pdf(
+        String(pdf.base64),
+        String(pdf.fileName || 'Report.pdf'),
+        V387_pdfPrintProfile(module)
+      );
       return;
     }
 
@@ -27284,7 +27308,7 @@ V38_reportCardHtml = function(item) {
 
   let actions = '';
   if (fileId || pdfUrl) {
-    actions += '<button type="button" class="v38-open" data-file-id="'+V38_escape(fileId)+'" data-url="'+V38_escape(pdfUrl)+'" onclick="V386_openPdf(this.dataset.fileId,this.dataset.url)">Open PDF</button>';
+    actions += '<button type="button" class="v38-open" data-file-id="'+V38_escape(fileId)+'" data-url="'+V38_escape(pdfUrl)+'" data-module="'+V38_escape(item.module||'')+'" onclick="V386_openPdf(this.dataset.fileId,this.dataset.url,this.dataset.module)">Open PDF</button>';
   }
   if (item.module !== 'ACCOMP_CONSOLIDATED') {
     actions += '<button type="button" class="v38-edit" data-module="'+V38_escape(item.module||'')+'" data-id="'+V38_escape(item.reportId||'')+'" onclick="V38_editSavedReport(this.dataset.module,this.dataset.id)">Edit Report</button>';
