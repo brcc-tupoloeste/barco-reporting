@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V38.7 OPEN PDF NATIVE BRIDGE FIX -->
+<!-- FRONTEND VERSION: V38.8 ACCOMPLISHMENT EDIT RESTORE FIX -->
 
 <style>
 
@@ -27361,6 +27361,112 @@ LSP_generatePdfV3724 = async function() {
 document.addEventListener('DOMContentLoaded',function(){
   V386_cleanSyncButtons();
 });
+</script>
+
+
+<script id="v388-accomplishment-history-edit-fix">
+/* =========================================================
+   V38.8 — ACCOMPLISHMENT HISTORY EDIT / RESTORE FIX
+   - History Edit opens the saved report itself, not a blank/new form.
+   - Waits for existing menu wrappers to finish before showing data.
+   - Opens Report Information immediately so restored values are visible.
+========================================================= */
+
+const V388_editSavedReportBase = V38_editSavedReport;
+
+V38_editSavedReport = async function(module, reportId) {
+  module = String(module || '').trim();
+  reportId = String(reportId || '').trim();
+
+  if (module !== 'ACCOMP_MONTHLY') {
+    return V388_editSavedReportBase.apply(this, arguments);
+  }
+
+  if (!reportId) {
+    V382_notify(
+      'Accomplishment Report ID is missing.',
+      'Edit Report',
+      'error'
+    );
+    return;
+  }
+
+  try {
+    if (typeof showActionOverlay === 'function') {
+      showActionOverlay('Opening saved Accomplishment Report...');
+    }
+
+    /* Open the Accomplishment module first. */
+    await BARCO_openAccomplishmentV32();
+
+    /* Load the exact saved monthly report and all saved accomplishments. */
+    await ACCOMP_openSavedReportV33(reportId);
+
+    /*
+     * Existing v38 menu wrappers rebuild on a short setTimeout.
+     * Let those complete first so they cannot hide the restored section.
+     */
+    await new Promise(function(resolve){
+      setTimeout(resolve, 140);
+    });
+
+    if (
+      String(ACCOMP_currentReportIdV33 || '').trim() !== reportId
+    ) {
+      throw new Error(
+        'The saved Accomplishment Report data could not be restored.'
+      );
+    }
+
+    const landing = document.getElementById('accompLandingV33');
+    const monthly = document.getElementById('accompMonthlyScreenV33');
+    const consolidated = document.getElementById('accompConsolidatedScreenV37');
+
+    if (landing) landing.style.display = 'none';
+    if (consolidated) consolidated.style.display = 'none';
+    if (monthly) monthly.style.display = 'block';
+
+    if (typeof V384_prepareAccompMergedInformation === 'function') {
+      V384_prepareAccompMergedInformation();
+    }
+
+    if (typeof V383_setupAccompMenu === 'function') {
+      V383_setupAccompMenu();
+    }
+
+    /* Open the restored Report Information section immediately. */
+    if (typeof V383_openAccompSection === 'function') {
+      V383_openAccompSection(0);
+    }
+
+    if (typeof V383_updateAccompMenu === 'function') {
+      V383_updateAccompMenu();
+    }
+
+    if (typeof hideActionOverlay === 'function') {
+      hideActionOverlay();
+    }
+
+    if (typeof V382_notify === 'function') {
+      V382_notify(
+        'Saved Accomplishment Report loaded. You can now edit the information and accomplishments.',
+        'Report Loaded',
+        'success'
+      );
+    }
+
+  } catch(error) {
+    if (typeof hideActionOverlay === 'function') {
+      hideActionOverlay();
+    }
+
+    V382_notify(
+      'Edit Accomplishment error: ' + error.message,
+      'Edit Report',
+      'error'
+    );
+  }
+};
 </script>
 
 </body>
