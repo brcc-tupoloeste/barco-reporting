@@ -14516,16 +14516,41 @@ function LSP_refreshConnectionStateV3727() {
 function LSP_autoCacheV3727() {
 
   /*
-   * Any edit made while offline is automatically marked as pending sync.
-   * This means house-to-house encoding is preserved even if the user
-   * forgets to tap Save Draft after every household.
+   * V39.6 TRUE OFFLINE LIVESTOCK
+   * Every edit is first treated as a local pending change, even when the
+   * browser currently reports ONLINE. This protects field encoding when
+   * the signal is weak, intermittent, or the backend is temporarily
+   * unreachable. Only a confirmed server save changes pendingSync to false.
    */
   LSP_cacheLocalV3724(
-    !navigator.onLine
+    true
   );
 
 
   LSP_refreshConnectionStateV3727();
+
+}
+
+
+let LSP_syncInProgressV396 = false;
+let LSP_autoSyncTimerV396 = null;
+
+
+function LSP_scheduleAutoSyncV396(delayMs) {
+
+  if (LSP_autoSyncTimerV396) {
+    clearTimeout(LSP_autoSyncTimerV396);
+  }
+
+  LSP_autoSyncTimerV396 = setTimeout(
+    function() {
+      LSP_autoSyncTimerV396 = null;
+      if (navigator.onLine) {
+        LSP_syncPendingV3724();
+      }
+    },
+    Math.max(250, Number(delayMs || 1000))
+  );
 
 }
 
@@ -14569,12 +14594,36 @@ function LSP_initializeV3724() {
   LSP_refreshConnectionStateV3727();
 
 
+  /*
+   * If the page is reopened after fieldwork and internet is already back,
+   * immediately sync any local pending livestock data.
+   */
+  if (navigator.onLine) {
+    LSP_scheduleAutoSyncV396(800);
+  }
+
+
+  /*
+   * Retry pending livestock data periodically while online. The function
+   * itself exits immediately when nothing is pending, so this does not
+   * create repeated server writes after a successful sync.
+   */
+  window.setInterval(
+    function() {
+      if (navigator.onLine) {
+        LSP_syncPendingV3724();
+      }
+    },
+    30000
+  );
+
+
   window.addEventListener(
     'online',
     function() {
 
       LSP_refreshConnectionStateV3727();
-      LSP_syncPendingV3724();
+      LSP_scheduleAutoSyncV396(500);
 
     }
   );
@@ -15500,9 +15549,15 @@ async function LSP_saveDraftV3724() {
 
 async function LSP_syncPendingV3724() {
 
-  if (!navigator.onLine) {
+  if (
+    !navigator.onLine ||
+    LSP_syncInProgressV396
+  ) {
     return;
   }
+
+
+  let saved = null;
 
 
   try {
@@ -15518,7 +15573,7 @@ async function LSP_syncPendingV3724() {
     }
 
 
-    const saved =
+    saved =
       JSON.parse(
         raw
       );
@@ -15532,42 +15587,92 @@ async function LSP_syncPendingV3724() {
     }
 
 
+    LSP_syncInProgressV396 =
+      true;
+
+
+    const payload =
+      LSP_getPayloadV3724();
+
+
+    /*
+     * Keep the local report ID when one already exists so the server updates
+     * the same draft instead of creating a duplicate after reconnecting.
+     */
+    if (
+      !payload.reportId &&
+      saved.reportId
+    ) {
+      payload.reportId =
+        saved.reportId;
+    }
+
+
     const result =
       await barcoApi(
         'livestockSaveReport',
-        LSP_getPayloadV3724()
+        payload
       );
 
 
     if (
-      result &&
-      result.success
+      !result ||
+      !result.success
     ) {
-
-      LSP_reportIdV3724 =
-        String(
-          result.reportId || ''
-        );
-
-
-      LSP_cacheLocalV3724(
-        false
+      throw new Error(
+        (result && result.error) ||
+        'Livestock synchronization failed.'
       );
-
-
-      LSP_refreshConnectionStateV3727();
-
-
-      LSP_setStatusV3724(
-        'success',
-        'Internet restored. Offline livestock draft synchronized.'
-      );
-
     }
 
-  } catch(error) {}
+
+    LSP_reportIdV3724 =
+      String(
+        result.reportId ||
+        payload.reportId ||
+        LSP_reportIdV3724 ||
+        ''
+      );
+
+
+    LSP_cacheLocalV3724(
+      false
+    );
+
+
+    LSP_refreshConnectionStateV3727();
+
+
+    LSP_setStatusV3724(
+      'success',
+      'Internet available. Offline livestock data synchronized successfully.'
+    );
+
+
+  } catch(error) {
+
+    /*
+     * Never clear pending data after a failed sync. Keep the device copy and
+     * let the next online event / 30-second retry try again.
+     */
+    try {
+      LSP_cacheLocalV3724(
+        true
+      );
+    } catch(e) {}
+
+
+    LSP_refreshConnectionStateV3727();
+
+  } finally {
+
+    LSP_syncInProgressV396 =
+      false;
+
+  }
 
 }
+
 
 
 async function LSP_generatePdfV3724() {
@@ -25191,7 +25296,7 @@ function ACCOMP_hideConsolidatedStatusV37() {
       'load',
       function() {
         navigator.serviceWorker
-          .register('./sw.js')
+          .register('./sw.js?v=396', { updateViaCache: 'none' })
           .catch(function(error) {
             console.warn(
               'Offline service worker registration failed:',
@@ -27694,6 +27799,10 @@ document.addEventListener('input', function(event) {
     if (typeof V383_updateAccompMenu === 'function') V383_updateAccompMenu();
   }
 });
+</script>
+
+<script>
+window.BARCO_PORTAL_BUILD = 'v39.6-true-offline-livestock';
 </script>
 
 </body>
