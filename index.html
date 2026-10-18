@@ -7124,7 +7124,7 @@ button:hover:not(:disabled),
           Maximum of <strong>15 photos per report</strong>.
           You may use the <strong>Photos</strong> button beside a road entry
           to link a photo to a specific road/location, but this is optional.
-          Photos without a location can still use <strong>Generate AI Caption</strong>.
+          Type the caption in <strong>Tagalog</strong>, then use <strong>Translate to English</strong>.
           Selected photos are automatically uploaded before
           <strong>Generate Final PDF</strong>.
 
@@ -21055,7 +21055,7 @@ function renderSelectedPhotos() {
 
           <textarea
             class="photo-caption"
-            placeholder="Optional manual caption. Generate AI caption after upload."
+            placeholder="Optional Tagalog caption. Translate to English after upload."
             oninput="selectedPhotos[${index}].caption=this.value"
           >${escapeHtml(photo.caption || '')}</textarea>
 
@@ -21494,12 +21494,12 @@ function renderPhotoGroup(
           <div class="photo-actions">
 
             <button
-              id="${imageId}_ai_caption"
+              id="${imageId}_translate_caption"
               type="button"
               class="ai-caption-button-v378"
-              onclick="BARCO_generateAICaptionV378('${escapeJsString(photo.photoId)}', '${imageId}_caption', '${imageId}_ai_caption', '${imageId}_status')"
+              onclick="BARCO_translateCaptionV393('${escapeJsString(photo.photoId)}', '${imageId}_caption', '${imageId}_translate_caption', '${imageId}_status')"
             >
-              Generate AI Caption
+              Translate to English
             </button>
 
             <button
@@ -21647,7 +21647,7 @@ async function BARCO_updateUploadedPhotoRoadV378(
 }
 
 
-async function BARCO_generateAICaptionV378(
+async function BARCO_translateCaptionV393(
   photoId,
   captionInputId,
   buttonId,
@@ -21659,83 +21659,89 @@ async function BARCO_generateAICaptionV378(
       captionInputId
     );
 
-
   const button =
     document.getElementById(
       buttonId
     );
-
 
   const status =
     document.getElementById(
       statusId
     );
 
+  const tagalogText =
+    input
+      ? String(input.value || '').trim()
+      : '';
+
+  if (!tagalogText) {
+    setPhotoLocalStatus(
+      status,
+      'error',
+      'Type the Tagalog caption first, then tap Translate to English.'
+    );
+    if (input) input.focus();
+    return;
+  }
 
   try {
 
     setPhotoActionLoading(
       button,
       status,
-      'Generating...',
-      'AI is reviewing the photo and related road data...'
+      'Translating...',
+      'Translating Tagalog caption to English...'
     );
-
 
     const result =
       await barcoApi(
         'generatePhotoCaption',
         {
-          photoId:
-            photoId
+          photoId: photoId,
+          text: tagalogText,
+          sourceLanguage: 'tl',
+          targetLanguage: 'en'
         }
       );
-
 
     if (
       !result ||
       !result.success ||
       !result.caption
     ) {
-
       throw new Error(
-        (
-          result &&
-          result.error
-        ) ||
-        'Unable to generate caption.'
+        (result && result.error) ||
+        'Unable to translate caption.'
       );
-
     }
-
 
     if (input) {
       input.value = result.caption;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
     }
-
 
     setPhotoLocalStatus(
       status,
       'success',
-      'AI caption generated. You may edit it before the PDF is generated.'
+      'Translated to English and saved. You may still edit the caption manually.'
     );
 
+    BARCO_scheduleOfflineCacheV3717();
 
   } catch(error) {
 
     setPhotoLocalStatus(
       status,
       'error',
-      'AI caption error: ' +
+      'Translation error: ' +
       error.message
     );
-
 
   } finally {
 
     setPhotoActionIdle(
       button,
-      'Generate AI Caption'
+      'Translate to English'
     );
 
   }
