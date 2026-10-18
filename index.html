@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V39.0 ACCOMPLISHMENT ENTRIES RESTORE -->
+<!-- FRONTEND VERSION: V39.1 ACCOMPLISHMENT SAFE EDIT + RECOVERY -->
 
 <style>
 
@@ -23077,7 +23077,7 @@ async function ACCOMP_saveDraftV33() {
     await ensureBarcoBridge();
 
     const result = await barcoApi(
-      'accompSaveMonthly',
+      'portalSaveAccomplishmentSafe',
       payload
     );
 
@@ -23320,7 +23320,7 @@ async function ACCOMP_openSavedReportV33(reportId) {
   ACCOMP_setStatusV33('loading','Opening saved Monthly Accomplishment Report...');
 
   try {
-    const result = await barcoApi('accompGetMonthly',{reportId:reportId});
+    const result = await barcoApi('portalGetAccomplishmentForEdit',{reportId:reportId});
 
     if (!result || !result.success || !result.found) {
       throw new Error('Saved accomplishment report was not found.');
@@ -27542,13 +27542,14 @@ async function V3900_openSavedAccomplishment(reportId) {
     await BARCO_openAccomplishmentV32();
     await ensureBarcoBridge();
 
-    const result = await barcoApi('accompGetMonthly',{reportId:reportId});
+    const result = await barcoApi('portalGetAccomplishmentForEdit',{reportId:reportId});
     if (!result || !result.success || !result.found) {
       throw new Error('Saved accomplishment report was not found.');
     }
 
     const report = result.report || {};
     const savedEntries = V3900_accompEntriesFromResult(result);
+    const recoveredFromGeneratedSource = !!result.recovered;
 
     ACCOMP_currentReportIdV33 = String(report.reportId || reportId);
     ACCOMP_currentStatusV33 = String(report.status || 'DRAFT').toUpperCase();
@@ -27602,8 +27603,10 @@ async function V3900_openSavedAccomplishment(reportId) {
       );
     } else {
       V382_notify(
-        savedEntries.length + ' saved accomplishment entr' + (savedEntries.length === 1 ? 'y' : 'ies') + ' restored. Both Report Information and Accomplishments can now be edited.',
-        'Report Loaded',
+        savedEntries.length + ' saved accomplishment entr' + (savedEntries.length === 1 ? 'y' : 'ies') +
+          (recoveredFromGeneratedSource ? ' recovered from the generated report source.' : ' restored.') +
+          ' Both Report Information and Accomplishments can now be edited.',
+        recoveredFromGeneratedSource ? 'Accomplishment Recovered' : 'Report Loaded',
         'success'
       );
     }
@@ -27648,6 +27651,24 @@ document.addEventListener('input', function(event) {
     if (typeof V383_updateAccompMenu === 'function') V383_updateAccompMenu();
   }
 });
+</script>
+
+
+<script id="v391-accomplishment-safe-recovery-ui">
+/* =========================================================
+   V39.1 — ACCOMPLISHMENT SAFE EDIT / RECOVERY
+========================================================= */
+const V391_accompSaveDraftBase = ACCOMP_saveDraftV33;
+ACCOMP_saveDraftV33 = async function() {
+  const result = await V391_accompSaveDraftBase.apply(this,arguments);
+  if (result && result.success) {
+    try {
+      if (typeof V383_updateAccompMenu === 'function') V383_updateAccompMenu();
+      if (typeof V386_loadModuleHistory === 'function') V386_loadModuleHistory('ACCOMP_MONTHLY',true);
+    } catch(error) {}
+  }
+  return result;
+};
 </script>
 
 </body>
