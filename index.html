@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V38.9 ACCOMPLISHMENT EDIT BOTH SECTIONS -->
+<!-- FRONTEND VERSION: V38.9 ALL MODULE HISTORY EDIT -->
 
 <style>
 
@@ -27434,18 +27434,9 @@ V38_editSavedReport = async function(module, reportId) {
       V383_setupAccompMenu();
     }
 
-    /*
-     * Keep the Accomplishment menu visible after loading the saved report.
-     * This makes BOTH Report Information and Accomplishments available
-     * for editing instead of forcing the user into Report Information only.
-     */
-    if (typeof V383_backToAccompMenu === 'function') {
-      V383_backToAccompMenu();
-    } else {
-      const menu = document.getElementById('accompMenuV383');
-      const toolbar = document.getElementById('accompSectionToolbarV383');
-      if (menu) menu.style.display = 'block';
-      if (toolbar) toolbar.style.display = 'none';
+    /* Open the restored Report Information section immediately. */
+    if (typeof V383_openAccompSection === 'function') {
+      V383_openAccompSection(0);
     }
 
     if (typeof V383_updateAccompMenu === 'function') {
@@ -27458,7 +27449,7 @@ V38_editSavedReport = async function(module, reportId) {
 
     if (typeof V382_notify === 'function') {
       V382_notify(
-        'Saved Accomplishment Report loaded. Select Report Information or Accomplishments to edit.',
+        'Saved Accomplishment Report loaded. You can now edit the information and accomplishments.',
         'Report Loaded',
         'success'
       );
@@ -27480,46 +27471,107 @@ V38_editSavedReport = async function(module, reportId) {
 
 
 
-<script id="v389-accomplishment-edit-both-sections">
+<script id="v389-all-module-history-edit-fix">
 /* =========================================================
-   V38.9 — ACCOMPLISHMENT EDIT BOTH SECTIONS
-   History Edit returns to the Accomplishment menu after restore so
-   Report Information AND Accomplishments can both be opened/edited.
+   V38.9 — HISTORY EDIT RESTORE FOR ALL MODULES
+   - Edit loads the exact saved report and ALL saved section data.
+   - After loading, return to the module menu so every section
+     can be opened, edited, saved, and regenerated.
 ========================================================= */
 
-const V389_editSavedReportBase = V38_editSavedReport;
+function V389_wait(ms) {
+  return new Promise(function(resolve){ setTimeout(resolve, ms); });
+}
+
+async function V389_restoreBarcoForEdit(reportId) {
+  await BARCO_openModuleV32();
+  await openDraftById(reportId);
+  await V389_wait(160);
+
+  if (typeof V382_setupBarcoMenu === 'function') V382_setupBarcoMenu();
+  if (typeof V382_backToBarcoMenu === 'function') V382_backToBarcoMenu();
+}
+
+async function V389_restoreAccomplishmentForEdit(reportId) {
+  await BARCO_openAccomplishmentV32();
+  await ACCOMP_openSavedReportV33(reportId);
+  await V389_wait(180);
+
+  if (String(ACCOMP_currentReportIdV33 || '').trim() !== reportId) {
+    throw new Error('The saved Accomplishment Report could not be restored.');
+  }
+
+  if (typeof V384_prepareAccompMergedInformation === 'function') {
+    V384_prepareAccompMergedInformation();
+  }
+  if (typeof V383_setupAccompMenu === 'function') V383_setupAccompMenu();
+  if (typeof V383_backToAccompMenu === 'function') V383_backToAccompMenu();
+}
+
+async function V389_restoreDanaForEdit(reportId) {
+  BARCO_openDanaV3719();
+  await V389_wait(160);
+  await DANA_loadPreviousReportV3740(reportId);
+  await V389_wait(180);
+
+  if (String(DANA_currentReportIdV3720 || '').trim() !== reportId) {
+    throw new Error('The saved DANA Report could not be restored.');
+  }
+
+  if (typeof V383_setupDanaMenu === 'function') V383_setupDanaMenu();
+  if (typeof V383_backToDanaMenu === 'function') V383_backToDanaMenu();
+}
+
+async function V389_restoreLivestockForEdit(reportId) {
+  await V38_openLivestockSavedReport(reportId);
+  await V389_wait(180);
+
+  if (String(LSP_reportIdV3724 || '').trim() !== reportId) {
+    throw new Error('The saved Livestock Report could not be restored.');
+  }
+
+  if (typeof V383_setupLivestockMenu === 'function') V383_setupLivestockMenu();
+  if (typeof V383_backToLivestockMenu === 'function') V383_backToLivestockMenu();
+}
 
 V38_editSavedReport = async function(module, reportId) {
   module = String(module || '').trim();
   reportId = String(reportId || '').trim();
 
-  const result = await V389_editSavedReportBase.apply(this, arguments);
-
-  if (module !== 'ACCOMP_MONTHLY' || !reportId) {
-    return result;
+  if (!reportId) {
+    V382_notify('Report ID is missing.','Edit Report','error');
+    return;
   }
 
-  /* Let all older menu wrappers finish, then leave the module at its menu. */
-  setTimeout(function(){
-    try {
-      const monthly = document.getElementById('accompMonthlyScreenV33');
-      if (monthly) monthly.style.display = 'block';
+  try {
+    if (typeof showActionOverlay === 'function') {
+      showActionOverlay('Opening saved report...');
+    }
 
-      if (typeof V383_setupAccompMenu === 'function') {
-        V383_setupAccompMenu();
-      }
+    if (module === 'BARCO') {
+      await V389_restoreBarcoForEdit(reportId);
+    } else if (module === 'ACCOMP_MONTHLY') {
+      await V389_restoreAccomplishmentForEdit(reportId);
+    } else if (module === 'DANA') {
+      await V389_restoreDanaForEdit(reportId);
+    } else if (module === 'LIVESTOCK') {
+      await V389_restoreLivestockForEdit(reportId);
+    } else {
+      throw new Error('Unsupported report type.');
+    }
 
-      if (typeof V383_backToAccompMenu === 'function') {
-        V383_backToAccompMenu();
-      }
+    if (typeof hideActionOverlay === 'function') hideActionOverlay();
 
-      if (typeof V383_updateAccompMenu === 'function') {
-        V383_updateAccompMenu();
-      }
-    } catch(error) {}
-  }, 220);
+    V382_notify(
+      'Saved report loaded. Open any section to edit its saved data, then Save Changes or Regenerate PDF.',
+      'Report Loaded',
+      'success'
+    );
 
-  return result;
+  } catch(error) {
+    if (typeof hideActionOverlay === 'function') hideActionOverlay();
+    V382_notify('Edit Report error: ' + error.message,'Edit Report','error');
+  }
 };
 </script>
 
