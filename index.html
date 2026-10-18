@@ -25955,7 +25955,7 @@ function V382_setupBarcoMenu() {
       deleteButton.id = 'barcoDeleteReportV382';
       deleteButton.type = 'button';
       deleteButton.className = 'btn-red barco-delete-report-v382';
-      deleteButton.textContent = 'Delete Report';
+      deleteButton.textContent = 'Archive Report';
       deleteButton.onclick = V382_deleteCurrentBarcoReport;
       const area = actionHost.querySelector('.save-area');
       if (area) area.appendChild(deleteButton);
@@ -26034,13 +26034,16 @@ BARCO_openModuleV32 = async function() {
 async function V382_deleteCurrentBarcoReport() {
   const id = V382_barcoReportId();
   if (!id) {
-    V382_notify('There is no saved BaRCO report to delete yet.', 'Delete Report', 'warning');
+    V382_notify('There is no saved BaRCO report to archive yet.', 'Archive Report', 'warning');
     return;
   }
-  if (!window.confirm('Delete this BaRCO report? This will remove its saved report data and generated PDF.')) return;
-  const deleted = await V382_deleteReport('BARCO',id,'BaRCO Report');
-  if (deleted) {
+  if (!window.confirm('Archive this BaRCO report? Its saved source data, photos, signatories and generated PDF will be preserved.')) return;
+  const archived = await V382_deleteReport('BARCO',id,'BaRCO Report');
+  if (archived) {
+    try { localStorage.removeItem('barcoLastReportId'); } catch(error) {}
     try { await startNewMonthlyReport(); } catch(error) {}
+    V386_historyCache = null;
+    V386_historyCacheAt = 0;
     V382_setupBarcoMenu();
   }
 }
@@ -26048,8 +26051,13 @@ async function V382_deleteCurrentBarcoReport() {
 async function V382_deleteReport(module, reportId, title) {
   try {
     const result = await barcoApi('portalDeleteReport',{module:module,reportId:reportId});
-    if (!result || !result.success) throw new Error((result && result.error) || 'Delete failed.');
-    V382_notify(result.message || (title + ' deleted successfully.'), 'Report Deleted', 'success');
+    if (!result || !result.success) throw new Error((result && result.error) || 'Delete/archive failed.');
+    const archived = !!result.archived || String(module || '').toUpperCase() === 'BARCO';
+    V382_notify(
+      result.message || (archived ? (title + ' archived safely.') : (title + ' deleted successfully.')),
+      archived ? 'Report Archived' : 'Report Deleted',
+      'success'
+    );
     return true;
   } catch(error) {
     V382_notify('Delete error: ' + error.message, 'Delete Error', 'error');
@@ -26059,7 +26067,11 @@ async function V382_deleteReport(module, reportId, title) {
 
 async function V382_deleteReportFromLibrary(module, reportId, title) {
   if (!reportId) return;
-  if (!window.confirm('Delete "' + String(title || 'Report') + '"? The saved report and generated PDF will be removed.')) return;
+  const isBarco = String(module || '').toUpperCase() === 'BARCO';
+  const prompt = isBarco
+    ? 'Archive "' + String(title || 'Report') + '"? Its source data and generated PDF will be preserved.'
+    : 'Delete "' + String(title || 'Report') + '"? The saved report and generated PDF will be removed.';
+  if (!window.confirm(prompt)) return;
   const ok = await V382_deleteReport(module,reportId,title);
   if (!ok) return;
   const year = (document.getElementById('v38LibraryYear')||{}).value || 0;
@@ -27126,9 +27138,10 @@ function V386_historyCardHtml(item,module) {
     '<button type="button" class="v386-history-open" data-file-id="'+V38_escape(fileId)+'" data-url="'+V38_escape(pdfUrl)+'" data-module="'+V38_escape(module)+'" onclick="V386_openPdf(this.dataset.fileId,this.dataset.url,this.dataset.module)">Open PDF</button>';
 
   if (editable) {
+    const removeLabel = String(module || '').toUpperCase() === 'BARCO' ? 'Archive' : 'Delete';
     actions +=
       '<button type="button" class="v386-history-edit" data-module="'+V38_escape(module)+'" data-id="'+V38_escape(item.reportId || '')+'" onclick="V38_editSavedReport(this.dataset.module,this.dataset.id)">Edit</button>' +
-      '<button type="button" class="v386-history-delete" data-module="'+V38_escape(module)+'" data-id="'+V38_escape(item.reportId || '')+'" data-title="'+V38_escape(title)+'" onclick="V386_deleteHistoryReport(this.dataset.module,this.dataset.id,this.dataset.title)">Delete</button>';
+      '<button type="button" class="v386-history-delete" data-module="'+V38_escape(module)+'" data-id="'+V38_escape(item.reportId || '')+'" data-title="'+V38_escape(title)+'" onclick="V386_deleteHistoryReport(this.dataset.module,this.dataset.id,this.dataset.title)">'+removeLabel+'</button>';
   }
 
   return '<div class="v386-history-card">' +
@@ -27257,7 +27270,11 @@ async function V386_openPdf(fileId,fallbackUrl,module) {
 
 async function V386_deleteHistoryReport(module,reportId,title) {
   if (!reportId) return;
-  if (!window.confirm('Delete "' + String(title || 'Report') + '"? The saved report and generated PDF will be removed.')) return;
+  const isBarco = String(module || '').toUpperCase() === 'BARCO';
+  const prompt = isBarco
+    ? 'Archive "' + String(title || 'Report') + '"? Its editable source data, photos, signatories and generated PDF will be preserved.'
+    : 'Delete "' + String(title || 'Report') + '"? The saved report and generated PDF will be removed.';
+  if (!window.confirm(prompt)) return;
   const ok = await V382_deleteReport(module,reportId,title);
   if (!ok) return;
   V386_historyCache = null;
@@ -27313,20 +27330,29 @@ V38_reportCardHtml = function(item) {
   const finalClass = status === 'FINAL' || status === 'FINALIZED' ? ' final' : '';
   const fileId = String(item.pdfFileId || '');
   const pdfUrl = String(item.pdfUrl || '');
+  const module = String(item.module || '').toUpperCase();
+  const editable = item.editable !== false;
+  const recovered = !!item.orphaned || !!item.recoveredPdf;
 
   let actions = '';
   if (fileId || pdfUrl) {
-    actions += '<button type="button" class="v38-open" data-file-id="'+V38_escape(fileId)+'" data-url="'+V38_escape(pdfUrl)+'" data-module="'+V38_escape(item.module||'')+'" onclick="V386_openPdf(this.dataset.fileId,this.dataset.url,this.dataset.module)">Open PDF</button>';
+    actions += '<button type="button" class="v38-open" data-file-id="'+V38_escape(fileId)+'" data-url="'+V38_escape(pdfUrl)+'" data-module="'+V38_escape(module)+'" onclick="V386_openPdf(this.dataset.fileId,this.dataset.url,this.dataset.module)">Open PDF</button>';
   }
-  if (item.module !== 'ACCOMP_CONSOLIDATED') {
-    actions += '<button type="button" class="v38-edit" data-module="'+V38_escape(item.module||'')+'" data-id="'+V38_escape(item.reportId||'')+'" onclick="V38_editSavedReport(this.dataset.module,this.dataset.id)">Edit Report</button>';
+
+  if (editable) {
+    if (module !== 'ACCOMP_CONSOLIDATED') {
+      actions += '<button type="button" class="v38-edit" data-module="'+V38_escape(module)+'" data-id="'+V38_escape(item.reportId||'')+'" onclick="V38_editSavedReport(this.dataset.module,this.dataset.id)">Edit Report</button>';
+    }
+    const removeLabel = module === 'BARCO' ? 'Archive' : 'Delete';
+    actions += '<button type="button" class="v382-delete-library" data-module="'+V38_escape(module)+'" data-id="'+V38_escape(item.reportId||'')+'" data-title="'+V38_escape(item.title||'Report')+'" onclick="V382_deleteReportFromLibrary(this.dataset.module,this.dataset.id,this.dataset.title)">'+removeLabel+'</button>';
   }
-  actions += '<button type="button" class="v382-delete-library" data-module="'+V38_escape(item.module||'')+'" data-id="'+V38_escape(item.reportId||'')+'" data-title="'+V38_escape(item.title||'Report')+'" onclick="V382_deleteReportFromLibrary(this.dataset.module,this.dataset.id,this.dataset.title)">Delete</button>';
 
   return '<div class="v38-report-card">' +
     '<div class="v38-report-top">' +
       '<div><div class="v38-report-title">'+V38_escape(item.title||'Report')+'</div>' +
-      '<div class="v38-report-sub">'+V38_escape(item.subtitle||item.reportId||'')+'</div></div>' +
+      '<div class="v38-report-sub">'+V38_escape(item.subtitle||item.reportId||'')+'</div>' +
+      (recovered ? '<div class="v38-report-sub">Recovered PDF · editable source rows are unavailable</div>' : '') +
+      '</div>' +
       '<div class="v38-report-status'+finalClass+'">'+V38_escape(status)+'</div>' +
     '</div>' +
     '<div class="v38-report-actions">'+actions+'</div>' +
