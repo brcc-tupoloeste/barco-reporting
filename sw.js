@@ -1,4 +1,4 @@
-const CACHE_NAME = 'barco-reporting-v3880';
+const CACHE_NAME = 'barco-reporting-v3890';
 const APP_SHELL = [
   './',
   './index.html'

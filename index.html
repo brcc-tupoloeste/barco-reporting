@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V38.8 ACCOMPLISHMENT EDIT RESTORE FIX -->
+<!-- FRONTEND VERSION: V38.9 ACCOMPLISHMENT EDIT BOTH SECTIONS -->
 
 <style>
 
@@ -27434,9 +27434,18 @@ V38_editSavedReport = async function(module, reportId) {
       V383_setupAccompMenu();
     }
 
-    /* Open the restored Report Information section immediately. */
-    if (typeof V383_openAccompSection === 'function') {
-      V383_openAccompSection(0);
+    /*
+     * Keep the Accomplishment menu visible after loading the saved report.
+     * This makes BOTH Report Information and Accomplishments available
+     * for editing instead of forcing the user into Report Information only.
+     */
+    if (typeof V383_backToAccompMenu === 'function') {
+      V383_backToAccompMenu();
+    } else {
+      const menu = document.getElementById('accompMenuV383');
+      const toolbar = document.getElementById('accompSectionToolbarV383');
+      if (menu) menu.style.display = 'block';
+      if (toolbar) toolbar.style.display = 'none';
     }
 
     if (typeof V383_updateAccompMenu === 'function') {
@@ -27449,7 +27458,7 @@ V38_editSavedReport = async function(module, reportId) {
 
     if (typeof V382_notify === 'function') {
       V382_notify(
-        'Saved Accomplishment Report loaded. You can now edit the information and accomplishments.',
+        'Saved Accomplishment Report loaded. Select Report Information or Accomplishments to edit.',
         'Report Loaded',
         'success'
       );
@@ -27466,6 +27475,51 @@ V38_editSavedReport = async function(module, reportId) {
       'error'
     );
   }
+};
+</script>
+
+
+
+<script id="v389-accomplishment-edit-both-sections">
+/* =========================================================
+   V38.9 — ACCOMPLISHMENT EDIT BOTH SECTIONS
+   History Edit returns to the Accomplishment menu after restore so
+   Report Information AND Accomplishments can both be opened/edited.
+========================================================= */
+
+const V389_editSavedReportBase = V38_editSavedReport;
+
+V38_editSavedReport = async function(module, reportId) {
+  module = String(module || '').trim();
+  reportId = String(reportId || '').trim();
+
+  const result = await V389_editSavedReportBase.apply(this, arguments);
+
+  if (module !== 'ACCOMP_MONTHLY' || !reportId) {
+    return result;
+  }
+
+  /* Let all older menu wrappers finish, then leave the module at its menu. */
+  setTimeout(function(){
+    try {
+      const monthly = document.getElementById('accompMonthlyScreenV33');
+      if (monthly) monthly.style.display = 'block';
+
+      if (typeof V383_setupAccompMenu === 'function') {
+        V383_setupAccompMenu();
+      }
+
+      if (typeof V383_backToAccompMenu === 'function') {
+        V383_backToAccompMenu();
+      }
+
+      if (typeof V383_updateAccompMenu === 'function') {
+        V383_updateAccompMenu();
+      }
+    } catch(error) {}
+  }, 220);
+
+  return result;
 };
 </script>
 
