@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V38.9 ALL MODULE HISTORY EDIT -->
+<!-- FRONTEND VERSION: V39.0 ACCOMPLISHMENT ENTRIES RESTORE -->
 
 <style>
 
@@ -27470,109 +27470,184 @@ V38_editSavedReport = async function(module, reportId) {
 </script>
 
 
-
-<script id="v389-all-module-history-edit-fix">
+<script id="v3900-universal-edit-restore-fix">
 /* =========================================================
-   V38.9 — HISTORY EDIT RESTORE FOR ALL MODULES
-   - Edit loads the exact saved report and ALL saved section data.
-   - After loading, return to the module menu so every section
-     can be opened, edited, saved, and regenerated.
+   V39.0 — UNIVERSAL SAVED REPORT EDIT / RESTORE
+   Main fix: Accomplishment entries are restored robustly.
 ========================================================= */
 
-function V389_wait(ms) {
-  return new Promise(function(resolve){ setTimeout(resolve, ms); });
-}
+function V3900_accompEntryText(item) {
+  if (item == null) return '';
 
-async function V389_restoreBarcoForEdit(reportId) {
-  await BARCO_openModuleV32();
-  await openDraftById(reportId);
-  await V389_wait(160);
-
-  if (typeof V382_setupBarcoMenu === 'function') V382_setupBarcoMenu();
-  if (typeof V382_backToBarcoMenu === 'function') V382_backToBarcoMenu();
-}
-
-async function V389_restoreAccomplishmentForEdit(reportId) {
-  await BARCO_openAccomplishmentV32();
-  await ACCOMP_openSavedReportV33(reportId);
-  await V389_wait(180);
-
-  if (String(ACCOMP_currentReportIdV33 || '').trim() !== reportId) {
-    throw new Error('The saved Accomplishment Report could not be restored.');
+  if (typeof item === 'string' || typeof item === 'number') {
+    return String(item).trim();
   }
 
-  if (typeof V384_prepareAccompMergedInformation === 'function') {
-    V384_prepareAccompMergedInformation();
-  }
-  if (typeof V383_setupAccompMenu === 'function') V383_setupAccompMenu();
-  if (typeof V383_backToAccompMenu === 'function') V383_backToAccompMenu();
-}
+  const candidates = [
+    item.accomplishment,
+    item.text,
+    item.description,
+    item.details,
+    item.value,
+    item.entry,
+    item.activity,
+    item.title
+  ];
 
-async function V389_restoreDanaForEdit(reportId) {
-  BARCO_openDanaV3719();
-  await V389_wait(160);
-  await DANA_loadPreviousReportV3740(reportId);
-  await V389_wait(180);
-
-  if (String(DANA_currentReportIdV3720 || '').trim() !== reportId) {
-    throw new Error('The saved DANA Report could not be restored.');
-  }
-
-  if (typeof V383_setupDanaMenu === 'function') V383_setupDanaMenu();
-  if (typeof V383_backToDanaMenu === 'function') V383_backToDanaMenu();
-}
-
-async function V389_restoreLivestockForEdit(reportId) {
-  await V38_openLivestockSavedReport(reportId);
-  await V389_wait(180);
-
-  if (String(LSP_reportIdV3724 || '').trim() !== reportId) {
-    throw new Error('The saved Livestock Report could not be restored.');
+  for (let i = 0; i < candidates.length; i++) {
+    const value = String(candidates[i] == null ? '' : candidates[i]).trim();
+    if (value) return value;
   }
 
-  if (typeof V383_setupLivestockMenu === 'function') V383_setupLivestockMenu();
-  if (typeof V383_backToLivestockMenu === 'function') V383_backToLivestockMenu();
+  return '';
 }
 
-V38_editSavedReport = async function(module, reportId) {
-  module = String(module || '').trim();
+function V3900_accompEntriesFromResult(result) {
+  result = result || {};
+  const sources = [
+    result.accomplishments,
+    result.entries,
+    result.items,
+    result.report && result.report.accomplishments,
+    result.report && result.report.entries
+  ];
+
+  for (let s = 0; s < sources.length; s++) {
+    const list = sources[s];
+    if (!Array.isArray(list)) continue;
+    const normalized = list.map(V3900_accompEntryText).filter(Boolean);
+    if (normalized.length) return normalized;
+  }
+  return [];
+}
+
+function V3900_setAccompField(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.value = value == null ? '' : value;
+}
+
+async function V3900_openSavedAccomplishment(reportId) {
   reportId = String(reportId || '').trim();
 
   if (!reportId) {
-    V382_notify('Report ID is missing.','Edit Report','error');
+    V382_notify('Accomplishment Report ID is missing.','Edit Report','error');
     return;
   }
 
   try {
     if (typeof showActionOverlay === 'function') {
-      showActionOverlay('Opening saved report...');
+      showActionOverlay('Loading saved Accomplishment Report...');
     }
 
-    if (module === 'BARCO') {
-      await V389_restoreBarcoForEdit(reportId);
-    } else if (module === 'ACCOMP_MONTHLY') {
-      await V389_restoreAccomplishmentForEdit(reportId);
-    } else if (module === 'DANA') {
-      await V389_restoreDanaForEdit(reportId);
-    } else if (module === 'LIVESTOCK') {
-      await V389_restoreLivestockForEdit(reportId);
-    } else {
-      throw new Error('Unsupported report type.');
+    await BARCO_openAccomplishmentV32();
+    await ensureBarcoBridge();
+
+    const result = await barcoApi('accompGetMonthly',{reportId:reportId});
+    if (!result || !result.success || !result.found) {
+      throw new Error('Saved accomplishment report was not found.');
     }
+
+    const report = result.report || {};
+    const savedEntries = V3900_accompEntriesFromResult(result);
+
+    ACCOMP_currentReportIdV33 = String(report.reportId || reportId);
+    ACCOMP_currentStatusV33 = String(report.status || 'DRAFT').toUpperCase();
+
+    V3900_setAccompField('accompMonthV33', report.month || 'January');
+    V3900_setAccompField('accompYearV33', Number(report.year || new Date().getFullYear()));
+    V3900_setAccompField('accompSubmittedByV33', report.submittedBy || '');
+    V3900_setAccompField('accompSubmittedDesignationV33', report.submittedDesignation || '');
+    V3900_setAccompField('accompCommitteeV33', report.committee || '');
+    V3900_setAccompField('accompApprovedByV33', report.approvedBy || '');
+    V3900_setAccompField('accompApprovedDesignationV33', report.approvedDesignation || '');
+
+    const entriesBox = document.getElementById('accompEntriesV33');
+    if (!entriesBox) throw new Error('Accomplishment editor is not available.');
+
+    entriesBox.innerHTML = '';
+    ACCOMP_entryCounterV33 = 0;
+
+    if (savedEntries.length) {
+      savedEntries.forEach(function(text){ ACCOMP_addEntryV33(text); });
+    } else {
+      ACCOMP_addEntryV33('');
+    }
+
+    if (typeof ACCOMP_updateHeaderV33 === 'function') ACCOMP_updateHeaderV33();
+
+    ACCOMP_currentPdfV3715 = {
+      fileId: String(report.pdfFileId || ''),
+      pdfUrl: String(report.pdfUrl || ''),
+      filename: String(report.filename || ('Accomplishment-' + (report.month || 'Report') + '-' + (report.year || '') + '.pdf'))
+    };
+
+    if (report.pdfUrl || report.pdfFileId) {
+      const pdfBox = document.getElementById('accompFinalLinkV33');
+      if (pdfBox) pdfBox.style.display = 'flex';
+    } else if (typeof ACCOMP_hidePdfLinkV33 === 'function') {
+      ACCOMP_hidePdfLinkV33();
+    }
+
+    if (typeof V384_prepareAccompMergedInformation === 'function') V384_prepareAccompMergedInformation();
+    if (typeof V383_setupAccompMenu === 'function') V383_setupAccompMenu();
+    if (typeof V383_backToAccompMenu === 'function') V383_backToAccompMenu();
 
     if (typeof hideActionOverlay === 'function') hideActionOverlay();
 
-    V382_notify(
-      'Saved report loaded. Open any section to edit its saved data, then Save Changes or Regenerate PDF.',
-      'Report Loaded',
-      'success'
-    );
+    if (!savedEntries.length) {
+      V382_notify(
+        'The report information was restored, but no saved accomplishment text was returned by the database. Add the accomplishment before saving so the report is not overwritten with a blank entry.',
+        'Accomplishment Data',
+        'warning'
+      );
+    } else {
+      V382_notify(
+        savedEntries.length + ' saved accomplishment entr' + (savedEntries.length === 1 ? 'y' : 'ies') + ' restored. Both Report Information and Accomplishments can now be edited.',
+        'Report Loaded',
+        'success'
+      );
+    }
 
   } catch(error) {
     if (typeof hideActionOverlay === 'function') hideActionOverlay();
-    V382_notify('Edit Report error: ' + error.message,'Edit Report','error');
+    V382_notify('Edit Accomplishment error: ' + error.message,'Edit Report','error');
   }
+}
+
+const V3900_editSavedReportBase = V38_editSavedReport;
+V38_editSavedReport = async function(module, reportId) {
+  module = String(module || '').trim();
+  reportId = String(reportId || '').trim();
+
+  if (module === 'ACCOMP_MONTHLY') {
+    return V3900_openSavedAccomplishment(reportId);
+  }
+
+  return V3900_editSavedReportBase.apply(this, arguments);
 };
+
+const V3900_accompSaveDraftBase = ACCOMP_saveDraftV33;
+ACCOMP_saveDraftV33 = async function() {
+  const reportId = String(ACCOMP_currentReportIdV33 || '').trim();
+  const items = ACCOMP_collectEntriesV33();
+
+  if (reportId && !items.length) {
+    V382_notify(
+      'Add at least one accomplishment before saving changes. This prevents the saved report from being overwritten with a blank accomplishment list.',
+      'Accomplishment Required',
+      'warning'
+    );
+    return null;
+  }
+
+  return V3900_accompSaveDraftBase.apply(this, arguments);
+};
+
+document.addEventListener('input', function(event) {
+  if (event.target && event.target.matches('#accompEntriesV33 .accomp-entry-text')) {
+    if (typeof V383_updateAccompMenu === 'function') V383_updateAccompMenu();
+  }
+});
 </script>
 
 </body>
