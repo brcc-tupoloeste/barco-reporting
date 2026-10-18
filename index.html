@@ -11,7 +11,7 @@
 >
 
 <title>Committee on Agriculture and Environmental Protection</title>
-<!-- FRONTEND VERSION: V38.5 CLEAN DANA/LIVESTOCK HEADERS + QUICK ENTRY -->
+<!-- FRONTEND VERSION: V38.6 MODULE HISTORY DOCUMENTS -->
 
 <style>
 
@@ -4948,6 +4948,188 @@ button:hover:not(:disabled),
   padding-top: 18px !important;
 }
 
+
+/* =========================================================
+   V38.6 — COMPACT DANA + MODULE HISTORY DOCUMENTS
+========================================================= */
+
+/* BaRCO offline sync remains automatic; remove the manual Sync Now card. */
+#barcoSyncBarV3717 {
+  display: none !important;
+}
+
+/* The separate Generated Reports card is replaced by module history. */
+#portalHome .portal-card[onclick*="V38_openGeneratedReports"] {
+  display: none !important;
+}
+
+/* Remove Farmer Masterlist status / helper notices from DANA entry screen. */
+#danaModuleV3719 .dana-masterlist-status-v3735,
+#danaModuleV3719 .dana-autofill-note-v3735 {
+  display: none !important;
+}
+
+/* Compact plain-text field list instead of large rounded chips. */
+#danaActiveFieldsV3720 {
+  display: block !important;
+  margin-top: 8px !important;
+}
+
+.v386-dana-fields-text {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: center;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #315d46;
+}
+
+.v386-dana-field-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+}
+
+.v386-dana-field-text:not(:last-child)::after {
+  content: '•';
+  margin-left: 7px;
+  color: #9bad9f;
+}
+
+.v386-dana-field-remove {
+  border: 0;
+  background: transparent;
+  color: #b42318;
+  padding: 0 2px;
+  min-width: auto;
+  min-height: auto;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+/* History / Documents inside every report module. */
+.v386-history {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #d9e7dd;
+}
+
+.v386-history-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.v386-history-title {
+  font-size: 16px;
+  font-weight: 900;
+  color: #18553a;
+}
+
+.v386-history-refresh {
+  border: 0;
+  border-radius: 8px;
+  min-height: 34px;
+  padding: 7px 10px;
+  background: #eef6f0;
+  color: #245f42;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.v386-history-list {
+  display: grid;
+  gap: 9px;
+}
+
+.v386-history-card {
+  border: 1px solid #cfe0d4;
+  border-radius: 11px;
+  padding: 11px;
+  background: #fff;
+}
+
+.v386-history-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.v386-history-name {
+  font-size: 13px;
+  line-height: 1.3;
+  font-weight: 900;
+  color: #1f4f38;
+}
+
+.v386-history-meta {
+  margin-top: 3px;
+  font-size: 11px;
+  color: #66756d;
+}
+
+.v386-history-status {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 4px 8px;
+  background: #e9f6ed;
+  color: #287247;
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.v386-history-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.v386-history-actions button {
+  border: 0;
+  border-radius: 8px;
+  min-height: 34px;
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.v386-history-open { background:#2d7a50; color:#fff; }
+.v386-history-edit { background:#eaf5ed; color:#245f42; }
+.v386-history-delete { background:#c9291f; color:#fff; }
+.v386-history-empty {
+  padding: 12px;
+  border: 1px dashed #cbdccf;
+  border-radius: 10px;
+  color: #6a766e;
+  font-size: 12px;
+  text-align: center;
+  background: #fbfdfb;
+}
+
+/* Hide raw PDF URL / Copy URL surfaces from the old central library. */
+#generatedReportsV38 .v38-report-url,
+#generatedReportsV38 .v38-copy {
+  display: none !important;
+}
+
+@media (max-width: 520px) {
+  .v386-history-actions button {
+    flex: 1 1 calc(33.333% - 7px);
+  }
+}
+
 </style>
 
 <!-- FRONTEND VERSION: V38.4 CLEAN SECTION SCREENS + MERGED MENUS + EDITABLE LIVESTOCK -->
@@ -5358,7 +5540,7 @@ button:hover:not(:disabled),
       <div>
         <div class="v38-screen-title">Saved / Generated Reports</div>
         <div class="v38-screen-subtitle">
-          Open PDF, copy its URL, or edit a saved report and regenerate it.
+          Open a generated PDF or edit a saved report and regenerate it.
         </div>
       </div>
 
@@ -26848,6 +27030,313 @@ BARCO_openModuleV32 = function(){
   setTimeout(V384_applyCleanWorkingHeaders, 0);
   return result;
 };
+</script>
+
+
+<script id="v386-module-history-js">
+/* =========================================================
+   V38.6 — MODULE HISTORY / DOCUMENTS + COMPACT DANA
+========================================================= */
+
+let V386_historyCache = null;
+let V386_historyCacheAt = 0;
+
+function V386_cleanSyncButtons() {
+  ['barcoModule','danaModuleV3719'].forEach(function(id){
+    const root = document.getElementById(id);
+    if (!root) return;
+    Array.from(root.querySelectorAll('button')).forEach(function(button){
+      if (/^\s*sync now\s*$/i.test(String(button.textContent || ''))) {
+        const parent = button.closest('.barco-sync-bar-v3717') || button;
+        parent.style.display = 'none';
+      }
+    });
+  });
+}
+
+/* Compact Form Template / Fields list. */
+DANA_renderFieldsV3720 = function() {
+  const host = document.getElementById('danaActiveFieldsV3720');
+  if (!host) return;
+
+  if (!(DANA_fieldsV3720 || []).length) {
+    host.innerHTML = '<div class="dana-help-v3720">No fields yet. Add a custom field below.</div>';
+    return;
+  }
+
+  host.innerHTML = '<div class="v386-dana-fields-text">' +
+    DANA_fieldsV3720.map(function(field,index){
+      return '<span class="v386-dana-field-text">' +
+        DANA_escapeHtmlV3720(field.label) +
+        '<button type="button" class="v386-dana-field-remove" onclick="DANA_removeFieldV3720('+index+')" title="Remove field">×</button>' +
+      '</span>';
+    }).join('') +
+  '</div>';
+};
+
+/* Cleaner DANA menu copy. */
+const V386_danaSummaryBase = V383_danaSummary;
+V383_danaSummary = function(index) {
+  if (Number(index) === 2) return 'Add or edit report records';
+  return V386_danaSummaryBase(index);
+};
+
+async function V386_getAllReports(force) {
+  const now = Date.now();
+  if (!force && V386_historyCache && (now - V386_historyCacheAt) < 30000) {
+    return V386_historyCache;
+  }
+
+  await ensureBarcoBridge();
+  const result = await barcoApi('portalGetGeneratedReports',{year:0});
+  if (!result || !result.success) {
+    throw new Error((result && result.error) || 'Unable to load report history.');
+  }
+
+  V386_historyCache = Array.isArray(result.reports) ? result.reports : [];
+  V386_historyCacheAt = now;
+  return V386_historyCache;
+}
+
+function V386_moduleHistoryFilter(module,item) {
+  if (!item || String(item.module || '') !== module) return false;
+  if (module === 'ACCOMP_MONTHLY' && item.module === 'ACCOMP_CONSOLIDATED') return false;
+  return !!(String(item.pdfFileId || '').trim() || String(item.pdfUrl || '').trim());
+}
+
+function V386_historyMeta(item) {
+  const month = String(item.month || '').trim();
+  const year = Number(item.year || 0);
+  const date = String(item.reportDate || '').trim();
+  if (month && year) return month + ' ' + year;
+  if (date) return date;
+  if (year) return String(year);
+  return String(item.reportId || 'Generated report');
+}
+
+function V386_historyCardHtml(item,module) {
+  const fileId = String(item.pdfFileId || '').trim();
+  const pdfUrl = String(item.pdfUrl || '').trim();
+  const status = String(item.status || 'FINAL').toUpperCase();
+  const title = String(item.title || 'Generated Report');
+
+  return '<div class="v386-history-card">' +
+    '<div class="v386-history-top">' +
+      '<div>' +
+        '<div class="v386-history-name">'+V38_escape(title)+'</div>' +
+        '<div class="v386-history-meta">'+V38_escape(V386_historyMeta(item))+'</div>' +
+      '</div>' +
+      '<div class="v386-history-status">'+V38_escape(status)+'</div>' +
+    '</div>' +
+    '<div class="v386-history-actions">' +
+      '<button type="button" class="v386-history-open" data-file-id="'+V38_escape(fileId)+'" data-url="'+V38_escape(pdfUrl)+'" onclick="V386_openPdf(this.dataset.fileId,this.dataset.url)">Open PDF</button>' +
+      '<button type="button" class="v386-history-edit" data-module="'+V38_escape(module)+'" data-id="'+V38_escape(item.reportId || '')+'" onclick="V38_editSavedReport(this.dataset.module,this.dataset.id)">Edit</button>' +
+      '<button type="button" class="v386-history-delete" data-module="'+V38_escape(module)+'" data-id="'+V38_escape(item.reportId || '')+'" data-title="'+V38_escape(title)+'" onclick="V386_deleteHistoryReport(this.dataset.module,this.dataset.id,this.dataset.title)">Delete</button>' +
+    '</div>' +
+  '</div>';
+}
+
+function V386_historyHost(menu,module) {
+  if (!menu) return null;
+  let host = menu.querySelector('.v386-history[data-module="'+module+'"]');
+  if (!host) {
+    host = document.createElement('div');
+    host.className = 'v386-history';
+    host.dataset.module = module;
+    host.innerHTML =
+      '<div class="v386-history-head">' +
+        '<div class="v386-history-title">History Documents</div>' +
+        '<button type="button" class="v386-history-refresh" onclick="V386_loadModuleHistory(\''+module+'\',true)">Refresh</button>' +
+      '</div>' +
+      '<div class="v386-history-list"><div class="v386-history-empty">Loading generated reports...</div></div>';
+    menu.appendChild(host);
+  }
+  return host;
+}
+
+async function V386_loadModuleHistory(module,force) {
+  const menuMap = {
+    BARCO:'barcoMenuV382',
+    ACCOMP_MONTHLY:'accompMenuV383',
+    DANA:'danaMenuV383',
+    LIVESTOCK:'lspMenuV383'
+  };
+  const menu = document.getElementById(menuMap[module]);
+  if (!menu) return;
+  const host = V386_historyHost(menu,module);
+  const list = host ? host.querySelector('.v386-history-list') : null;
+  if (!list) return;
+
+  list.innerHTML = '<div class="v386-history-empty">Loading generated reports...</div>';
+
+  try {
+    const all = await V386_getAllReports(!!force);
+    const rows = all.filter(function(item){ return V386_moduleHistoryFilter(module,item); });
+
+    rows.sort(function(a,b){
+      return (Number(b.year||0)-Number(a.year||0)) ||
+             (Number(b.monthNo||0)-Number(a.monthNo||0)) ||
+             String(b.lastUpdated||'').localeCompare(String(a.lastUpdated||''));
+    });
+
+    if (!rows.length) {
+      list.innerHTML = '<div class="v386-history-empty">No generated PDF yet.</div>';
+      return;
+    }
+
+    list.innerHTML = rows.map(function(item){ return V386_historyCardHtml(item,module); }).join('');
+  } catch(error) {
+    list.innerHTML = '<div class="v386-history-empty">Unable to load history: '+V38_escape(error.message)+'</div>';
+  }
+}
+
+async function V386_openPdf(fileId,fallbackUrl) {
+  fileId = String(fileId || '').trim();
+  fallbackUrl = String(fallbackUrl || '').trim();
+
+  try {
+    if (fileId && window.AndroidPrint && typeof window.AndroidPrint.openBase64Pdf === 'function') {
+      const pdf = await barcoApi('getPdfForPrint',{fileId:fileId});
+      if (!pdf || !pdf.success || !pdf.base64) throw new Error('Unable to load PDF.');
+      window.AndroidPrint.openBase64Pdf(pdf.base64,pdf.fileName || 'Report.pdf');
+      return;
+    }
+
+    if (fileId) {
+      const result = await barcoApi('portalPreparePdfView',{fileId:fileId});
+      if (!result || !result.success) throw new Error((result && result.error) || 'Unable to prepare PDF.');
+      const target = String(result.viewUrl || result.directViewUrl || '').trim();
+      if (target) {
+        window.open(target,'_blank','noopener');
+        return;
+      }
+    }
+
+    if (fallbackUrl) {
+      window.open(fallbackUrl,'_blank','noopener');
+      return;
+    }
+
+    throw new Error('PDF file is not available.');
+  } catch(error) {
+    V382_notify('Open PDF error: ' + error.message,'Open PDF','error');
+  }
+}
+
+async function V386_deleteHistoryReport(module,reportId,title) {
+  if (!reportId) return;
+  if (!window.confirm('Delete "' + String(title || 'Report') + '"? The saved report and generated PDF will be removed.')) return;
+  const ok = await V382_deleteReport(module,reportId,title);
+  if (!ok) return;
+  V386_historyCache = null;
+  V386_historyCacheAt = 0;
+  await V386_loadModuleHistory(module,true);
+}
+
+function V386_attachHistory(menuId,module) {
+  const menu = document.getElementById(menuId);
+  if (!menu) return;
+  V386_historyHost(menu,module);
+  V386_loadModuleHistory(module,false);
+}
+
+/* Attach module history after each existing menu is built. */
+const V386_setupBarcoBase = V382_setupBarcoMenu;
+V382_setupBarcoMenu = function() {
+  const result = V386_setupBarcoBase.apply(this,arguments);
+  V386_cleanSyncButtons();
+  V386_attachHistory('barcoMenuV382','BARCO');
+  return result;
+};
+BARCO_setupCollapsibleSectionsV31 = V382_setupBarcoMenu;
+
+const V386_setupAccompBase = V383_setupAccompMenu;
+V383_setupAccompMenu = function() {
+  const result = V386_setupAccompBase.apply(this,arguments);
+  V386_attachHistory('accompMenuV383','ACCOMP_MONTHLY');
+  return result;
+};
+
+const V386_setupDanaBase = V383_setupDanaMenu;
+V383_setupDanaMenu = function() {
+  const result = V386_setupDanaBase.apply(this,arguments);
+  V386_cleanSyncButtons();
+  const sub = document.querySelector('#danaMenuV383 .v383-menu-sub');
+  if (sub) sub.textContent = 'Open one section at a time.';
+  V386_attachHistory('danaMenuV383','DANA');
+  DANA_renderFieldsV3720();
+  return result;
+};
+
+const V386_setupLivestockBase = V383_setupLivestockMenu;
+V383_setupLivestockMenu = function() {
+  const result = V386_setupLivestockBase.apply(this,arguments);
+  V386_attachHistory('lspMenuV383','LIVESTOCK');
+  return result;
+};
+
+/* Remove Copy URL and raw URL even if the old library is opened directly. */
+V38_reportCardHtml = function(item) {
+  const status = String(item.status || 'DRAFT').toUpperCase();
+  const finalClass = status === 'FINAL' || status === 'FINALIZED' ? ' final' : '';
+  const fileId = String(item.pdfFileId || '');
+  const pdfUrl = String(item.pdfUrl || '');
+
+  let actions = '';
+  if (fileId || pdfUrl) {
+    actions += '<button type="button" class="v38-open" data-file-id="'+V38_escape(fileId)+'" data-url="'+V38_escape(pdfUrl)+'" onclick="V386_openPdf(this.dataset.fileId,this.dataset.url)">Open PDF</button>';
+  }
+  if (item.module !== 'ACCOMP_CONSOLIDATED') {
+    actions += '<button type="button" class="v38-edit" data-module="'+V38_escape(item.module||'')+'" data-id="'+V38_escape(item.reportId||'')+'" onclick="V38_editSavedReport(this.dataset.module,this.dataset.id)">Edit Report</button>';
+  }
+  actions += '<button type="button" class="v382-delete-library" data-module="'+V38_escape(item.module||'')+'" data-id="'+V38_escape(item.reportId||'')+'" data-title="'+V38_escape(item.title||'Report')+'" onclick="V382_deleteReportFromLibrary(this.dataset.module,this.dataset.id,this.dataset.title)">Delete</button>';
+
+  return '<div class="v38-report-card">' +
+    '<div class="v38-report-top">' +
+      '<div><div class="v38-report-title">'+V38_escape(item.title||'Report')+'</div>' +
+      '<div class="v38-report-sub">'+V38_escape(item.subtitle||item.reportId||'')+'</div></div>' +
+      '<div class="v38-report-status'+finalClass+'">'+V38_escape(status)+'</div>' +
+    '</div>' +
+    '<div class="v38-report-actions">'+actions+'</div>' +
+  '</div>';
+};
+
+/* Refresh module history after successful PDF generation. */
+const V386_barcoGenerateBase = generateFinalPdf;
+generateFinalPdf = async function() {
+  const result = await V386_barcoGenerateBase.apply(this,arguments);
+  V386_historyCache = null;
+  setTimeout(function(){ V386_loadModuleHistory('BARCO',true); },500);
+  return result;
+};
+
+const V386_accompGenerateBase = ACCOMP_generatePdfV33;
+ACCOMP_generatePdfV33 = async function() {
+  const result = await V386_accompGenerateBase.apply(this,arguments);
+  V386_historyCache = null;
+  setTimeout(function(){ V386_loadModuleHistory('ACCOMP_MONTHLY',true); },500);
+  return result;
+};
+
+const V386_danaGenerateBase = DANA_generatePdfV3720;
+DANA_generatePdfV3720 = async function() {
+  const result = await V386_danaGenerateBase.apply(this,arguments);
+  V386_historyCache = null;
+  setTimeout(function(){ V386_loadModuleHistory('DANA',true); },500);
+  return result;
+};
+
+const V386_lspGenerateBase = LSP_generatePdfV3724;
+LSP_generatePdfV3724 = async function() {
+  const result = await V386_lspGenerateBase.apply(this,arguments);
+  V386_historyCache = null;
+  setTimeout(function(){ V386_loadModuleHistory('LIVESTOCK',true); },500);
+  return result;
+};
+
+document.addEventListener('DOMContentLoaded',function(){
+  V386_cleanSyncButtons();
+});
 </script>
 
 </body>
